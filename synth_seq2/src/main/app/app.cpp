@@ -8,6 +8,8 @@
 
 #include "src/audio/audio_entrypoint.hpp"
 
+int getStep(int transport);
+
 App::App(
     std::function<void(AppContext& context)> setup,
     std::function<void(AppContext& context)> callback
@@ -71,14 +73,7 @@ void App::handleMessagesFromAudioThread()
     }
 
     if (sequencer.playing) {
-        std::cout << sequencer.transport << std::endl;
-
-        // std::cout << context.sharedData.intData["transport"] << std::endl;
-
-        // int t = getStep(context.sharedData.intData["transport"]);
-        // std::cout << t << std::endl;
-
-        // context.sharedData.sequencer.step = t;
+        sequencer.step = getStep(sequencer.transport);
     }
 }
 
@@ -87,4 +82,12 @@ void App::nextState()
     context.eltId = 0;
     context.inputSystem.nextState();
     context.sharedDataWrapper.nextState();
+}
+
+int getStep(int transport)
+{
+    int sampsPerSec = 44100;
+    int t = transport / 10000;
+    t = t % 16;
+    return t;
 }
