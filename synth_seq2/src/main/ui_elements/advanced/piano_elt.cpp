@@ -4,7 +4,6 @@
 #include <iostream>
 
 #include "src/main/ui_elements/advanced/rect_button_elt.hpp"
-#include "src/shared/audio_queue.hpp"
 
 namespace
 {

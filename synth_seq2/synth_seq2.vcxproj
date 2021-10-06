@@ -85,11 +85,9 @@
     <ClCompile Include="src/shared/sequencer/sequencer.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src/shared/audio_queue.hpp" />
     <ClInclude Include="src/shared/messages.hpp" />
     <ClInclude Include="src/shared/sequencer/sequencer.hpp" />
     <ClInclude Include="src/shared/shared_data.hpp" />
-    <ClInclude Include="src/shared/ui_queue.hpp" />
   </ItemGroup>
   <!-- 3rd party libraries -->
   <ItemGroup>

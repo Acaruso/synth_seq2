@@ -1,8 +1,6 @@
 #pragma once
 
 #include "src/lib/readerwriterqueue.h"
-#include "src/shared/audio_queue.hpp"
-#include "src/shared/ui_queue.hpp"
 #include "src/shared/shared_data.hpp"
 
 struct AudioSystemContext

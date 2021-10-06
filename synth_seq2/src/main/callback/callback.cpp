@@ -1,17 +1,11 @@
 #include "callback.hpp"
 
 #include <iostream>
-#include <string>
 
-#include "src/main/ui_elements/advanced/number_elt.hpp"
 #include "src/main/ui_elements/advanced/piano_elt.hpp"
-#include "src/main/ui_elements/advanced/rect_button_elt.hpp"
-#include "src/main/ui_elements/advanced/text_elt.hpp"
 #include "src/main/ui_elements/advanced/sequencer_elt.hpp"
 #include "src/main/ui_elements/advanced/synth_settings_elt.hpp"
 #include "src/main/ui_elements/elt_params.hpp"
-#include "src/main/util.hpp"
-#include "src/shared/audio_queue.hpp"
 
 void setup(AppContext& context)
 {

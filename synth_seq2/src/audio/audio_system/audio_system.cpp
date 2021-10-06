@@ -73,12 +73,6 @@ void AudioSystem::handleMessagesFromMainThread()
             context.freq = mtof(p->note);
             context.trig = true;
         }
-        // else if (IntMessage* p = std::get_if<IntMessage>(&message)) {
-        //     context.sharedData.intData[p->key] = p->value;
-        // }
-        // else if (BoolMessage* p = std::get_if<BoolMessage>(&message)) {
-        //     context.sharedData.boolData[p->key] = p->value;
-        // }
     }
 }
 

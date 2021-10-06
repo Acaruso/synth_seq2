@@ -9,9 +9,6 @@ class App
 public:
     AppContext context;
 
-    std::function<void(AppContext& context)> setup;
-    std::function<void(AppContext& context)> callback;
-
     App(
         std::function<void(AppContext& context)> setup,
         std::function<void(AppContext& context)> callback
@@ -20,5 +17,8 @@ public:
     void run();
 
 private:
+    std::function<void(AppContext& context)> setup;
+    std::function<void(AppContext& context)> callback;
+
     void nextState();
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../app/app_context.hpp"
+#include "src/main/app/app_context.hpp"
 
 void setup(AppContext& context);
 

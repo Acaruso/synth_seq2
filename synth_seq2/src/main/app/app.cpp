@@ -7,9 +7,6 @@
 #include "src/lib/readerwriterqueue.h"
 
 #include "src/audio/audio_entrypoint.hpp"
-#include "src/shared/audio_queue.hpp"
-
-int getStep(int transport);
 
 App::App(
     std::function<void(AppContext& context)> setup,
@@ -49,7 +46,6 @@ void App::run()
 
     std::cout << "main thread: quitting" << std::endl;
 
-    // context.audioQueue.enqueue(QuitMessage());
     context.sharedDataWrapper.toAudioQueue.enqueue(QuitMessage());
 
     audioThread.join();
