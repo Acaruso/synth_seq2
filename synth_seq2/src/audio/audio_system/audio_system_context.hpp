@@ -8,6 +8,7 @@ struct AudioSystemContext
     SharedDataWrapper* sharedDataWrapper;
 
     unsigned long sampleCounter{0};
+    unsigned long transport{0};
     double secondsPerSample{0.0};
     bool trig{false};
     double freq{0.0};

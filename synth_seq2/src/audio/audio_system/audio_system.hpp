@@ -23,6 +23,7 @@ public:
 
     void playAudio();
     void handleMessagesFromMainThread();
+    void sendMessagesToMainThread();
     ~AudioSystem();
 
 private:

@@ -76,8 +76,21 @@ void AudioSystem::handleMessagesFromMainThread()
     }
 }
 
+void AudioSystem::sendMessagesToMainThread()
+{
+    auto& sequencer = context.sharedDataWrapper->getStable().sequencer;
+
+    if (sequencer.playing) {
+        context.sharedDataWrapper->toMainQueue.enqueue(
+            IntMessage("transport", context.transport)
+        );
+    }
+}
+
 void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
 {
+    auto& sequencer = context.sharedDataWrapper->getStable().sequencer;
+
     unsigned numChannels = 2;
 
     for (int i = 0; i < numSamplesToWrite; i += numChannels) {
@@ -89,6 +102,10 @@ void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
         sampleBuffer.buffer[i + 1] = samp;   // R
 
         ++context.sampleCounter;
+
+        if (sequencer.playing) {
+            ++context.transport;
+        }
 
         // need to unset trigs each sample
         // only want trig to be on for 1 sample

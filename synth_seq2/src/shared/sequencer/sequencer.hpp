@@ -9,10 +9,17 @@ struct Cell
 
 struct Sequencer
 {
-    std::vector<Cell> row;
+    bool playing{false};
     int step{0};
+    std::vector<Cell> row;
 
-    Sequencer() {}
+    Sequencer()
+    {
+        int size = 16;
+        for (int i = 0; i < size; i++) {
+            row.push_back(Cell());
+        }
+    }
 
     Sequencer(int size)
     {
