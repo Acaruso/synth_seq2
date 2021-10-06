@@ -11,8 +11,7 @@ Smooth smooth(32);
 
 double audioCallback(AudioSystemContext& context)
 {
-    auto& intData = context.sharedData.intData;
-
+    auto& intData = context.sharedDataWrapper->getStable().intData;
     double t = context.getTime();
 
     double freq = context.freq;
@@ -36,6 +35,5 @@ double audioCallback(AudioSystemContext& context)
 
     sig = sig * volume * 0.1;
 
-    context.sharedData.doubleData["env"] = 0;
     return sig;
 }

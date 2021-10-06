@@ -21,7 +21,7 @@ struct AppContext
     int eltId{0};
     int curEltId{0};
 
-    SharedData sharedData;
+    SharedDataWrapper sharedDataWrapper;
 
     AppContext()
     {

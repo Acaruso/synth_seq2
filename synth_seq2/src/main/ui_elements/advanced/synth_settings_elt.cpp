@@ -86,9 +86,11 @@ void synthSettingsElt(EltParams& params)
 
 void _numberElt(AppContext& context, std::string label, Coord coord, std::string key)
 {
+    auto& intData = context.sharedDataWrapper.getVolatile().intData;
+
     std::string fontName = "dos";
     Font& font = context.graphicsWrapper.getFont(fontName);
-    int data = context.sharedData.intData[key];
+    int data = intData[key];
 
     context.graphicsWrapper.drawText(label, fontName, coord);
 
@@ -118,9 +120,8 @@ void _numberElt(AppContext& context, std::string label, Coord coord, std::string
     };
 
     p.onDrag = [&]() {
-        data = data + context.getDragAmount() / 2;
-        data = clamp(data, p.min, p.max);
-        context.sharedData.setInt(key, data);
+        intData[key] += context.getDragAmount() / 2;
+        intData[key] = clamp(intData[key], p.min, p.max);
     };
 
     numberElt(p);

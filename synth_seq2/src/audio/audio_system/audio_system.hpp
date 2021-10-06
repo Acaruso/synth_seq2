@@ -7,8 +7,7 @@
 #include "src/audio/audio_system/audio_system_context.hpp"
 #include "src/audio/audio_system/sample_buffer.hpp"
 #include "src/audio/wasapi_wrapper/wasapi_wrapper.hpp"
-#include "src/shared/audio_queue.hpp"
-#include "src/shared/ui_queue.hpp"
+#include "src/shared/shared_data.hpp"
 
 class AudioSystem
 {
@@ -19,11 +18,11 @@ public:
 
     AudioSystem(
         std::function<double(AudioSystemContext& context)> callback,
-        AudioQueue* audioQueue,
-        UIQueue* uiQueue
+        SharedDataWrapper* sharedDataWrapper
     );
 
     void playAudio();
+    void handleMessagesFromMainThread();
     ~AudioSystem();
 
 private:
@@ -32,7 +31,5 @@ private:
     unsigned bufferSizeBytes;
     unsigned bufferSizeFrames;
 
-    void handleMessagesFromMainThread();
-    void sendMessagesToMainThread();
     void fillSampleBuffer(size_t numSamplesToWrite);
 };

@@ -30,7 +30,7 @@ void pianoElt(EltParams& params)
 
     for (int i = 0; i < 12; i++) {
         auto _onClick = [&]() {
-            ctx.audioQueue.enqueue(NoteMessage(baseNote + i));
+            ctx.sharedDataWrapper.toAudioQueue.enqueue(NoteMessage(baseNote + i));
         };
 
         if (i == 1 || i == 3 || i == 6 || i == 8 || i == 10) {

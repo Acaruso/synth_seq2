@@ -9,13 +9,11 @@
 
 AudioSystem::AudioSystem(
     std::function<double(AudioSystemContext& context)> callback,
-    AudioQueue* audioQueue,
-    UIQueue* uiQueue
+    SharedDataWrapper* sharedDataWrapper
 )
     : callback(callback)
 {
-    context.audioQueue = audioQueue;
-    context.uiQueue = uiQueue;
+    context.sharedDataWrapper = sharedDataWrapper;
 
     wasapiWrapper = {};
     init(wasapiWrapper);
@@ -56,8 +54,6 @@ void AudioSystem::playAudio()
         fillSampleBuffer(numSamplesToWrite);
 
         wasapiWrapper.writeBuffer(sampleBuffer.buffer, numFramesToWrite);
-
-        sendMessagesToMainThread();
     }
 
     wasapiWrapper.stopPlaying();
@@ -67,7 +63,7 @@ void AudioSystem::handleMessagesFromMainThread()
 {
     Message message;
 
-    while (context.audioQueue->try_dequeue(message)) {
+    while (context.sharedDataWrapper->toAudioQueue.try_dequeue(message)) {
         if (std::get_if<QuitMessage>(&message)) {
             std::cout << "audio thread: quitting" << std::endl;
             context.quit = true;
@@ -77,24 +73,12 @@ void AudioSystem::handleMessagesFromMainThread()
             context.freq = mtof(p->note);
             context.trig = true;
         }
-        else if (IntMessage* p = std::get_if<IntMessage>(&message)) {
-            context.sharedData.intData[p->key] = p->value;
-        }
-        else if (BoolMessage* p = std::get_if<BoolMessage>(&message)) {
-            context.sharedData.boolData[p->key] = p->value;
-        }
-    }
-}
-
-void AudioSystem::sendMessagesToMainThread()
-{
-    DoubleMessage data("env", context.sharedData.doubleData["env"]);
-    context.uiQueue->enqueue(data);
-
-    if (context.sharedData.boolData["playing"]) {
-        context.uiQueue->enqueue(
-            IntMessage("transport", context.sharedData.intData["transport"])
-        );
+        // else if (IntMessage* p = std::get_if<IntMessage>(&message)) {
+        //     context.sharedData.intData[p->key] = p->value;
+        // }
+        // else if (BoolMessage* p = std::get_if<BoolMessage>(&message)) {
+        //     context.sharedData.boolData[p->key] = p->value;
+        // }
     }
 }
 
@@ -111,10 +95,6 @@ void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
         sampleBuffer.buffer[i + 1] = samp;   // R
 
         ++context.sampleCounter;
-
-        if (context.sharedData.boolData["playing"]) {
-            context.sharedData.intData["transport"] += 1;
-        }
 
         // need to unset trigs each sample
         // only want trig to be on for 1 sample

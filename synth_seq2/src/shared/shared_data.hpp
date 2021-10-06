@@ -1,22 +1,31 @@
 #pragma once
 
-#include <string>
+#include <atomic>
 #include <unordered_map>
-#include <unordered_set>
 #include <vector>
 
+#include "src/lib/readerwriterqueue.h"
 
 #include "src/shared/sequencer/sequencer.hpp"
+#include "src/shared/messages.hpp"
+
+struct SynthSettings
+{
+    int volume;
+    int modAmount;
+    int attack;
+    int hold;
+    int release;
+    int modAttack;
+    int modHold;
+    int modRelease;
+    bool playing;
+};
 
 struct SharedData
 {
+    SynthSettings synthSettings;
     std::unordered_map<std::string, int> intData;
-    std::unordered_map<std::string, double> doubleData;
-    std::unordered_map<std::string, bool> boolData;
-    std::unordered_map<std::string, std::string> stringData;
-    std::unordered_set<std::string> dirtyInts;
-    std::unordered_set<std::string> dirtyBools;
-
     Sequencer sequencer;
 
     SharedData()
@@ -31,26 +40,51 @@ struct SharedData
         intData["modAttack"] = 0;
         intData["modHold"] = 80;
         intData["modRelease"] = 100;
+    }
+};
 
-        intData["freq"] = 100;
+class SharedDataWrapper
+{
+public:
+    moodycamel::ReaderWriterQueue<Message> toAudioQueue;
 
-        doubleData["env"] = 0.0;
+    std::vector<SharedData> sharedDataVector;
+    std::atomic<std::uint64_t> counter;
 
-        boolData["playing"] = false;
-        intData["transport"] = 0;
+    SharedDataWrapper()
+    {
+        toAudioQueue = moodycamel::ReaderWriterQueue<Message>(16);
 
-        sequencer = Sequencer(16);
+        sharedDataVector.push_back(SharedData());
+        sharedDataVector.push_back(SharedData());
     }
 
-    void setInt(std::string key, int value)
+    SharedData& getStable()
     {
-        intData[key] = value;
-        dirtyInts.insert(key);
+        return sharedDataVector[getStableIndex()];
     }
 
-    void setBool(std::string key, bool value)
+    SharedData& getVolatile()
     {
-        boolData[key] = value;
-        dirtyBools.insert(key);
+        return sharedDataVector[getVolatileIndex()];
+    }
+
+    void nextState()
+    {
+        int oldStableIndex = getStableIndex();
+        int oldVolatileIndex = getVolatileIndex();
+        counter++;
+        sharedDataVector[getVolatileIndex()] = sharedDataVector[oldVolatileIndex];
+    }
+
+private:
+    int getStableIndex()
+    {
+        return counter % 2;
+    }
+
+    int getVolatileIndex()
+    {
+        return (counter + 1) % 2;
     }
 };

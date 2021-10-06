@@ -20,7 +20,5 @@ public:
     void run();
 
 private:
-    void handleMessagesFromAudioThread();
-    void sendMessagesToAudioThread();
     void nextState();
 };

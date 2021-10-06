@@ -8,7 +8,6 @@
 
 #include "src/audio/audio_entrypoint.hpp"
 #include "src/shared/audio_queue.hpp"
-#include "src/shared/messages.hpp"
 
 int getStep(int transport);
 
@@ -25,8 +24,7 @@ void App::run()
 {
     std::thread audioThread(
         &audioEntrypoint,
-        &(context.audioQueue),
-        &(context.uiQueue)
+        &(context.sharedDataWrapper)
     );
 
     setup(context);
@@ -34,14 +32,10 @@ void App::run()
     while (!context.inputSystem.uiState.quit) {
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
-        handleMessagesFromAudioThread();
-
         context.graphicsWrapper.clearWindow();
         context.inputSystem.run();
 
         callback(context);
-
-        sendMessagesToAudioThread();
 
         context.graphicsWrapper.render();
 
@@ -55,7 +49,8 @@ void App::run()
 
     std::cout << "main thread: quitting" << std::endl;
 
-    context.audioQueue.enqueue(QuitMessage());
+    // context.audioQueue.enqueue(QuitMessage());
+    context.sharedDataWrapper.toAudioQueue.enqueue(QuitMessage());
 
     audioThread.join();
 
@@ -63,61 +58,9 @@ void App::run()
     context.graphicsWrapper.quit();
 }
 
-void App::handleMessagesFromAudioThread()
-{
-    Message message;
-
-    while (context.uiQueue.try_dequeue(message)) {
-        if (IntMessage* p = std::get_if<IntMessage>(&message)) {
-            context.sharedData.intData[p->key] = p->value;
-        }
-        else if (BoolMessage* p = std::get_if<BoolMessage>(&message)) {
-            context.sharedData.boolData[p->key] = p->value;
-        }
-    }
-
-    if (context.sharedData.boolData["playing"]) {
-        // std::cout << context.sharedData.intData["transport"] << std::endl;
-
-        int t = getStep(context.sharedData.intData["transport"]);
-        // std::cout << t << std::endl;
-
-        context.sharedData.sequencer.step = t;
-    }
-
-}
-
-void App::sendMessagesToAudioThread()
-{
-    auto& intData = context.sharedData.intData;
-
-    for (const auto& key : context.sharedData.dirtyInts) {
-        IntMessage message(key, intData[key]);
-        context.audioQueue.enqueue(message);
-    }
-
-    context.sharedData.dirtyInts.clear();
-
-    auto& boolData = context.sharedData.boolData;
-
-    for (const auto& key : context.sharedData.dirtyBools) {
-        BoolMessage message(key, boolData[key]);
-        context.audioQueue.enqueue(message);
-    }
-
-    context.sharedData.dirtyBools.clear();
-}
-
 void App::nextState()
 {
     context.eltId = 0;
     context.inputSystem.nextState();
-}
-
-int getStep(int transport)
-{
-    int sampsPerSec = 44100;
-    int t = transport / sampsPerSec;
-    t = t % 16;
-    return t;
+    context.sharedDataWrapper.nextState();
 }

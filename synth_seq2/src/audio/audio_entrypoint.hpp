@@ -2,5 +2,6 @@
 
 #include "src/shared/audio_queue.hpp"
 #include "src/shared/ui_queue.hpp"
+#include "src/shared/shared_data.hpp"
 
-int audioEntrypoint(AudioQueue* audioQueue, UIQueue* uiQueue);
+int audioEntrypoint(SharedDataWrapper* sharedDataWrapper);

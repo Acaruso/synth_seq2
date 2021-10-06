@@ -41,31 +41,4 @@ void callback(AppContext& context)
         EltParams p(context, Coord(100, 300));
         synthSettingsElt(p);
     }
-
-    {
-        EltParams p(context, Coord(100, 500));
-        sequencerElt(p);
-    }
-
-    {
-        Coord coord(1200, 500);
-        EltParams textParams(context, coord);
-        textParams.label = "play";
-        textElt(textParams);
-
-        EltParams p(context);
-        bool& playing = context.sharedData.boolData["playing"];
-        p.rect = Rect(coord.x, coord.y + 20, 50, 50);
-        p.color = white;
-        p.displayColor = playing ? blue : white;
-        p.onClickColor = blue;
-
-        p.onClick = [&]() {
-            context.sharedData.setBool("playing", !playing);
-            context.sharedData.setInt("transport", 0);
-        };
-
-        p.onHold = [&]() { p.displayColor = p.onClickColor; };
-        rectButtonElt(p);
-    }
 }

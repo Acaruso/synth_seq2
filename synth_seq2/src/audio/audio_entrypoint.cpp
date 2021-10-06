@@ -7,13 +7,13 @@
 #include "src/audio/audio_system/audio_system.hpp"
 #include "src/audio/synthesis/audio_callback.hpp"
 
-int audioEntrypoint(AudioQueue* audioQueue, UIQueue* uiQueue)
+int audioEntrypoint(SharedDataWrapper* sharedDataWrapper)
 {
     // initialize COM
     CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 
     try {
-        AudioSystem audioSystem(audioCallback, audioQueue, uiQueue);
+        AudioSystem audioSystem(audioCallback, sharedDataWrapper);
 
         // begin main loop
         audioSystem.playAudio();

@@ -7,9 +7,7 @@
 
 struct AudioSystemContext
 {
-    AudioQueue* audioQueue;
-    UIQueue* uiQueue;
-    SharedData sharedData;
+    SharedDataWrapper* sharedDataWrapper;
 
     unsigned long sampleCounter{0};
     double secondsPerSample{0.0};
