@@ -9,22 +9,8 @@
 #include "src/shared/sequencer/sequencer.hpp"
 #include "src/shared/messages.hpp"
 
-struct SynthSettings
-{
-    int volume;
-    int modAmount;
-    int attack;
-    int hold;
-    int release;
-    int modAttack;
-    int modHold;
-    int modRelease;
-    bool playing;
-};
-
 struct SharedData
 {
-    SynthSettings synthSettings;
     std::unordered_map<std::string, int> intData;
     Sequencer sequencer;
 
@@ -47,6 +33,7 @@ class SharedDataWrapper
 {
 public:
     moodycamel::ReaderWriterQueue<Message> toAudioQueue;
+    moodycamel::ReaderWriterQueue<Message> toMainQueue;
 
     std::vector<SharedData> sharedDataVector;
     std::atomic<std::uint64_t> counter;
@@ -54,6 +41,7 @@ public:
     SharedDataWrapper()
     {
         toAudioQueue = moodycamel::ReaderWriterQueue<Message>(16);
+        toMainQueue = moodycamel::ReaderWriterQueue<Message>(16);
 
         sharedDataVector.push_back(SharedData());
         sharedDataVector.push_back(SharedData());
@@ -71,7 +59,6 @@ public:
 
     void nextState()
     {
-        int oldStableIndex = getStableIndex();
         int oldVolatileIndex = getVolatileIndex();
         counter++;
         sharedDataVector[getVolatileIndex()] = sharedDataVector[oldVolatileIndex];
