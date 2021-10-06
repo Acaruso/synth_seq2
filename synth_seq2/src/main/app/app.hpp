@@ -20,5 +20,6 @@ private:
     std::function<void(AppContext& context)> setup;
     std::function<void(AppContext& context)> callback;
 
+    void handleMessagesFromAudioThread();
     void nextState();
 };

@@ -59,7 +59,7 @@ void callback(AppContext& context)
 
         p.onClick = [&]() {
             sequencer.playing = !sequencer.playing;
-            // context.sharedData.setInt("transport", 0);
+            sequencer.transport = 0;
         };
 
         p.onHold = [&]() { p.displayColor = p.onClickColor; };

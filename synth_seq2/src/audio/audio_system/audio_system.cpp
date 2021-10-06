@@ -54,6 +54,8 @@ void AudioSystem::playAudio()
         fillSampleBuffer(numSamplesToWrite);
 
         wasapiWrapper.writeBuffer(sampleBuffer.buffer, numFramesToWrite);
+
+        sendMessagesToMainThread();
     }
 
     wasapiWrapper.stopPlaying();
@@ -105,6 +107,9 @@ void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
 
         if (sequencer.playing) {
             ++context.transport;
+        }
+        else {
+            context.transport = 0;
         }
 
         // need to unset trigs each sample

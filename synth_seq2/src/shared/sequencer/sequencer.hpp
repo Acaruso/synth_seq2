@@ -11,6 +11,7 @@ struct Sequencer
 {
     bool playing{false};
     int step{0};
+    unsigned long transport{0};
     std::vector<Cell> row;
 
     Sequencer()

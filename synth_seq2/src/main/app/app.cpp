@@ -29,6 +29,8 @@ void App::run()
     while (!context.inputSystem.uiState.quit) {
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
+        handleMessagesFromAudioThread();
+
         context.graphicsWrapper.clearWindow();
         context.inputSystem.run();
 
@@ -52,6 +54,32 @@ void App::run()
 
     context.graphicsWrapper.destroyWindow();
     context.graphicsWrapper.quit();
+}
+
+void App::handleMessagesFromAudioThread()
+{
+    auto& sequencer = context.sharedDataWrapper.getVolatile().sequencer;
+
+    Message message;
+
+    while (context.sharedDataWrapper.toMainQueue.try_dequeue(message)) {
+        if (IntMessage* p = std::get_if<IntMessage>(&message)) {
+            if (p->key == "transport") {
+                sequencer.transport = p->value;
+            }
+        }
+    }
+
+    if (sequencer.playing) {
+        std::cout << sequencer.transport << std::endl;
+
+        // std::cout << context.sharedData.intData["transport"] << std::endl;
+
+        // int t = getStep(context.sharedData.intData["transport"]);
+        // std::cout << t << std::endl;
+
+        // context.sharedData.sequencer.step = t;
+    }
 }
 
 void App::nextState()
