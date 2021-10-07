@@ -1,16 +1,19 @@
 #pragma once
 
+#include <string>
+#include <unordered_map>
 #include <vector>
-
-struct Cell
-{
-    bool on{false};
-};
 
 enum SequencerMode
 {
     Normal,
     Select
+};
+
+struct Cell
+{
+    bool on{false};
+    std::unordered_map<std::string, int> intData;
 };
 
 class Sequencer

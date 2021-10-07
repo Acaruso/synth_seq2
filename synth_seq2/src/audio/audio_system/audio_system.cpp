@@ -98,6 +98,9 @@ void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
     for (int i = 0; i < numSamplesToWrite; i += numChannels) {
         setTrigs();
 
+        // std::cout << "fill sample buffer:" << std::endl;
+        // printMap(context.intData);
+
         double sig = callback(context);
 
         unsigned samp = scaleSignal(sig);
@@ -132,6 +135,10 @@ void AudioSystem::setTrigs()
         && sequencer.row[step].on
     ) {
         context.trig = true;
+        // printMap(sequencer.row[step].intData);
+        context.intData = sequencer.row[step].intData;
+        // std::cout << "set trigs:" << std::endl;
+        // printMap(context.intData);
     }
 }
 

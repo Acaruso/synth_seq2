@@ -2,23 +2,37 @@
 
 #include <iostream>
 
-#include "src/audio/synthesis/ugens/poly_sin.hpp"
+#include "src/audio/audio_util.hpp"
 #include "src/audio/synthesis/ugens/poly_fm_sin.hpp"
+#include "src/audio/synthesis/ugens/poly_sin.hpp"
 #include "src/audio/synthesis/ugens/smooth.hpp"
 
 PolyFmSin polyFmSin(8);
 Smooth smooth(32);
 
+// void printMap(AudioSystemContext& context)
+// {
+//     for (auto& elt : context.intData) {
+//         std::cout << elt.first << " " << elt.second << std::endl;
+//     }
+//     std::cout << std::endl;
+// }
+
 double audioCallback(AudioSystemContext& context)
 {
-    auto& intData = context.sharedDataWrapper->getFrontBuffer().intData;
-    double t = context.getTime();
+    // auto& intData = context.sharedDataWrapper->getFrontBuffer().intData;
+    auto& intData = context.intData;
 
-    double freq = context.freq;
+    double t = context.getTime();
     double volume = ((double)intData["volume"]) / 100.0;
-    double modAmount = ((double)intData["modAmount"]) / 100.0;
 
     if (context.trig) {
+        // double freq = context.freq;
+        // printMap(context.intData);
+        double freq = mtof(intData["note"]);
+
+        double modAmount = ((double)intData["modAmount"]) / 100.0;
+
         polyFmSin.trigger(
             (double)intData["attack"] * 2,
             (double)intData["hold"] * 20,

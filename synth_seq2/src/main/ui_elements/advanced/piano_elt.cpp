@@ -22,6 +22,7 @@ void pianoElt(EltParams& params)
 {
     AppContext& ctx = params.ctx;
     Coord coord = params.coord;
+    auto& sharedData = ctx.getSharedData();
 
     background(params, coord);
 
@@ -29,7 +30,9 @@ void pianoElt(EltParams& params)
 
     for (int i = 0; i < 12; i++) {
         auto _onClick = [&]() {
-            ctx.sharedDataWrapper.toAudioQueue.enqueue(NoteMessage(baseNote + i));
+            int note = baseNote + i;
+            ctx.sharedDataWrapper.toAudioQueue.enqueue(NoteMessage(note));
+            sharedData.intData["note"] = note;
         };
 
         if (i == 1 || i == 3 || i == 6 || i == 8 || i == 10) {

@@ -59,6 +59,7 @@ Rect _getClockRect(Coord coord, int i)
 
 void _cell(AppContext& ctx, Cell& cell, Coord coord, int i)
 {
+    auto& sharedData = ctx.getSharedData();
     auto& sequencer = ctx.getSequencer();
     auto& uiState = ctx.getUiState();
 
@@ -69,10 +70,17 @@ void _cell(AppContext& ctx, Cell& cell, Coord coord, int i)
     p.onClickColor = blue;
 
     p.onClick = [&]() {
+        printMap(sharedData.intData);
         sequencer.mode = Select;
 
         if (!uiState.lshift) {
-            cell.on = !cell.on;
+            if (!cell.on) {
+                cell.on = true;
+                cell.intData = sharedData.intData;
+            }
+            else {
+                cell.on = false;
+            }
             sequencer.selected = i;
         }
         else if (uiState.lshift) {
