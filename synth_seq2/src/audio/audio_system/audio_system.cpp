@@ -54,6 +54,8 @@ void AudioSystem::playAudio()
         fillSampleBuffer(numSamplesToWrite);
 
         wasapiWrapper.writeBuffer(sampleBuffer.buffer, numFramesToWrite);
+
+        sendMessagesToMainThread();
     }
 
     wasapiWrapper.stopPlaying();
@@ -76,11 +78,26 @@ void AudioSystem::handleMessagesFromMainThread()
     }
 }
 
+void AudioSystem::sendMessagesToMainThread()
+{
+    auto& sequencer = context.sharedDataWrapper->getFrontBuffer().sequencer;
+
+    if (sequencer.playing) {
+        context.sharedDataWrapper->toMainQueue.enqueue(
+            IntMessage("transport", context.transport)
+        );
+    }
+}
+
 void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
 {
+    auto& sequencer = context.sharedDataWrapper->getFrontBuffer().sequencer;
+
     unsigned numChannels = 2;
 
     for (int i = 0; i < numSamplesToWrite; i += numChannels) {
+        setTrigs();
+
         double sig = callback(context);
 
         unsigned samp = scaleSignal(sig);
@@ -90,10 +107,37 @@ void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
 
         ++context.sampleCounter;
 
+        if (sequencer.playing) {
+            ++context.transport;
+        }
+        else {
+            context.transport = 0;
+        }
+
         // need to unset trigs each sample
         // only want trig to be on for 1 sample
-        context.trig = false;
+        unsetTrigs();
     }
+}
+
+void AudioSystem::setTrigs()
+{
+    auto& sequencer = context.sharedDataWrapper->getFrontBuffer().sequencer;
+
+    int step = sequencer.getStep(context.transport);
+
+    if (
+        sequencer.playing
+        && context.transport % sequencer.samplesPerStep == 0
+        && sequencer.row[step].on
+    ) {
+        context.trig = true;
+    }
+}
+
+void AudioSystem::unsetTrigs()
+{
+    context.trig = false;
 }
 
 AudioSystem::~AudioSystem()
