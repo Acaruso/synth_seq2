@@ -7,16 +7,10 @@ struct Cell
     bool on{false};
 };
 
-inline int getStep(int transport)
-{
-    int sampsPerSec = 44100;
-    int t = transport / 10000;
-    t = t % 16;
-    return t;
-}
 
-struct Sequencer
+class Sequencer
 {
+public:
     bool playing{false};
     int step{0};
     unsigned long transport{0};
@@ -37,10 +31,22 @@ struct Sequencer
         }
     }
 
+    // recall that sequencer.step and sequencer.transport are only used in main thread
+    // audio thread has its own, more accurate transport variable on audioContext object
     void update()
     {
         if (playing) {
             step = getStep(transport);
         }
+    }
+
+private:
+    int samplesPerStep{10000};
+
+    int getStep(int transport)
+    {
+        int t = transport / samplesPerStep;
+        t = t % 16;
+        return t;
     }
 };
