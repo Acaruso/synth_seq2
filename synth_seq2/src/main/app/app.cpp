@@ -42,7 +42,7 @@ void App::run()
 
         std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
         Uint32 dur = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
-        Uint32 time_to_delay = dur > 10 ? 0 : 10 - dur;
+        Uint32 time_to_delay = dur > frameTimeMs ? 0 : frameTimeMs - dur;
         std::this_thread::sleep_for(std::chrono::milliseconds(time_to_delay));
     }
 
@@ -62,6 +62,7 @@ void App::handleMessagesFromAudioThread()
 
     Message message;
 
+    std::cout << "size: " << context.sharedDataWrapper.toMainQueue.size_approx() << std::endl;
     while (context.sharedDataWrapper.toMainQueue.try_dequeue(message)) {
         if (IntMessage* p = std::get_if<IntMessage>(&message)) {
             if (p->key == "transport") {
