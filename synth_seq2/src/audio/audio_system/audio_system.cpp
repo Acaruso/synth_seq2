@@ -131,7 +131,6 @@ void AudioSystem::setTrigs()
         && context.transport % sequencer.samplesPerStep == 0
         && sequencer.row[step].on
     ) {
-        std::cout << step << std::endl;
         context.trig = true;
     }
 }
