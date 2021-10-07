@@ -60,6 +60,7 @@ Rect _getClockRect(Coord coord, int i)
 void _cell(AppContext& ctx, Cell& cell, Coord coord, int i)
 {
     auto& sequencer = ctx.getSequencer();
+    auto& uiState = ctx.getUiState();
 
     EltParams p(ctx);
     p.rect = _getCellRect(coord, i);
@@ -68,17 +69,39 @@ void _cell(AppContext& ctx, Cell& cell, Coord coord, int i)
     p.onClickColor = blue;
 
     p.onClick = [&]() {
-        if (ctx.inputSystem.uiState.lshift) {
+        if (
+            uiState.lshift
+            && sequencer.mode == Normal
+        ) {
             sequencer.mode = Select;
             sequencer.selected = i;
-        } else {
+        }
+        else if (
+            uiState.lshift
+            && sequencer.mode == Select
+            && sequencer.selected != i
+        ) {
+            sequencer.selected = i;
+        }
+        else if (
+            uiState.lshift
+            && sequencer.mode == Select
+            && sequencer.selected == i
+        ) {
+            sequencer.mode = Normal;
+        }
+        else {
             cell.on = !cell.on;
         }
     };
 
-    p.onHold = [&]() { p.displayColor = p.onClickColor; };
+    p.onHold = [&]() {
+        if (!uiState.lshift) {
+            p.displayColor = p.onClickColor;
+        }
+    };
 
-    if (sequencer.selected == i) {
+    if (sequencer.mode == Select && sequencer.selected == i) {
         _drawSelectedRect(ctx, p.rect);
     }
 
