@@ -7,6 +7,7 @@ void _clock(AppContext& ctx, Coord coord, int i);
 Rect _getClockRect(Coord coord, int i);
 void _cell(AppContext& ctx, Cell& cell, Coord coord, int i);
 Rect _getCellRect(Coord coord, int i);
+void _drawSelectedRect(AppContext& ctx, Rect rect);
 
 namespace
 {
@@ -58,13 +59,29 @@ Rect _getClockRect(Coord coord, int i)
 
 void _cell(AppContext& ctx, Cell& cell, Coord coord, int i)
 {
+    auto& sequencer = ctx.getSequencer();
+
     EltParams p(ctx);
     p.rect = _getCellRect(coord, i);
     p.color = white;
     p.displayColor = cell.on ? blue : white;
     p.onClickColor = blue;
-    p.onClick = [&]() { cell.on = !cell.on; };
+
+    p.onClick = [&]() {
+        if (ctx.inputSystem.uiState.lshift) {
+            sequencer.mode = Select;
+            sequencer.selected = i;
+        } else {
+            cell.on = !cell.on;
+        }
+    };
+
     p.onHold = [&]() { p.displayColor = p.onClickColor; };
+
+    if (sequencer.selected == i) {
+        _drawSelectedRect(ctx, p.rect);
+    }
+
     rectButtonElt(p);
 }
 
@@ -79,4 +96,30 @@ Rect _getCellRect(Coord coord, int i)
         cellWidth,
         cellHeight
     );
+}
+
+void _drawSelectedRect(AppContext& ctx, Rect rect)
+{
+    int borderWidth = 4;
+
+    Rect selectedRect(
+        rect.x - borderWidth,
+        rect.y - borderWidth,
+        -2,
+        rect.w + (2 * borderWidth),
+        rect.h + (2 * borderWidth),
+        red
+    );
+
+    Rect whiteRect(
+        rect.x - 1,
+        rect.y - 1,
+        -1,
+        rect.w + 2,
+        rect.h + 2,
+        white
+    );
+
+    ctx.graphicsWrapper.drawRect(whiteRect);
+    ctx.graphicsWrapper.drawRect(selectedRect);
 }

@@ -7,12 +7,19 @@ struct Cell
     bool on{false};
 };
 
+enum SequencerMode
+{
+    Normal,
+    Select
+};
 
 class Sequencer
 {
 public:
     bool playing{false};
     int step{0};
+    SequencerMode mode{Normal};
+    int selected{0};
     unsigned long transport{0};
     int samplesPerStep{10000};
 
