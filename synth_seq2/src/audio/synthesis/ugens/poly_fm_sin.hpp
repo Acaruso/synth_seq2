@@ -14,7 +14,7 @@ struct Operator
 
     bool isOn()
     {
-        return (carrier.env.on || modulator.env.on);
+        return carrier.env.on;
     }
 
     void trigger(
