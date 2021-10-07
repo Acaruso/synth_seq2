@@ -69,29 +69,19 @@ void _cell(AppContext& ctx, Cell& cell, Coord coord, int i)
     p.onClickColor = blue;
 
     p.onClick = [&]() {
-        if (
-            uiState.lshift
-            && sequencer.mode == Normal
-        ) {
-            sequencer.mode = Select;
-            sequencer.selected = i;
-        }
-        else if (
-            uiState.lshift
-            && sequencer.mode == Select
-            && sequencer.selected != i
-        ) {
-            sequencer.selected = i;
-        }
-        else if (
-            uiState.lshift
-            && sequencer.mode == Select
-            && sequencer.selected == i
-        ) {
-            sequencer.mode = Normal;
-        }
-        else {
+        sequencer.mode = Select;
+
+        if (!uiState.lshift) {
             cell.on = !cell.on;
+            sequencer.selected = i;
+        }
+        else if (uiState.lshift) {
+            if (sequencer.selected == i) {
+                sequencer.mode = Normal;
+            }
+            else {
+                sequencer.selected = i;
+            }
         }
     };
 
