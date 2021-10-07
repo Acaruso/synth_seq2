@@ -60,7 +60,7 @@ void App::run()
 
 void App::handleMessagesFromAudioThread()
 {
-    auto& sequencer = context.sharedDataWrapper.getVolatile().sequencer;
+    auto& sequencer = context.sharedDataWrapper.getBackBuffer().sequencer;
 
     Message message;
 

@@ -80,7 +80,7 @@ void AudioSystem::handleMessagesFromMainThread()
 
 void AudioSystem::sendMessagesToMainThread()
 {
-    auto& sequencer = context.sharedDataWrapper->getStable().sequencer;
+    auto& sequencer = context.sharedDataWrapper->getFrontBuffer().sequencer;
 
     if (sequencer.playing) {
         context.sharedDataWrapper->toMainQueue.enqueue(
@@ -91,7 +91,7 @@ void AudioSystem::sendMessagesToMainThread()
 
 void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
 {
-    auto& sequencer = context.sharedDataWrapper->getStable().sequencer;
+    auto& sequencer = context.sharedDataWrapper->getFrontBuffer().sequencer;
 
     unsigned numChannels = 2;
 

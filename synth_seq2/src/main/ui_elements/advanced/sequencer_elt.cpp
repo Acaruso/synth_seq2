@@ -19,7 +19,7 @@ namespace
 
 void sequencerElt(EltParams& params)
 {
-    Sequencer& sequencer = params.ctx.sharedDataWrapper.getVolatile().sequencer;
+    Sequencer& sequencer = params.ctx.sharedDataWrapper.getBackBuffer().sequencer;
     Coord coord = params.coord;
 
     for (int i = 0; i < sequencer.row.size(); i++) {
@@ -31,7 +31,7 @@ void sequencerElt(EltParams& params)
 
 void _clock(AppContext& ctx, Coord coord, int i)
 {
-    Sequencer& sequencer = ctx.sharedDataWrapper.getVolatile().sequencer;
+    Sequencer& sequencer = ctx.sharedDataWrapper.getBackBuffer().sequencer;
     EltParams p(ctx);
     p.rect = _getClockRect(coord, i);
     p.color = white;

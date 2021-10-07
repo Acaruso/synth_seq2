@@ -11,7 +11,7 @@ Smooth smooth(32);
 
 double audioCallback(AudioSystemContext& context)
 {
-    auto& intData = context.sharedDataWrapper->getStable().intData;
+    auto& intData = context.sharedDataWrapper->getFrontBuffer().intData;
     double t = context.getTime();
 
     double freq = context.freq;

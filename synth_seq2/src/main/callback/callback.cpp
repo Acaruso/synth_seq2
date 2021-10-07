@@ -50,7 +50,7 @@ void callback(AppContext& context)
         textElt(textParams);
 
         EltParams p(context);
-        auto& sequencer = context.sharedDataWrapper.getVolatile().sequencer;
+        auto& sequencer = context.sharedDataWrapper.getBackBuffer().sequencer;
         bool& playing = sequencer.playing;
         p.rect = Rect(coord.x, coord.y + 20, 50, 50);
         p.color = white;

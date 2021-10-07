@@ -47,30 +47,33 @@ public:
         sharedDataVector.push_back(SharedData());
     }
 
-    SharedData& getStable()
+    // front buffer is buffer that is not being written to
+    // safe for audio thread to read from it
+    SharedData& getFrontBuffer()
     {
-        return sharedDataVector[getStableIndex()];
+        return sharedDataVector[getFrontIndex()];
     }
 
-    SharedData& getVolatile()
+    // back buffer is buffer that is currently being updated by main thread
+    SharedData& getBackBuffer()
     {
-        return sharedDataVector[getVolatileIndex()];
+        return sharedDataVector[getBackIndex()];
     }
 
     void nextState()
     {
-        int oldVolatileIndex = getVolatileIndex();
+        int oldBackIndex = getBackIndex();
         counter++;
-        sharedDataVector[getVolatileIndex()] = sharedDataVector[oldVolatileIndex];
+        sharedDataVector[getBackIndex()] = sharedDataVector[oldBackIndex];
     }
 
 private:
-    int getStableIndex()
+    int getFrontIndex()
     {
         return counter % 2;
     }
 
-    int getVolatileIndex()
+    int getBackIndex()
     {
         return (counter + 1) % 2;
     }
