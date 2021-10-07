@@ -14,6 +14,8 @@ public:
     bool playing{false};
     int step{0};
     unsigned long transport{0};
+    int samplesPerStep{10000};
+
     std::vector<Cell> row;
 
     Sequencer()
@@ -39,9 +41,6 @@ public:
             step = getStep(transport);
         }
     }
-
-private:
-    int samplesPerStep{10000};
 
     int getStep(int transport)
     {

@@ -32,5 +32,7 @@ private:
     unsigned bufferSizeBytes;
     unsigned bufferSizeFrames;
 
+    void setTrigs();
+    void unsetTrigs();
     void fillSampleBuffer(size_t numSamplesToWrite);
 };

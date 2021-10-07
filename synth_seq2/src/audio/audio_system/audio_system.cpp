@@ -96,6 +96,8 @@ void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
     unsigned numChannels = 2;
 
     for (int i = 0; i < numSamplesToWrite; i += numChannels) {
+        setTrigs();
+
         double sig = callback(context);
 
         unsigned samp = scaleSignal(sig);
@@ -114,8 +116,29 @@ void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
 
         // need to unset trigs each sample
         // only want trig to be on for 1 sample
-        context.trig = false;
+        unsetTrigs();
     }
+}
+
+void AudioSystem::setTrigs()
+{
+    auto& sequencer = context.sharedDataWrapper->getFrontBuffer().sequencer;
+
+    int step = sequencer.getStep(context.transport);
+
+    if (
+        sequencer.playing
+        && context.transport % sequencer.samplesPerStep == 0
+        && sequencer.row[step].on
+    ) {
+        std::cout << step << std::endl;
+        context.trig = true;
+    }
+}
+
+void AudioSystem::unsetTrigs()
+{
+    context.trig = false;
 }
 
 AudioSystem::~AudioSystem()
