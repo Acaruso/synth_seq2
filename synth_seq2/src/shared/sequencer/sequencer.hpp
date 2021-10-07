@@ -7,6 +7,14 @@ struct Cell
     bool on{false};
 };
 
+inline int getStep(int transport)
+{
+    int sampsPerSec = 44100;
+    int t = transport / 10000;
+    t = t % 16;
+    return t;
+}
+
 struct Sequencer
 {
     bool playing{false};
@@ -26,6 +34,13 @@ struct Sequencer
     {
         for (int i = 0; i < size; i++) {
             row.push_back(Cell());
+        }
+    }
+
+    void update()
+    {
+        if (playing) {
+            step = getStep(transport);
         }
     }
 };

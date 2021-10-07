@@ -28,6 +28,10 @@ void setup(AppContext& context)
 
 void callback(AppContext& context)
 {
+    auto& sequencer = context.sharedDataWrapper.getBackBuffer().sequencer;
+
+    sequencer.update();
+
     {
         EltParams p(context, Coord(100, 100));
         pianoElt(p);
@@ -50,11 +54,11 @@ void callback(AppContext& context)
         textElt(textParams);
 
         EltParams p(context);
-        auto& sequencer = context.sharedDataWrapper.getBackBuffer().sequencer;
-        bool& playing = sequencer.playing;
+        // auto& sequencer = context.sharedDataWrapper.getBackBuffer().sequencer;
+        // bool& playing = sequencer.playing;
         p.rect = Rect(coord.x, coord.y + 20, 50, 50);
         p.color = white;
-        p.displayColor = playing ? blue : white;
+        p.displayColor = sequencer.playing ? blue : white;
         p.onClickColor = blue;
 
         p.onClick = [&]() {
