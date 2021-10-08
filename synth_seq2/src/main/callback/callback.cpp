@@ -14,7 +14,7 @@ void setup(AppContext& context)
     try {
         context.graphicsWrapper.loadFont(
             "dos",
-            "src/fonts/Perfect-DOS-VGA-437.ttf",
+            "fonts/Perfect-DOS-VGA-437.ttf",
             16,
             9,
             20

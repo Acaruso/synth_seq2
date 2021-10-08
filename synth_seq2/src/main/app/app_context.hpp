@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "src/lib/readerwriterqueue.h"
+#include "lib/readerwriterqueue.h"
 
 #include "src/main/graphics/graphics_wrapper.hpp"
 #include "src/main/input_system/input_system.hpp"

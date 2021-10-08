@@ -6,7 +6,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "src/lib/readerwriterqueue.h"
+#include "lib/readerwriterqueue.h"
 
 #include "src/shared/sequencer/sequencer.hpp"
 #include "src/shared/messages.hpp"

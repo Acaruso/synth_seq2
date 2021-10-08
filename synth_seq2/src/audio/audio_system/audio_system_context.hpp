@@ -3,7 +3,7 @@
 #include <string>
 #include <unordered_map>
 
-#include "src/lib/readerwriterqueue.h"
+#include "lib/readerwriterqueue.h"
 #include "src/shared/shared_data.hpp"
 
 struct AudioSystemContext

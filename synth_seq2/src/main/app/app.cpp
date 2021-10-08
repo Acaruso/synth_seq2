@@ -4,7 +4,7 @@
 #include <iostream>
 #include <thread>
 
-#include "src/lib/readerwriterqueue.h"
+#include "lib/readerwriterqueue.h"
 
 #include "src/audio/audio_entrypoint.hpp"
 

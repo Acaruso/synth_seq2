@@ -2,7 +2,7 @@
 
 #include <functional>
 
-#include "src/lib/readerwriterqueue.h"
+#include "lib/readerwriterqueue.h"
 
 #include "src/audio/audio_system/audio_system_context.hpp"
 #include "src/audio/audio_system/sample_buffer.hpp"
