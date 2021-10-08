@@ -32,4 +32,20 @@ struct AppContext
     {
         return inputSystem.prevUiState.mousePos.y - inputSystem.uiState.mousePos.y;
     }
+
+    UiState& getUiState()
+    {
+        return inputSystem.uiState;
+    }
+
+    // main thread should always use back buffer
+    SharedData& getSharedData()
+    {
+        return sharedDataWrapper.getBackBuffer();
+    }
+
+    Sequencer& getSequencer()
+    {
+        return sharedDataWrapper.getBackBuffer().sequencer;
+    }
 };

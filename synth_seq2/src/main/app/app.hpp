@@ -17,6 +17,7 @@ public:
     void run();
 
 private:
+    unsigned frameTimeMs{10};
     std::function<void(AppContext& context)> setup;
     std::function<void(AppContext& context)> callback;
 

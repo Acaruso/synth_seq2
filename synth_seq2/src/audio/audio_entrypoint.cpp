@@ -19,7 +19,7 @@ int audioEntrypoint(SharedDataWrapper* sharedDataWrapper)
         audioSystem.playAudio();
     }
     catch(std::exception& ex) {
-        std::cout << ex.what() << std::endl;
+        std::cout << "Audio error: " << ex.what() << std::endl;
     }
 
     return 0;
