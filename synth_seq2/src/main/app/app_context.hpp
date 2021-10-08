@@ -18,6 +18,11 @@ struct AppContext
 
     SharedDataWrapper sharedDataWrapper;
 
+    void toAudioThread(Message message)
+    {
+        sharedDataWrapper.toAudioQueue.enqueue(message);
+    }
+
     void registerElt()
     {
         eltId++;

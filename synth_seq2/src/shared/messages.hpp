@@ -5,6 +5,10 @@
 
 struct QuitMessage {};
 
+struct PlayMessage {};
+
+struct StopMessage {};
+
 struct NoteMessage
 {
     int note{0};
@@ -44,6 +48,8 @@ struct StringMessage
 
 using Message = std::variant<
     QuitMessage,
+    PlayMessage,
+    StopMessage,
     NoteMessage,
     IntMessage,
     BoolMessage,

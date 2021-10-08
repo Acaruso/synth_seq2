@@ -64,8 +64,10 @@ void App::handleMessagesFromAudioThread()
 
     while (context.sharedDataWrapper.toMainQueue.try_dequeue(message)) {
         if (IntMessage* p = std::get_if<IntMessage>(&message)) {
-            if (p->key == "transport") {
-                sequencer.transport = p->value;
+            std::cout << "main got message" << std::endl;
+            if (p->key == "futureTransport") {
+                std::cout << "main futureTransport: " << p->value << std::endl;
+                // sequencer.transport = p->value;
             }
         }
     }

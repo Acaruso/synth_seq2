@@ -25,6 +25,12 @@ AudioSystem::AudioSystem(
     sampleBuffer = SampleBuffer(bufferSizeBytes);
 
     bufferSizeFrames = wasapiWrapper.getBufferSizeFrames();
+    std::cout << "buffer size frames: " << bufferSizeFrames << std::endl;
+
+    unsigned padding = wasapiWrapper.getCurrentPadding();
+    std::cout << "padding: " << padding << std::endl;
+
+    context.sliceTime = bufferSizeFrames * 4;
 }
 
 void AudioSystem::playAudio()
@@ -43,11 +49,17 @@ void AudioSystem::playAudio()
 
         unsigned numPaddingFrames = wasapiWrapper.getCurrentPadding();
 
+        std::cout << "padding loop: " << numPaddingFrames << std::endl;
+
         // recall that each elt of buffer stores 1 sample
         // frame is 2 samples -> 1 for each channel
         // so numSamplesToWrite = (2 * numFramesToWrite)
 
         unsigned numFramesToWrite = bufferSizeFrames - numPaddingFrames;
+
+        std::cout << "bufferSizeFrames: " << bufferSizeFrames << std::endl;
+
+        std::cout << "numFramesToWrite: " << numFramesToWrite << std::endl;
 
         unsigned numSamplesToWrite = numFramesToWrite * 2;
 
@@ -55,6 +67,7 @@ void AudioSystem::playAudio()
 
         wasapiWrapper.writeBuffer(sampleBuffer.buffer, numFramesToWrite);
 
+        // std::cout << "samp counter" << context.sampleCounter << std::endl;
         sendMessagesToMainThread();
     }
 
@@ -71,6 +84,12 @@ void AudioSystem::handleMessagesFromMainThread()
             context.quit = true;
             break;
         }
+        else if (std::get_if<PlayMessage>(&message)) {
+            context.playing = true;
+        }
+        else if (std::get_if<StopMessage>(&message)) {
+            context.playing = false;
+        }
         else if (NoteMessage* p = std::get_if<NoteMessage>(&message)) {
             context.freq = mtof(p->note);
             context.trig = true;
@@ -82,9 +101,15 @@ void AudioSystem::sendMessagesToMainThread()
 {
     auto& sequencer = context.sharedDataWrapper->getFrontBuffer().sequencer;
 
-    if (sequencer.playing) {
+    // std::cout << "audio futureTransport: " << context.futureTransport << std::endl;
+    // std::cout << "audio sliceTime: " << context.sliceTime << std::endl;
+    // std::cout << "audio: " << context.futureTransport % context.sliceTime << std::endl;
+    // std::cout << "audio: " << context.sliceTime << std::endl;
+
+    if (context.playing && context.futureTransport % context.sliceTime == 0) {
+        std::cout << "audio sending message" << std::endl;
         context.sharedDataWrapper->toMainQueue.enqueue(
-            IntMessage("transport", context.transport)
+            IntMessage("futureTransport", context.futureTransport)
         );
     }
 }
@@ -111,10 +136,14 @@ void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
         ++context.sampleCounter;
 
         if (sequencer.playing) {
-            ++context.transport;
+            if (context.futureTransport >= (context.sliceTime * 2)) {
+                ++context.presentTransport;
+            }
+            ++context.futureTransport;
         }
         else {
-            context.transport = 0;
+            context.futureTransport = 0;
+            context.presentTransport = 0;
         }
 
         // need to unset trigs each sample

@@ -54,8 +54,6 @@ void callback(AppContext& context)
         textElt(textParams);
 
         EltParams p(context);
-        // auto& sequencer = context.sharedDataWrapper.getBackBuffer().sequencer;
-        // bool& playing = sequencer.playing;
         p.rect = Rect(coord.x, coord.y + 20, 50, 50);
         p.color = white;
         p.displayColor = sequencer.playing ? blue : white;
@@ -64,6 +62,13 @@ void callback(AppContext& context)
         p.onClick = [&]() {
             sequencer.playing = !sequencer.playing;
             sequencer.transport = 0;
+
+            if (sequencer.playing) {
+                context.toAudioThread(PlayMessage());
+            }
+            else {
+                context.toAudioThread(StopMessage());
+            }
         };
 
         p.onHold = [&]() { p.displayColor = p.onClickColor; };

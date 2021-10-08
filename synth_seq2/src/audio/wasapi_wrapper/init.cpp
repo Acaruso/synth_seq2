@@ -132,13 +132,14 @@ void initAudioClient(WasapiWrapper& wasapiWrapper, REFERENCE_TIME minimumDeviceP
     std::cout << "minimumDevicePeriod: " << minimumDevicePeriod << std::endl;
 
     // 100 ms buffer time
-    REFERENCE_TIME period = REFTIMES_PER_MS * 100;
+    REFERENCE_TIME period = REFTIMES_PER_MS * 23;
+
+    // REFERENCE_TIME period = minimumDevicePeriod;
 
     HRESULT hr = wasapiWrapper.audioClient->Initialize(
         AUDCLNT_SHAREMODE_SHARED,
         AUDCLNT_STREAMFLAGS_EVENTCALLBACK,
-        minimumDevicePeriod,
-        // period,
+        period,
         0,
         &wasapiWrapper.waveFormat.Format,
         NULL

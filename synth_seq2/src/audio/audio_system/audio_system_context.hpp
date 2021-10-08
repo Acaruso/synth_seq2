@@ -12,6 +12,13 @@ struct AudioSystemContext
 
     unsigned long sampleCounter{0};
     unsigned long transport{0};
+
+    unsigned sliceTime{0};
+    unsigned long presentTransport{0};
+    unsigned long futureTransport{0};
+
+    bool playing{false};
+
     double secondsPerSample{0.0};
 
     bool trig{false};
