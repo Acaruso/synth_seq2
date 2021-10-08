@@ -14,8 +14,23 @@ namespace
 
 Rect getWhiteKeyRect(Coord coord, int i);
 Rect getBlackKeyRect(Coord coord, int i);
-void whiteKey(AppContext& ctx, Rect rect, std::function<void()> onClick);
-void blackKey(AppContext& ctx, Rect rect, std::function<void()> onClick);
+
+void whiteKey(
+    AppContext& ctx,
+    Rect rect,
+    std::function<void()> onClick,
+    SequencerMode mode,
+    int note
+);
+
+void blackKey(
+    AppContext& ctx,
+    Rect rect,
+    std::function<void()> onClick,
+    SequencerMode mode,
+    int note
+);
+
 void background(EltParams& params, Coord coord);
 
 void pianoElt(EltParams& params)
@@ -23,30 +38,45 @@ void pianoElt(EltParams& params)
     AppContext& ctx = params.ctx;
     Coord coord = params.coord;
     auto& sharedData = ctx.getSharedData();
+    auto& sequencer = ctx.getSequencer();
 
     background(params, coord);
 
     int k = 0;
 
     for (int i = 0; i < 12; i++) {
-        auto _onClick = [&]() {
-            int note = baseNote + i;
-            ctx.sharedDataWrapper.toAudioQueue.enqueue(NoteMessage(note));
-            sharedData.intData["note"] = note;
-        };
+        int note = baseNote + i;
+
+        std::function<void()> _onClick = nullptr;
+
+        if (sequencer.mode == Normal) {
+            _onClick = [&]() {
+                sharedData.intData["note"] = note;
+                ctx.sharedDataWrapper.toAudioQueue.enqueue(NoteMessage(note));
+            };
+        }
+        else if (sequencer.mode == Select) {
+            _onClick = [&]() {
+                sequencer.getCurrentCell().intData["note"] = note;
+            };
+        }
 
         if (i == 1 || i == 3 || i == 6 || i == 8 || i == 10) {
             blackKey(
                 params.ctx,
                 getBlackKeyRect(coord, i),
-                _onClick
+                _onClick,
+                sequencer.mode,
+                note
             );
         }
         else {
             whiteKey(
                 params.ctx,
                 getWhiteKeyRect(coord, k++),
-                _onClick
+                _onClick,
+                sequencer.mode,
+                note
             );
         }
     }
@@ -90,8 +120,13 @@ Rect getBlackKeyRect(Coord coord, int i)
     return newRect;
 }
 
-void whiteKey(AppContext& ctx, Rect rect, std::function<void()> onClick)
-{
+void whiteKey(
+    AppContext& ctx,
+    Rect rect,
+    std::function<void()> onClick,
+    SequencerMode mode,
+    int note
+) {
     EltParams p(ctx);
     p.rect = rect;
     p.color = white;
@@ -102,8 +137,13 @@ void whiteKey(AppContext& ctx, Rect rect, std::function<void()> onClick)
     rectButtonElt(p);
 }
 
-void blackKey(AppContext& ctx, Rect rect, std::function<void()> onClick)
-{
+void blackKey(
+    AppContext& ctx,
+    Rect rect,
+    std::function<void()> onClick,
+    SequencerMode mode,
+    int note
+) {
     EltParams p(ctx);
     p.rect = rect;
     p.color = black;

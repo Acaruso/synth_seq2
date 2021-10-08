@@ -43,6 +43,11 @@ public:
         }
     }
 
+    Cell& getCurrentCell()
+    {
+        return row[selected];
+    }
+
     // recall that sequencer.step and sequencer.transport are only used in main thread
     // audio thread has its own, more accurate transport variable on audioContext object
     void update()

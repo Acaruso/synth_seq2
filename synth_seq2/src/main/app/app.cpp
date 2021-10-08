@@ -62,7 +62,6 @@ void App::handleMessagesFromAudioThread()
 
     Message message;
 
-    std::cout << "size: " << context.sharedDataWrapper.toMainQueue.size_approx() << std::endl;
     while (context.sharedDataWrapper.toMainQueue.try_dequeue(message)) {
         if (IntMessage* p = std::get_if<IntMessage>(&message)) {
             if (p->key == "transport") {

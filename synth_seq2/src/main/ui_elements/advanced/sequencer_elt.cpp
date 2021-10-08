@@ -70,7 +70,6 @@ void _cell(AppContext& ctx, Cell& cell, Coord coord, int i)
     p.onClickColor = blue;
 
     p.onClick = [&]() {
-        printMap(sharedData.intData);
         sequencer.mode = Select;
 
         if (!uiState.lshift) {
