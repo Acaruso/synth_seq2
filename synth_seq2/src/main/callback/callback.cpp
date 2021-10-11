@@ -28,7 +28,7 @@ void setup(AppContext& context)
 
 void callback(AppContext& context)
 {
-    auto& sequencer = context.sharedDataWrapper.getBackBuffer().sequencer;
+    auto& sequencer = context.sharedDataWrapper.sharedData.sequencer;
 
     sequencer.update();
 

@@ -86,7 +86,7 @@ void synthSettingsElt(EltParams& params)
 
 void _numberElt(AppContext& context, std::string label, Coord coord, std::string key)
 {
-    auto& sequencer = context.getSequencer();
+    auto& sequencer = context.sharedDataWrapper.sharedData.sequencer;
 
     auto& intData = sequencer.mode == Normal
         ? context.sharedDataWrapper.sharedData.intData

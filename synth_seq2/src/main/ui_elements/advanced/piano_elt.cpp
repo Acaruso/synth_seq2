@@ -37,8 +37,8 @@ void pianoElt(EltParams& params)
 {
     AppContext& ctx = params.ctx;
     Coord coord = params.coord;
-    auto& sharedData = ctx.getSharedData();
-    auto& sequencer = ctx.getSequencer();
+    auto& sharedData = ctx.sharedDataWrapper.sharedData;
+    auto& sequencer = sharedData.sequencer;
 
     background(params, coord);
 

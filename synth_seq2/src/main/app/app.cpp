@@ -34,7 +34,7 @@ void App::run()
 
         callback(context);
 
-        auto& sequencer = context.sharedDataWrapper.getBackBuffer().sequencer;
+        auto& sequencer = context.sharedDataWrapper.sharedData.sequencer;
         EventMap eventMap = sequencer.getEventMap();
         sendMessagesToAudioThread(eventMap);
 
@@ -60,7 +60,7 @@ void App::run()
 
 void App::handleMessagesFromAudioThread()
 {
-    auto& sequencer = context.sharedDataWrapper.getBackBuffer().sequencer;
+    auto& sequencer = context.sharedDataWrapper.sharedData.sequencer;
 
     Message message;
 

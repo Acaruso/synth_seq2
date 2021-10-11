@@ -42,15 +42,4 @@ struct AppContext
     {
         return inputSystem.uiState;
     }
-
-    // main thread should always use back buffer
-    SharedData& getSharedData()
-    {
-        return sharedDataWrapper.getBackBuffer();
-    }
-
-    Sequencer& getSequencer()
-    {
-        return sharedDataWrapper.getBackBuffer().sequencer;
-    }
 };

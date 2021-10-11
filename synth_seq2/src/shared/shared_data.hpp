@@ -64,9 +64,4 @@ public:
         toAudioQueue = moodycamel::ReaderWriterQueue<Message>(16);
         toMainQueue = moodycamel::ReaderWriterQueue<Message>(16);
     }
-
-    SharedData& getBackBuffer()
-    {
-        return sharedData;
-    }
 };
