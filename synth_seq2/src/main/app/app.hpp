@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <unordered_map>
 
 #include "lib/readerwriterqueue.h"
 
@@ -15,6 +16,7 @@ public:
     MessageQueue toAudioQueue;
     MessageQueue toMainQueue;
     Sequencer sequencer;
+    std::unordered_map<std::string, int> synthSettings;
 
     App(
         std::function<void(AppContext& context)> setup,

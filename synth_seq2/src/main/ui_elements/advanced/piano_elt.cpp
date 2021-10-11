@@ -37,7 +37,6 @@ void pianoElt(EltParams& params)
 {
     AppContext& ctx = params.ctx;
     Coord coord = params.coord;
-    auto& sharedData = ctx.sharedDataWrapper.sharedData;
 
     background(params, coord);
 
@@ -50,7 +49,7 @@ void pianoElt(EltParams& params)
 
         if (ctx.sequencer->mode == Normal) {
             _onClick = [&]() {
-                sharedData.intData["note"] = note;
+                (*ctx.synthSettings)["note"] = note;
                 ctx.toAudioQueue->enqueue(NoteMessage(note));
             };
         }

@@ -16,6 +16,7 @@ struct AppContext
     MessageQueue* toAudioQueue;
     MessageQueue* toMainQueue;
     Sequencer* sequencer;
+    std::unordered_map<std::string, int>* synthSettings;
 
     int eltId{0};
     int curEltId{0};

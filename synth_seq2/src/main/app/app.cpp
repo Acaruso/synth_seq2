@@ -17,9 +17,20 @@ App::App(
     toAudioQueue = MessageQueue(16);
     toMainQueue = MessageQueue(16);
 
+    synthSettings["volume"] = 100;
+    synthSettings["modAmount"] = 0;
+    synthSettings["attack"] = 0;
+    synthSettings["hold"] = 80;
+    synthSettings["release"] = 100;
+    synthSettings["modAttack"] = 0;
+    synthSettings["modHold"] = 80;
+    synthSettings["modRelease"] = 100;
+    synthSettings["note"] = 60;
+
     context.toAudioQueue = &toAudioQueue;
     context.toMainQueue = &toMainQueue;
     context.sequencer = &sequencer;
+    context.synthSettings = &synthSettings;
 }
 
 void App::run()
@@ -42,7 +53,6 @@ void App::run()
 
         callback(context);
 
-        // auto& sequencer = context.sharedDataWrapper.sharedData.sequencer;
         EventMap eventMap = sequencer.getEventMap();
         sendMessagesToAudioThread(eventMap);
 

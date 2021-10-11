@@ -57,7 +57,6 @@ Rect _getClockRect(Coord coord, int i)
 
 void _cell(AppContext& ctx, Cell& cell, Coord coord, int i)
 {
-    auto& sharedData = ctx.sharedDataWrapper.sharedData;
     auto& uiState = ctx.getUiState();
 
     EltParams p(ctx);
@@ -72,7 +71,7 @@ void _cell(AppContext& ctx, Cell& cell, Coord coord, int i)
         if (!uiState.lshift) {
             if (!cell.on) {
                 cell.on = true;
-                cell.intData = sharedData.intData;
+                cell.intData = (*ctx.synthSettings);
             }
             else {
                 cell.on = false;

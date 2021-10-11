@@ -10,22 +10,22 @@
 
 struct SharedData
 {
-    std::unordered_map<std::string, int> intData;
+    // std::unordered_map<std::string, int> intData;
 
     SharedData()
     {
-        intData["volume"] = 100;
-        intData["modAmount"] = 0;
+        // intData["volume"] = 100;
+        // intData["modAmount"] = 0;
 
-        intData["attack"] = 0;
-        intData["hold"] = 80;
-        intData["release"] = 100;
+        // intData["attack"] = 0;
+        // intData["hold"] = 80;
+        // intData["release"] = 100;
 
-        intData["modAttack"] = 0;
-        intData["modHold"] = 80;
-        intData["modRelease"] = 100;
+        // intData["modAttack"] = 0;
+        // intData["modHold"] = 80;
+        // intData["modRelease"] = 100;
 
-        intData["note"] = 60;
+        // intData["note"] = 60;
     }
 };
 
