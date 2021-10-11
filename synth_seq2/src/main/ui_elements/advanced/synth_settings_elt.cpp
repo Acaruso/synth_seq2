@@ -4,6 +4,7 @@
 #include "src/main/util.hpp"
 
 void _numberElt(AppContext& context, std::string label, Coord coord, std::string key);
+SynthSettings& getSynthSettings(AppContext& context);
 
 void synthSettingsElt(EltParams& params)
 {
@@ -86,9 +87,7 @@ void synthSettingsElt(EltParams& params)
 
 void _numberElt(AppContext& context, std::string label, Coord coord, std::string key)
 {
-    auto& synthSettings = context.sequencer->mode == Normal
-        ? (*context.synthSettings)
-        : context.sequencer->getCurrentCell().synthSettings;
+    auto& synthSettings = getSynthSettings(context);
 
     std::string fontName = "dos";
     Font& font = context.graphicsWrapper.getFont(fontName);
@@ -127,4 +126,20 @@ void _numberElt(AppContext& context, std::string label, Coord coord, std::string
     };
 
     numberElt(p);
+}
+
+SynthSettings& getSynthSettings(AppContext& context)
+{
+    if (context.sequencer->mode == Normal) {
+        return *context.synthSettings;
+    }
+    else {
+        auto& cell = context.sequencer->getSelectedCell();
+        if (cell.on) {
+            return context.sequencer->getSelectedCell().synthSettings;
+        }
+        else {
+            return *context.synthSettings;
+        }
+    }
 }

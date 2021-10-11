@@ -17,7 +17,7 @@ Sequencer::Sequencer(int size)
     }
 }
 
-Cell& Sequencer::getCurrentCell()
+Cell& Sequencer::getSelectedCell()
 {
     return row[selected];
 }

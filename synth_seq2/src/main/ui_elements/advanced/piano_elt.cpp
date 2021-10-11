@@ -55,7 +55,7 @@ void pianoElt(EltParams& params)
         }
         else if (ctx.sequencer->mode == Select) {
             _onClick = [&]() {
-                ctx.sequencer->getCurrentCell().synthSettings["note"] = note;
+                ctx.sequencer->getSelectedCell().synthSettings["note"] = note;
             };
         }
 

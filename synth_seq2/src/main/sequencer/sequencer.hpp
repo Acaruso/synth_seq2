@@ -16,6 +16,11 @@ struct Cell
 {
     bool on{false};
     SynthSettings synthSettings;
+
+    Cell()
+    {
+        synthSettings = getDefaultSynthSettings();
+    }
 };
 
 class Sequencer
@@ -34,7 +39,7 @@ public:
     Sequencer();
     Sequencer(int size);
 
-    Cell& getCurrentCell();
+    Cell& getSelectedCell();
     void update();
     int getStep(int transport);
     EventMap getEventMap();
