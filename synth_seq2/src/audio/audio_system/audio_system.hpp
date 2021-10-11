@@ -6,7 +6,7 @@
 
 #include "src/audio/audio_system/sample_buffer.hpp"
 #include "src/audio/wasapi_wrapper/wasapi_wrapper.hpp"
-#include "src/shared/shared_data.hpp"
+#include "src/shared/messages.hpp"
 
 class AudioSystem
 {

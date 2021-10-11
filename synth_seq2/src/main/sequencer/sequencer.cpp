@@ -2,8 +2,6 @@
 
 #include <iostream>
 
-#include "src/shared/shared_data.hpp"
-
 EventMap Sequencer::getEventMap()
 {
     EventMap map;

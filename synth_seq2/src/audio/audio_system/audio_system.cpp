@@ -5,7 +5,6 @@
 
 #include "src/audio/audio_util.hpp"
 #include "src/audio/wasapi_wrapper/init.hpp"
-#include "src/shared/messages.hpp"
 
 AudioSystem::AudioSystem(
     MessageQueue* toAudioQueue,

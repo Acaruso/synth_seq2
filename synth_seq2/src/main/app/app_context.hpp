@@ -6,7 +6,7 @@
 
 #include "src/main/graphics/graphics_wrapper.hpp"
 #include "src/main/input_system/input_system.hpp"
-#include "src/shared/shared_data.hpp"
+#include "src/shared/messages.hpp"
 
 struct AppContext
 {
@@ -20,8 +20,6 @@ struct AppContext
 
     int eltId{0};
     int curEltId{0};
-
-    SharedDataWrapper sharedDataWrapper;
 
     void registerElt()
     {
