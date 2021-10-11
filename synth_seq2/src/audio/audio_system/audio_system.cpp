@@ -137,8 +137,8 @@ void AudioSystem::setTrigs()
     // check if presentTransport is in eventMap
     if (eventMap.find(presentTransport) != eventMap.end()) {
         trig = true;
-        intData = eventMap[presentTransport];
-        intData["note"] = 60;
+        synthSettings = eventMap[presentTransport];
+        synthSettings["note"] = 60;
         eventMap.erase(presentTransport);
     }
 

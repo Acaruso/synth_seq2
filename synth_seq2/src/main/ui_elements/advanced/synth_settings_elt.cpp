@@ -86,13 +86,13 @@ void synthSettingsElt(EltParams& params)
 
 void _numberElt(AppContext& context, std::string label, Coord coord, std::string key)
 {
-    auto& intData = context.sequencer->mode == Normal
+    auto& synthSettings = context.sequencer->mode == Normal
         ? (*context.synthSettings)
-        : context.sequencer->getCurrentCell().intData;
+        : context.sequencer->getCurrentCell().synthSettings;
 
     std::string fontName = "dos";
     Font& font = context.graphicsWrapper.getFont(fontName);
-    int data = intData[key];
+    int data = synthSettings[key];
 
     context.graphicsWrapper.drawText(label, fontName, coord);
 
@@ -122,8 +122,8 @@ void _numberElt(AppContext& context, std::string label, Coord coord, std::string
     };
 
     p.onDrag = [&]() {
-        intData[key] += context.getDragAmount() / 2;
-        intData[key] = clamp(intData[key], p.min, p.max);
+        synthSettings[key] += context.getDragAmount() / 2;
+        synthSettings[key] = clamp(synthSettings[key], p.min, p.max);
     };
 
     numberElt(p);

@@ -83,6 +83,7 @@
   <!-- shared -->
   <ItemGroup>
     <ClInclude Include="src/shared/messages.hpp" />
+    <ClInclude Include="src/shared/shared.hpp" />
   </ItemGroup>
   <!-- 3rd party libraries -->
   <ItemGroup>

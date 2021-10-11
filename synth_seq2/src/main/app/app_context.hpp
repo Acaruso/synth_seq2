@@ -7,6 +7,7 @@
 #include "src/main/graphics/graphics_wrapper.hpp"
 #include "src/main/input_system/input_system.hpp"
 #include "src/shared/messages.hpp"
+#include "src/shared/shared.hpp"
 
 struct AppContext
 {
@@ -16,7 +17,7 @@ struct AppContext
     MessageQueue* toAudioQueue;
     MessageQueue* toMainQueue;
     Sequencer* sequencer;
-    std::unordered_map<std::string, int>* synthSettings;
+    SynthSettings* synthSettings;
 
     int eltId{0};
     int curEltId{0};

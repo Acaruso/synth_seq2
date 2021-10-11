@@ -71,7 +71,7 @@ void _cell(AppContext& ctx, Cell& cell, Coord coord, int i)
         if (!uiState.lshift) {
             if (!cell.on) {
                 cell.on = true;
-                cell.intData = (*ctx.synthSettings);
+                cell.synthSettings = (*ctx.synthSettings);
             }
             else {
                 cell.on = false;

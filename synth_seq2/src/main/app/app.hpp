@@ -6,8 +6,9 @@
 #include "lib/readerwriterqueue.h"
 
 #include "app_context.hpp"
-#include "src/shared/messages.hpp"
 #include "src/main/sequencer/sequencer.hpp"
+#include "src/shared/messages.hpp"
+#include "src/shared/shared.hpp"
 
 class App
 {
@@ -16,7 +17,7 @@ public:
     MessageQueue toAudioQueue;
     MessageQueue toMainQueue;
     Sequencer sequencer;
-    std::unordered_map<std::string, int> synthSettings;
+    SynthSettings synthSettings;
 
     App(
         std::function<void(AppContext& context)> setup,

@@ -13,20 +13,20 @@ Smooth smooth(32);
 double AudioSystem::audioCallback()
 {
     double t = getTime();
-    double volume = ((double)intData["volume"]) / 100.0;
+    double volume = ((double)synthSettings["volume"]) / 100.0;
 
     if (trig) {
-        double freq = mtof(intData["note"]);
+        double freq = mtof(synthSettings["note"]);
 
-        double modAmount = ((double)intData["modAmount"]) / 100.0;
+        double modAmount = ((double)synthSettings["modAmount"]) / 100.0;
 
         polyFmSin.trigger(
-            (double)intData["attack"] * 2,
-            (double)intData["hold"] * 20,
-            (double)intData["release"] * 20,
-            (double)intData["modAttack"] * 2,
-            (double)intData["modHold"] * 20,
-            (double)intData["modRelease"] * 20,
+            (double)synthSettings["attack"] * 2,
+            (double)synthSettings["hold"] * 20,
+            (double)synthSettings["release"] * 20,
+            (double)synthSettings["modAttack"] * 2,
+            (double)synthSettings["modHold"] * 20,
+            (double)synthSettings["modRelease"] * 20,
             modAmount,
             freq
         );

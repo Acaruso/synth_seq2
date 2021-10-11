@@ -7,6 +7,7 @@
 #include "src/audio/audio_system/sample_buffer.hpp"
 #include "src/audio/wasapi_wrapper/wasapi_wrapper.hpp"
 #include "src/shared/messages.hpp"
+#include "src/shared/shared.hpp"
 
 class AudioSystem
 {
@@ -44,7 +45,7 @@ private:
     double secondsPerSample{0.0};
 
     bool trig{false};
-    std::unordered_map<std::string, int> intData;
+    SynthSettings synthSettings;
     EventMap eventMap;
 
     double freq{0.0};

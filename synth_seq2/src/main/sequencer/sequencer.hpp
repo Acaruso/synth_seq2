@@ -4,10 +4,7 @@
 #include <unordered_map>
 #include <vector>
 
-using IntData = std::unordered_map<std::string, int>;
-
-// key = sample location
-using EventMap = std::unordered_map<unsigned, IntData>;
+#include "src/shared/shared.hpp"
 
 enum SequencerMode
 {
@@ -18,7 +15,7 @@ enum SequencerMode
 struct Cell
 {
     bool on{false};
-    std::unordered_map<std::string, int> intData;
+    SynthSettings synthSettings;
 };
 
 class Sequencer
@@ -54,8 +51,6 @@ public:
         return row[selected];
     }
 
-    // recall that sequencer.step and sequencer.transport are only used in main thread
-    // audio thread has its own, more accurate transport variable on audioContext object
     void update()
     {
         if (playing) {

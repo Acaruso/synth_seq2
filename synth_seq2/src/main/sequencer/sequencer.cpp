@@ -20,7 +20,7 @@ EventMap Sequencer::getEventMap()
         int step = getStep(nextStep);
 
         if (row[step].on) {
-            map[nextStep] = row[step].intData;
+            map[nextStep] = row[step].synthSettings;
         }
 
         nextStep += samplesPerStep;
