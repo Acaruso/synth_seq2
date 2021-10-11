@@ -13,15 +13,13 @@ struct AppContext
     GraphicsWrapper graphicsWrapper;
     InputSystem inputSystem;
 
+    MessageQueue* toAudioQueue;
+    MessageQueue* toMainQueue;
+
     int eltId{0};
     int curEltId{0};
 
     SharedDataWrapper sharedDataWrapper;
-
-    void toAudioThread(Message message)
-    {
-        sharedDataWrapper.toAudioQueue.enqueue(message);
-    }
 
     void registerElt()
     {

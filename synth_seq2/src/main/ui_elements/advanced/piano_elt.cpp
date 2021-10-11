@@ -52,7 +52,7 @@ void pianoElt(EltParams& params)
         if (sequencer.mode == Normal) {
             _onClick = [&]() {
                 sharedData.intData["note"] = note;
-                ctx.sharedDataWrapper.toAudioQueue.enqueue(NoteMessage(note));
+                ctx.toAudioQueue->enqueue(NoteMessage(note));
             };
         }
         else if (sequencer.mode == Select) {

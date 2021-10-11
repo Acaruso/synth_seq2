@@ -11,7 +11,14 @@
 class AudioSystem
 {
 public:
-    AudioSystem(SharedDataWrapper* sharedDataWrapper);
+    MessageQueue* toAudioQueue;
+    MessageQueue* toMainQueue;
+
+    AudioSystem(
+        MessageQueue* toAudioQueue,
+        MessageQueue* toMainQueue
+    );
+
     void playAudio();
     ~AudioSystem();
 
@@ -23,8 +30,6 @@ private:
     unsigned periodSizeFrames;
 
     // from context /////////////////////////////
-
-    SharedDataWrapper* sharedDataWrapper;
 
     unsigned long sampleCounter{0};
     unsigned long transport{0};

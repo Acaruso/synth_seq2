@@ -13,13 +13,20 @@ App::App(
     std::function<void(AppContext& context)> callback
 )
     : setup(setup), callback(callback)
-{}
+{
+    toAudioQueue = MessageQueue(16);
+    toMainQueue = MessageQueue(16);
+
+    context.toAudioQueue = &toAudioQueue;
+    context.toMainQueue = &toMainQueue;
+}
 
 void App::run()
 {
     std::thread audioThread(
         &audioEntrypoint,
-        &(context.sharedDataWrapper)
+        &toAudioQueue,
+        &toMainQueue
     );
 
     setup(context);
@@ -50,7 +57,7 @@ void App::run()
 
     std::cout << "main thread: quitting" << std::endl;
 
-    context.sharedDataWrapper.toAudioQueue.enqueue(QuitMessage());
+    toAudioQueue.enqueue(QuitMessage());
 
     audioThread.join();
 
@@ -64,7 +71,7 @@ void App::handleMessagesFromAudioThread()
 
     Message message;
 
-    while (context.sharedDataWrapper.toMainQueue.try_dequeue(message)) {
+    while (toMainQueue.try_dequeue(message)) {
         if (IntMessage* p = std::get_if<IntMessage>(&message)) {
             if (p->key == "futureTransport") {
                 sequencer.prevTransport = sequencer.transport;
@@ -80,7 +87,7 @@ void App::sendMessagesToAudioThread(EventMap& eventMap)
     EventMapMessage message(eventMap);
 
     if (getEventMap) {
-        context.sharedDataWrapper.toAudioQueue.enqueue(message);
+        toAudioQueue.enqueue(message);
     }
 }
 

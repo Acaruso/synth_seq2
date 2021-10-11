@@ -2,12 +2,17 @@
 
 #include <functional>
 
+#include "lib/readerwriterqueue.h"
+
 #include "app_context.hpp"
+#include "src/shared/messages.hpp"
 
 class App
 {
 public:
     AppContext context;
+    MessageQueue toAudioQueue;
+    MessageQueue toMainQueue;
 
     App(
         std::function<void(AppContext& context)> setup,

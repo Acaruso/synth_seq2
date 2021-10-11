@@ -36,14 +36,14 @@ struct SharedData
 class SharedDataWrapper
 {
 public:
-    moodycamel::ReaderWriterQueue<Message> toAudioQueue;
-    moodycamel::ReaderWriterQueue<Message> toMainQueue;
+    // moodycamel::ReaderWriterQueue<Message> toAudioQueue;
+    // moodycamel::ReaderWriterQueue<Message> toMainQueue;
 
     SharedData sharedData;
 
     SharedDataWrapper()
     {
-        toAudioQueue = moodycamel::ReaderWriterQueue<Message>(16);
-        toMainQueue = moodycamel::ReaderWriterQueue<Message>(16);
+        // toAudioQueue = moodycamel::ReaderWriterQueue<Message>(16);
+        // toMainQueue = moodycamel::ReaderWriterQueue<Message>(16);
     }
 };

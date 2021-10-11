@@ -7,10 +7,12 @@
 #include "src/audio/wasapi_wrapper/init.hpp"
 #include "src/shared/messages.hpp"
 
-AudioSystem::AudioSystem(SharedDataWrapper* sharedDataWrapper)
+AudioSystem::AudioSystem(
+    MessageQueue* toAudioQueue,
+    MessageQueue* toMainQueue
+)
+    : toAudioQueue(toAudioQueue), toMainQueue(toMainQueue)
 {
-    this->sharedDataWrapper = sharedDataWrapper;
-
     wasapiWrapper = {};
     init(wasapiWrapper);
 
@@ -66,7 +68,7 @@ void AudioSystem::handleMessagesFromMainThread()
 {
     Message message;
 
-    while (sharedDataWrapper->toAudioQueue.try_dequeue(message)) {
+    while (toAudioQueue->try_dequeue(message)) {
         if (std::get_if<QuitMessage>(&message)) {
             std::cout << "audio thread: quitting" << std::endl;
             quit = true;
@@ -92,7 +94,7 @@ void AudioSystem::handleMessagesFromMainThread()
 void AudioSystem::sendMessagesToMainThread()
 {
     if (playing && futureTransport % sliceTime == 0) {
-        sharedDataWrapper->toMainQueue.enqueue(
+        toMainQueue->enqueue(
             IntMessage("futureTransport", futureTransport)
         );
     }

@@ -64,10 +64,10 @@ void callback(AppContext& context)
             sequencer.transport = 0;
 
             if (sequencer.playing) {
-                context.toAudioThread(PlayMessage());
+                context.toAudioQueue->enqueue(PlayMessage());
             }
             else {
-                context.toAudioThread(StopMessage());
+                context.toAudioQueue->enqueue(StopMessage());
             }
         };
 

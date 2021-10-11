@@ -3,6 +3,10 @@
 #include <string>
 #include <variant>
 
+#include "lib/readerwriterqueue.h"
+
+#include "src/shared/sequencer/sequencer.hpp"
+
 struct QuitMessage {};
 
 struct PlayMessage {};
@@ -63,3 +67,5 @@ using Message = std::variant<
     StringMessage,
     EventMapMessage
 >;
+
+using MessageQueue = moodycamel::ReaderWriterQueue<Message>;
