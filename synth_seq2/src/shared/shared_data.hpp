@@ -11,24 +11,6 @@
 #include "src/shared/sequencer/sequencer.hpp"
 #include "src/shared/messages.hpp"
 
-template <typename T>
-inline void printMap(T t)
-{
-    for (auto& elt : t) {
-        std::cout << elt.first << " " << elt.second << std::endl;
-    }
-    std::cout << std::endl;
-}
-
-template <typename T>
-inline void printKeys(T t)
-{
-    for (auto& elt : t) {
-        std::cout << elt.first << std::endl;
-    }
-    std::cout << std::endl;
-}
-
 struct SharedData
 {
     std::unordered_map<std::string, int> intData;

@@ -18,17 +18,11 @@ EventMap Sequencer::getEventMap()
         nextStep = prevTransport + (samplesPerStep - (prevTransport % samplesPerStep));
     }
 
-    // std::cout << "nextStep: " << nextStep << std::endl;
-
     while (nextStep < transport) {
-        // std::cout << "nextStep: " << nextStep << std::endl;
         int step = getStep(nextStep);
-        std::cout << "step: " << step << std::endl;
 
         if (row[step].on) {
             map[nextStep] = row[step].intData;
-            std::cout << "add step to map at: " << nextStep << std::endl;
-            printMap(map[nextStep]);
         }
 
         nextStep += samplesPerStep;

@@ -87,8 +87,6 @@ void AudioSystem::handleMessagesFromMainThread()
             context.trig = true;
         }
         else if (EventMapMessage* p = std::get_if<EventMapMessage>(&message)) {
-            // context.eventMap = p->eventMap;
-
             // merge maps
             context.eventMap.insert(p->eventMap.begin(), p->eventMap.end());
         }
@@ -107,7 +105,7 @@ void AudioSystem::sendMessagesToMainThread()
 void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
 {
     unsigned numChannels = 2;
-    
+
     for (int i = 0; i < numSamplesToWrite; i += numChannels) {
         setTrigs();
 
@@ -141,7 +139,6 @@ void AudioSystem::setTrigs()
 {
     // check if presentTransport is in eventMap
     if (context.eventMap.find(context.presentTransport) != context.eventMap.end()) {
-        std::cout << "set trigs" << std::endl;
         context.trig = true;
         context.intData = context.eventMap[context.presentTransport];
         context.intData["note"] = 60;
@@ -149,9 +146,7 @@ void AudioSystem::setTrigs()
     }
 
     // auto& sequencer = context.sharedDataWrapper->getFrontBuffer().sequencer;
-
     // int step = sequencer.getStep(context.transport);
-
     // if (
     //     sequencer.playing
     //     && context.transport % sequencer.samplesPerStep == 0
@@ -165,7 +160,6 @@ void AudioSystem::setTrigs()
 void AudioSystem::unsetTrigs()
 {
     context.trig = false;
-    // context.eventMap.clear();
 }
 
 AudioSystem::~AudioSystem()
