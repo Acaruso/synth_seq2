@@ -65,7 +65,7 @@ void Sequencer::toggleCell(int i)
 
 void Sequencer::selectCell(int i)
 {
-    if (selected == i) {
+    if (selected == i && mode == Select) {
         mode = Normal;
     }
     else {
