@@ -1,6 +1,6 @@
 #include "sequencer_elt.hpp"
 
-#include "src/shared/sequencer/sequencer.hpp"
+#include "src/main/sequencer/sequencer.hpp"
 #include "src/main/ui_elements/advanced/rect_button_elt.hpp"
 
 void _clock(AppContext& ctx, Coord coord, int i);

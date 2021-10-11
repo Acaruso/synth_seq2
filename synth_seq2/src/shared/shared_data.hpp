@@ -6,9 +6,7 @@
 #include <unordered_map>
 #include <vector>
 
-#include "lib/readerwriterqueue.h"
-
-#include "src/shared/sequencer/sequencer.hpp"
+#include "src/main/sequencer/sequencer.hpp"
 #include "src/shared/messages.hpp"
 
 struct SharedData
@@ -36,14 +34,6 @@ struct SharedData
 class SharedDataWrapper
 {
 public:
-    // moodycamel::ReaderWriterQueue<Message> toAudioQueue;
-    // moodycamel::ReaderWriterQueue<Message> toMainQueue;
-
     SharedData sharedData;
-
-    SharedDataWrapper()
-    {
-        // toAudioQueue = moodycamel::ReaderWriterQueue<Message>(16);
-        // toMainQueue = moodycamel::ReaderWriterQueue<Message>(16);
-    }
+    SharedDataWrapper() {}
 };

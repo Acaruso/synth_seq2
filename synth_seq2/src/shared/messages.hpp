@@ -5,7 +5,7 @@
 
 #include "lib/readerwriterqueue.h"
 
-#include "src/shared/sequencer/sequencer.hpp"
+#include "src/main/sequencer/sequencer.hpp"
 
 struct QuitMessage {};
 

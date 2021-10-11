@@ -38,6 +38,7 @@
     <ClCompile Include="src/main/graphics/graphics_wrapper.cpp" />
     <ClCompile Include="src/main/input_system/input_system.cpp" />
     <ClCompile Include="src/main/main.cpp" />
+    <ClCompile Include="src/main/sequencer/sequencer.cpp" />
     <ClCompile Include="src/main/ui_elements/advanced/number_elt.cpp" />
     <ClCompile Include="src/main/ui_elements/advanced/piano_elt.cpp" />
     <ClCompile Include="src/main/ui_elements/advanced/rect_button_elt.cpp" />
@@ -63,12 +64,13 @@
     <ClInclude Include="src/main/graphics/image.hpp" />
     <ClInclude Include="src/main/graphics/rect.hpp" />
     <ClInclude Include="src/main/input_system/input_system.hpp" />
+    <ClInclude Include="src/main/sequencer/sequencer.hpp" />
     <ClInclude Include="src/main/ui_elements/advanced/number_elt.hpp" />
     <ClInclude Include="src/main/ui_elements/advanced/piano_elt.hpp" />
     <ClInclude Include="src/main/ui_elements/advanced/rect_button_elt.hpp" />
     <ClInclude Include="src/main/ui_elements/advanced/sequencer_elt.hpp" />
-    <ClInclude Include="src/main/ui_elements/advanced/text_elt.hpp" />
     <ClInclude Include="src/main/ui_elements/advanced/synth_settings_elt.hpp" />
+    <ClInclude Include="src/main/ui_elements/advanced/text_elt.hpp" />
     <ClInclude Include="src/main/ui_elements/decorators/base_decorator.hpp" />
     <ClInclude Include="src/main/ui_elements/decorators/clickable.hpp" />
     <ClInclude Include="src/main/ui_elements/decorators/decorator_utils.hpp" />
@@ -80,11 +82,7 @@
   </ItemGroup>
   <!-- shared -->
   <ItemGroup>
-    <ClCompile Include="src/shared/sequencer/sequencer.cpp" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="src/shared/messages.hpp" />
-    <ClInclude Include="src/shared/sequencer/sequencer.hpp" />
     <ClInclude Include="src/shared/shared_data.hpp" />
   </ItemGroup>
   <!-- 3rd party libraries -->
