@@ -141,17 +141,6 @@ void AudioSystem::setTrigs()
         synthSettings["note"] = 60;
         eventMap.erase(presentTransport);
     }
-
-    // auto& sequencer = sharedDataWrapper->getFrontBuffer().sequencer;
-    // int step = sequencer.getStep(transport);
-    // if (
-    //     sequencer.playing
-    //     && transport % sequencer.samplesPerStep == 0
-    //     && sequencer.row[step].on
-    // ) {
-    //     trig = true;
-    //     intData = sequencer.row[step].intData;
-    // }
 }
 
 void AudioSystem::unsetTrigs()
