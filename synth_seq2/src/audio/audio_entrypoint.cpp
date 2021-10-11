@@ -5,7 +5,6 @@
 #include <string>
 
 #include "src/audio/audio_system/audio_system.hpp"
-#include "src/audio/synthesis/audio_callback.hpp"
 
 int audioEntrypoint(SharedDataWrapper* sharedDataWrapper)
 {
@@ -13,7 +12,7 @@ int audioEntrypoint(SharedDataWrapper* sharedDataWrapper)
     CoInitializeEx(NULL, COINIT_APARTMENTTHREADED);
 
     try {
-        AudioSystem audioSystem(audioCallback, sharedDataWrapper);
+        AudioSystem audioSystem(sharedDataWrapper);
 
         // begin main loop
         audioSystem.playAudio();

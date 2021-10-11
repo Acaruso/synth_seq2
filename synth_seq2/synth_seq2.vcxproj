@@ -16,11 +16,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src/audio/audio_entrypoint.hpp" />
-    <ClInclude Include="src/audio/audio_system/audio_system_context.hpp" />
     <ClInclude Include="src/audio/audio_system/audio_system.hpp" />
     <ClInclude Include="src/audio/audio_system/sample_buffer.hpp" />
     <ClInclude Include="src/audio/audio_util.hpp" />
-    <ClInclude Include="src/audio/synthesis/audio_callback.hpp" />
     <ClInclude Include="src/audio/synthesis/consts.hpp" />
     <ClInclude Include="src/audio/synthesis/ugens/ahr_env.hpp" />
     <ClInclude Include="src/audio/synthesis/ugens/poly_sin.hpp" />

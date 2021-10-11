@@ -1,4 +1,4 @@
-#include "audio_callback.hpp"
+#include "src/audio/audio_system/audio_system.hpp"
 
 #include <iostream>
 
@@ -10,16 +10,12 @@
 PolyFmSin polyFmSin(8);
 Smooth smooth(32);
 
-double audioCallback(AudioSystemContext& context)
+double AudioSystem::audioCallback()
 {
-    auto& intData = context.intData;
-
-    double t = context.getTime();
+    double t = getTime();
     double volume = ((double)intData["volume"]) / 100.0;
 
-    if (context.trig) {
-        // double freq = context.freq;
-        // printMap(context.intData);
+    if (trig) {
         double freq = mtof(intData["note"]);
 
         double modAmount = ((double)intData["modAmount"]) / 100.0;
