@@ -2,6 +2,40 @@
 
 #include <iostream>
 
+Sequencer::Sequencer()
+{
+    int size = 16;
+    for (int i = 0; i < size; i++) {
+        row.push_back(Cell());
+    }
+}
+
+Sequencer::Sequencer(int size)
+{
+    for (int i = 0; i < size; i++) {
+        row.push_back(Cell());
+    }
+}
+
+Cell& Sequencer::getCurrentCell()
+{
+    return row[selected];
+}
+
+void Sequencer::update()
+{
+    if (playing) {
+        step = getStep(transport);
+    }
+}
+
+int Sequencer::getStep(int transport)
+{
+    int t = transport / samplesPerStep;
+    t = t % 16;
+    return t;
+}
+
 EventMap Sequencer::getEventMap()
 {
     EventMap map;

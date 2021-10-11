@@ -17,15 +17,7 @@ App::App(
     toAudioQueue = MessageQueue(16);
     toMainQueue = MessageQueue(16);
 
-    synthSettings["volume"] = 100;
-    synthSettings["modAmount"] = 0;
-    synthSettings["attack"] = 0;
-    synthSettings["hold"] = 80;
-    synthSettings["release"] = 100;
-    synthSettings["modAttack"] = 0;
-    synthSettings["modHold"] = 80;
-    synthSettings["modRelease"] = 100;
-    synthSettings["note"] = 60;
+    synthSettings = getDefaultSynthSettings();
 
     context.toAudioQueue = &toAudioQueue;
     context.toMainQueue = &toMainQueue;

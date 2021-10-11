@@ -27,6 +27,8 @@ AudioSystem::AudioSystem(
 
     sliceTime = periodSizeFrames * 4;
     leadTime = sliceTime * 2;
+
+    synthSettings = getDefaultSynthSettings();
 }
 
 void AudioSystem::playAudio()

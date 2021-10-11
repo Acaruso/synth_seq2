@@ -31,39 +31,11 @@ public:
 
     std::vector<Cell> row;
 
-    Sequencer()
-    {
-        int size = 16;
-        for (int i = 0; i < size; i++) {
-            row.push_back(Cell());
-        }
-    }
+    Sequencer();
+    Sequencer(int size);
 
-    Sequencer(int size)
-    {
-        for (int i = 0; i < size; i++) {
-            row.push_back(Cell());
-        }
-    }
-
-    Cell& getCurrentCell()
-    {
-        return row[selected];
-    }
-
-    void update()
-    {
-        if (playing) {
-            step = getStep(transport);
-        }
-    }
-
-    int getStep(int transport)
-    {
-        int t = transport / samplesPerStep;
-        t = t % 16;
-        return t;
-    }
-
+    Cell& getCurrentCell();
+    void update();
+    int getStep(int transport);
     EventMap getEventMap();
 };
