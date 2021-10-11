@@ -17,12 +17,9 @@ App::App(
     toAudioQueue = MessageQueue(16);
     toMainQueue = MessageQueue(16);
 
-    synthSettings = getDefaultSynthSettings();
-
     context.toAudioQueue = &toAudioQueue;
     context.toMainQueue = &toMainQueue;
     context.sequencer = &sequencer;
-    context.synthSettings = &synthSettings;
 }
 
 void App::run()

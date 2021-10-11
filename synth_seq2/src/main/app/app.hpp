@@ -17,7 +17,6 @@ public:
     MessageQueue toAudioQueue;
     MessageQueue toMainQueue;
     Sequencer sequencer;
-    SynthSettings synthSettings;
 
     App(
         std::function<void(AppContext& context)> setup,

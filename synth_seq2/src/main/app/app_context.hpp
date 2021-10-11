@@ -17,7 +17,6 @@ struct AppContext
     MessageQueue* toAudioQueue;
     MessageQueue* toMainQueue;
     Sequencer* sequencer;
-    SynthSettings* synthSettings;
 
     int eltId{0};
     int curEltId{0};

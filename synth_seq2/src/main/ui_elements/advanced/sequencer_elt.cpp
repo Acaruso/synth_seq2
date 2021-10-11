@@ -66,25 +66,11 @@ void _cell(AppContext& ctx, Cell& cell, Coord coord, int i)
     p.onClickColor = blue;
 
     p.onClick = [&]() {
-        ctx.sequencer->mode = Select;
-
-        if (!uiState.lshift) {
-            if (!cell.on) {
-                cell.on = true;
-                cell.synthSettings = (*ctx.synthSettings);
-            }
-            else {
-                cell.on = false;
-            }
-            ctx.sequencer->selected = i;
+        if (uiState.lshift) {
+            ctx.sequencer->selectCell(i);
         }
-        else if (uiState.lshift) {
-            if (ctx.sequencer->selected == i) {
-                ctx.sequencer->mode = Normal;
-            }
-            else {
-                ctx.sequencer->selected = i;
-            }
+        else {
+            ctx.sequencer->toggleCell(i);
         }
     };
 

@@ -33,13 +33,18 @@ public:
     unsigned long transport{0};
     unsigned long prevTransport{0};
     int samplesPerStep{10000};
+    SynthSettings curSynthSettings;
 
     std::vector<Cell> row;
 
     Sequencer();
     Sequencer(int size);
 
+    Cell& getCell(int i);
     Cell& getSelectedCell();
+    SynthSettings& getSynthSettings();
+    void toggleCell(int i);
+    void selectCell(int i);
     void update();
     int getStep(int transport);
     EventMap getEventMap();

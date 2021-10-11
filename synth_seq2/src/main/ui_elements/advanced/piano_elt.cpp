@@ -49,7 +49,7 @@ void pianoElt(EltParams& params)
 
         if (ctx.sequencer->mode == Normal) {
             _onClick = [&]() {
-                (*ctx.synthSettings)["note"] = note;
+                ctx.sequencer->curSynthSettings["note"] = note;
                 ctx.toAudioQueue->enqueue(NoteMessage(note));
             };
         }

@@ -4,6 +4,8 @@
 
 Sequencer::Sequencer()
 {
+    curSynthSettings = getDefaultSynthSettings();
+
     int size = 16;
     for (int i = 0; i < size; i++) {
         row.push_back(Cell());
@@ -12,14 +14,64 @@ Sequencer::Sequencer()
 
 Sequencer::Sequencer(int size)
 {
+    curSynthSettings = getDefaultSynthSettings();
+
     for (int i = 0; i < size; i++) {
         row.push_back(Cell());
     }
 }
 
+Cell& Sequencer::getCell(int i)
+{
+    return row[i];
+}
+
 Cell& Sequencer::getSelectedCell()
 {
     return row[selected];
+}
+
+SynthSettings& Sequencer::getSynthSettings()
+{
+    if (mode == Normal) {
+        return curSynthSettings;
+    }
+    else {
+        auto& cell = getSelectedCell();
+        if (cell.on) {
+            return cell.synthSettings;
+        }
+        else {
+            return curSynthSettings;
+        }
+    }
+}
+
+void Sequencer::toggleCell(int i)
+{
+    mode = Select;
+
+    Cell& cell = getCell(i);
+
+    if (!cell.on) {
+        cell.on = true;
+        cell.synthSettings = curSynthSettings;
+    }
+    else {
+        cell.on = false;
+    }
+    selected = i;
+}
+
+void Sequencer::selectCell(int i)
+{
+    if (selected == i) {
+        mode = Normal;
+    }
+    else {
+        mode = Select;
+        selected = i;
+    }
 }
 
 void Sequencer::update()
