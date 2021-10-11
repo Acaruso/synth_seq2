@@ -15,6 +15,7 @@ struct AppContext
 
     MessageQueue* toAudioQueue;
     MessageQueue* toMainQueue;
+    Sequencer* sequencer;
 
     int eltId{0};
     int curEltId{0};

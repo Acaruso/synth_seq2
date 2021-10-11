@@ -6,6 +6,7 @@
 
 #include "app_context.hpp"
 #include "src/shared/messages.hpp"
+#include "src/main/sequencer/sequencer.hpp"
 
 class App
 {
@@ -13,6 +14,7 @@ public:
     AppContext context;
     MessageQueue toAudioQueue;
     MessageQueue toMainQueue;
+    Sequencer sequencer;
 
     App(
         std::function<void(AppContext& context)> setup,

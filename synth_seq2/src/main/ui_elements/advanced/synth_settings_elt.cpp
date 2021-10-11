@@ -86,11 +86,9 @@ void synthSettingsElt(EltParams& params)
 
 void _numberElt(AppContext& context, std::string label, Coord coord, std::string key)
 {
-    auto& sequencer = context.sharedDataWrapper.sharedData.sequencer;
-
-    auto& intData = sequencer.mode == Normal
+    auto& intData = context.sequencer->mode == Normal
         ? context.sharedDataWrapper.sharedData.intData
-        : sequencer.getCurrentCell().intData;
+        : context.sequencer->getCurrentCell().intData;
 
     std::string fontName = "dos";
     Font& font = context.graphicsWrapper.getFont(fontName);

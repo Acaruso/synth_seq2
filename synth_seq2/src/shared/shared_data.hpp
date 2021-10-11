@@ -6,13 +6,11 @@
 #include <unordered_map>
 #include <vector>
 
-#include "src/main/sequencer/sequencer.hpp"
 #include "src/shared/messages.hpp"
 
 struct SharedData
 {
     std::unordered_map<std::string, int> intData;
-    Sequencer sequencer;
 
     SharedData()
     {

@@ -28,9 +28,7 @@ void setup(AppContext& context)
 
 void callback(AppContext& context)
 {
-    auto& sequencer = context.sharedDataWrapper.sharedData.sequencer;
-
-    sequencer.update();
+    context.sequencer->update();
 
     {
         EltParams p(context, Coord(100, 100));
@@ -56,14 +54,14 @@ void callback(AppContext& context)
         EltParams p(context);
         p.rect = Rect(coord.x, coord.y + 20, 50, 50);
         p.color = white;
-        p.displayColor = sequencer.playing ? blue : white;
+        p.displayColor = context.sequencer->playing ? blue : white;
         p.onClickColor = blue;
 
         p.onClick = [&]() {
-            sequencer.playing = !sequencer.playing;
-            sequencer.transport = 0;
+            context.sequencer->playing = !context.sequencer->playing;
+            context.sequencer->transport = 0;
 
-            if (sequencer.playing) {
+            if (context.sequencer->playing) {
                 context.toAudioQueue->enqueue(PlayMessage());
             }
             else {

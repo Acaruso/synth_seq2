@@ -38,7 +38,6 @@ void pianoElt(EltParams& params)
     AppContext& ctx = params.ctx;
     Coord coord = params.coord;
     auto& sharedData = ctx.sharedDataWrapper.sharedData;
-    auto& sequencer = sharedData.sequencer;
 
     background(params, coord);
 
@@ -49,15 +48,15 @@ void pianoElt(EltParams& params)
 
         std::function<void()> _onClick = nullptr;
 
-        if (sequencer.mode == Normal) {
+        if (ctx.sequencer->mode == Normal) {
             _onClick = [&]() {
                 sharedData.intData["note"] = note;
                 ctx.toAudioQueue->enqueue(NoteMessage(note));
             };
         }
-        else if (sequencer.mode == Select) {
+        else if (ctx.sequencer->mode == Select) {
             _onClick = [&]() {
-                sequencer.getCurrentCell().intData["note"] = note;
+                ctx.sequencer->getCurrentCell().intData["note"] = note;
             };
         }
 
@@ -66,7 +65,7 @@ void pianoElt(EltParams& params)
                 params.ctx,
                 getBlackKeyRect(coord, i),
                 _onClick,
-                sequencer.mode,
+                ctx.sequencer->mode,
                 note
             );
         }
@@ -75,7 +74,7 @@ void pianoElt(EltParams& params)
                 params.ctx,
                 getWhiteKeyRect(coord, k++),
                 _onClick,
-                sequencer.mode,
+                ctx.sequencer->mode,
                 note
             );
         }

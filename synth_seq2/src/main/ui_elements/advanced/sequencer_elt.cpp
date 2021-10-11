@@ -20,11 +20,10 @@ namespace
 
 void sequencerElt(EltParams& params)
 {
-    Sequencer& sequencer = params.ctx.sharedDataWrapper.sharedData.sequencer;
     Coord coord = params.coord;
 
-    for (int i = 0; i < sequencer.row.size(); i++) {
-        Cell& cell = sequencer.row[i];
+    for (int i = 0; i < params.ctx.sequencer->row.size(); i++) {
+        Cell& cell = params.ctx.sequencer->row[i];
         _clock(params.ctx, coord, i);
         _cell(params.ctx, cell, coord, i);
     }
@@ -32,16 +31,15 @@ void sequencerElt(EltParams& params)
 
 void _clock(AppContext& ctx, Coord coord, int i)
 {
-    Sequencer& sequencer = ctx.sharedDataWrapper.sharedData.sequencer;
     EltParams p(ctx);
     p.rect = _getClockRect(coord, i);
     p.color = white;
 
-    if (sequencer.playing == false) {
+    if (ctx.sequencer->playing == false) {
         p.displayColor = white;
     }
     else {
-        p.displayColor = sequencer.step == i ? blue : white;
+        p.displayColor = ctx.sequencer->step == i ? blue : white;
     }
 
     rectButtonElt(p);
@@ -60,7 +58,6 @@ Rect _getClockRect(Coord coord, int i)
 void _cell(AppContext& ctx, Cell& cell, Coord coord, int i)
 {
     auto& sharedData = ctx.sharedDataWrapper.sharedData;
-    auto& sequencer = sharedData.sequencer;
     auto& uiState = ctx.getUiState();
 
     EltParams p(ctx);
@@ -70,7 +67,7 @@ void _cell(AppContext& ctx, Cell& cell, Coord coord, int i)
     p.onClickColor = blue;
 
     p.onClick = [&]() {
-        sequencer.mode = Select;
+        ctx.sequencer->mode = Select;
 
         if (!uiState.lshift) {
             if (!cell.on) {
@@ -80,14 +77,14 @@ void _cell(AppContext& ctx, Cell& cell, Coord coord, int i)
             else {
                 cell.on = false;
             }
-            sequencer.selected = i;
+            ctx.sequencer->selected = i;
         }
         else if (uiState.lshift) {
-            if (sequencer.selected == i) {
-                sequencer.mode = Normal;
+            if (ctx.sequencer->selected == i) {
+                ctx.sequencer->mode = Normal;
             }
             else {
-                sequencer.selected = i;
+                ctx.sequencer->selected = i;
             }
         }
     };
@@ -98,7 +95,7 @@ void _cell(AppContext& ctx, Cell& cell, Coord coord, int i)
         }
     };
 
-    if (sequencer.mode == Select && sequencer.selected == i) {
+    if (ctx.sequencer->mode == Select && ctx.sequencer->selected == i) {
         _drawSelectedRect(ctx, p.rect);
     }
 

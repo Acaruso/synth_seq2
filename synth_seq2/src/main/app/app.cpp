@@ -19,6 +19,7 @@ App::App(
 
     context.toAudioQueue = &toAudioQueue;
     context.toMainQueue = &toMainQueue;
+    context.sequencer = &sequencer;
 }
 
 void App::run()
@@ -41,7 +42,7 @@ void App::run()
 
         callback(context);
 
-        auto& sequencer = context.sharedDataWrapper.sharedData.sequencer;
+        // auto& sequencer = context.sharedDataWrapper.sharedData.sequencer;
         EventMap eventMap = sequencer.getEventMap();
         sendMessagesToAudioThread(eventMap);
 
@@ -67,8 +68,6 @@ void App::run()
 
 void App::handleMessagesFromAudioThread()
 {
-    auto& sequencer = context.sharedDataWrapper.sharedData.sequencer;
-
     Message message;
 
     while (toMainQueue.try_dequeue(message)) {
