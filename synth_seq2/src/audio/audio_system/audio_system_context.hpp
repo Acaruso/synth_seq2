@@ -14,6 +14,7 @@ struct AudioSystemContext
     unsigned long transport{0};
 
     unsigned sliceTime{0};
+    unsigned leadTime{0};
     unsigned long presentTransport{0};
     unsigned long futureTransport{0};
 
@@ -23,6 +24,7 @@ struct AudioSystemContext
 
     bool trig{false};
     std::unordered_map<std::string, int> intData;
+    EventMap eventMap;
 
     double freq{0.0};
     bool quit{false};

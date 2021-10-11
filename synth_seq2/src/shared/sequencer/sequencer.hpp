@@ -4,6 +4,11 @@
 #include <unordered_map>
 #include <vector>
 
+using IntData = std::unordered_map<std::string, int>;
+
+// key = sample location
+using EventMap = std::unordered_map<unsigned, IntData>;
+
 enum SequencerMode
 {
     Normal,
@@ -24,6 +29,7 @@ public:
     SequencerMode mode{Normal};
     int selected{0};
     unsigned long transport{0};
+    unsigned long prevTransport{0};
     int samplesPerStep{10000};
 
     std::vector<Cell> row;
@@ -63,4 +69,6 @@ public:
         t = t % 16;
         return t;
     }
+
+    EventMap getEventMap();
 };

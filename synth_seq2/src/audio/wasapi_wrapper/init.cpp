@@ -54,8 +54,8 @@ void getDevice(WasapiWrapper& wasapiWrapper)
 
 void getAudioClient(WasapiWrapper& wasapiWrapper)
 {
-    IAudioClient* client = NULL;
-    IID IID_IAudioClient = __uuidof(IAudioClient);
+    IAudioClient3* client = NULL;
+    IID IID_IAudioClient = __uuidof(IAudioClient3);
 
     HRESULT hr = wasapiWrapper.device->Activate(
         IID_IAudioClient,
@@ -129,12 +129,7 @@ void checkFormatSupport(WasapiWrapper& wasapiWrapper)
 
 void initAudioClient(WasapiWrapper& wasapiWrapper, REFERENCE_TIME minimumDevicePeriod)
 {
-    std::cout << "minimumDevicePeriod: " << minimumDevicePeriod << std::endl;
-
-    // 100 ms buffer time
-    REFERENCE_TIME period = REFTIMES_PER_MS * 23;
-
-    // REFERENCE_TIME period = minimumDevicePeriod;
+    REFERENCE_TIME period = minimumDevicePeriod;
 
     HRESULT hr = wasapiWrapper.audioClient->Initialize(
         AUDCLNT_SHAREMODE_SHARED,

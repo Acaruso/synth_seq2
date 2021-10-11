@@ -16,21 +16,7 @@
 class GraphicsWrapper
 {
 public:
-    std::string windowTitle;
-
-    int screenWidth;
-    int screenHeight;
-
-    SDL_Window* window;
-    SDL_Surface* windowSurface;
-    SDL_Renderer* windowRenderer;
-
-    std::unordered_map<std::string, Image> images;
-    std::unordered_map<std::string, Font> fonts;
-
-    DrawSystem drawSystem;
-
-    GraphicsWrapper() {}
+    GraphicsWrapper();
 
     void init();
     void clearWindow();
@@ -54,4 +40,15 @@ public:
     void render();
     void destroyWindow();
     void quit();
+
+private:
+    std::string windowTitle;
+    int screenWidth;
+    int screenHeight;
+    SDL_Window* window;
+    SDL_Surface* windowSurface;
+    SDL_Renderer* windowRenderer;
+    DrawSystem drawSystem;
+    std::unordered_map<std::string, Image> images;
+    std::unordered_map<std::string, Font> fonts;
 };

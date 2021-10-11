@@ -46,6 +46,12 @@ struct StringMessage
     StringMessage(std::string key, std::string value) : key(key), value(value) {}
 };
 
+struct EventMapMessage
+{
+    EventMap eventMap;
+    EventMapMessage(EventMap eventMap) : eventMap(eventMap) {}
+};
+
 using Message = std::variant<
     QuitMessage,
     PlayMessage,
@@ -54,5 +60,6 @@ using Message = std::variant<
     IntMessage,
     BoolMessage,
     DoubleMessage,
-    StringMessage
+    StringMessage,
+    EventMapMessage
 >;

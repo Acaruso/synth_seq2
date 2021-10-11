@@ -10,17 +10,8 @@
 PolyFmSin polyFmSin(8);
 Smooth smooth(32);
 
-// void printMap(AudioSystemContext& context)
-// {
-//     for (auto& elt : context.intData) {
-//         std::cout << elt.first << " " << elt.second << std::endl;
-//     }
-//     std::cout << std::endl;
-// }
-
 double audioCallback(AudioSystemContext& context)
 {
-    // auto& intData = context.sharedDataWrapper->getFrontBuffer().intData;
     auto& intData = context.intData;
 
     double t = context.getTime();

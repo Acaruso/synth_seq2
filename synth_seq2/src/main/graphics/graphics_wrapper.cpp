@@ -5,7 +5,7 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
-void GraphicsWrapper::init()
+GraphicsWrapper::GraphicsWrapper()
 {
     this->windowTitle = "a cool title";
 
@@ -48,8 +48,6 @@ void GraphicsWrapper::init()
     if (this->windowRenderer == NULL) {
         printf("SDL_Error: %s\n", SDL_GetError());
     }
-
-    return;
 }
 
 void GraphicsWrapper::clearWindow()

@@ -89,7 +89,7 @@ void _numberElt(AppContext& context, std::string label, Coord coord, std::string
     auto& sequencer = context.getSequencer();
 
     auto& intData = sequencer.mode == Normal
-        ? context.sharedDataWrapper.getBackBuffer().intData
+        ? context.sharedDataWrapper.sharedData.intData
         : sequencer.getCurrentCell().intData;
 
     std::string fontName = "dos";

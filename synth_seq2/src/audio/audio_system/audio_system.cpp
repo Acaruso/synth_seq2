@@ -25,12 +25,11 @@ AudioSystem::AudioSystem(
     sampleBuffer = SampleBuffer(bufferSizeBytes);
 
     bufferSizeFrames = wasapiWrapper.getBufferSizeFrames();
-    std::cout << "buffer size frames: " << bufferSizeFrames << std::endl;
 
-    unsigned padding = wasapiWrapper.getCurrentPadding();
-    std::cout << "padding: " << padding << std::endl;
+    periodSizeFrames = wasapiWrapper.getPeriodSizeFrames();
 
-    context.sliceTime = bufferSizeFrames * 4;
+    context.sliceTime = periodSizeFrames * 4;
+    context.leadTime = context.sliceTime * 2;
 }
 
 void AudioSystem::playAudio()
@@ -49,17 +48,11 @@ void AudioSystem::playAudio()
 
         unsigned numPaddingFrames = wasapiWrapper.getCurrentPadding();
 
-        std::cout << "padding loop: " << numPaddingFrames << std::endl;
-
         // recall that each elt of buffer stores 1 sample
         // frame is 2 samples -> 1 for each channel
         // so numSamplesToWrite = (2 * numFramesToWrite)
 
         unsigned numFramesToWrite = bufferSizeFrames - numPaddingFrames;
-
-        std::cout << "bufferSizeFrames: " << bufferSizeFrames << std::endl;
-
-        std::cout << "numFramesToWrite: " << numFramesToWrite << std::endl;
 
         unsigned numSamplesToWrite = numFramesToWrite * 2;
 
@@ -67,7 +60,6 @@ void AudioSystem::playAudio()
 
         wasapiWrapper.writeBuffer(sampleBuffer.buffer, numFramesToWrite);
 
-        // std::cout << "samp counter" << context.sampleCounter << std::endl;
         sendMessagesToMainThread();
     }
 
@@ -94,20 +86,18 @@ void AudioSystem::handleMessagesFromMainThread()
             context.freq = mtof(p->note);
             context.trig = true;
         }
+        else if (EventMapMessage* p = std::get_if<EventMapMessage>(&message)) {
+            // context.eventMap = p->eventMap;
+
+            // merge maps
+            context.eventMap.insert(p->eventMap.begin(), p->eventMap.end());
+        }
     }
 }
 
 void AudioSystem::sendMessagesToMainThread()
 {
-    auto& sequencer = context.sharedDataWrapper->getFrontBuffer().sequencer;
-
-    // std::cout << "audio futureTransport: " << context.futureTransport << std::endl;
-    // std::cout << "audio sliceTime: " << context.sliceTime << std::endl;
-    // std::cout << "audio: " << context.futureTransport % context.sliceTime << std::endl;
-    // std::cout << "audio: " << context.sliceTime << std::endl;
-
     if (context.playing && context.futureTransport % context.sliceTime == 0) {
-        std::cout << "audio sending message" << std::endl;
         context.sharedDataWrapper->toMainQueue.enqueue(
             IntMessage("futureTransport", context.futureTransport)
         );
@@ -116,15 +106,10 @@ void AudioSystem::sendMessagesToMainThread()
 
 void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
 {
-    auto& sequencer = context.sharedDataWrapper->getFrontBuffer().sequencer;
-
     unsigned numChannels = 2;
-
+    
     for (int i = 0; i < numSamplesToWrite; i += numChannels) {
         setTrigs();
-
-        // std::cout << "fill sample buffer:" << std::endl;
-        // printMap(context.intData);
 
         double sig = callback(context);
 
@@ -135,8 +120,8 @@ void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
 
         ++context.sampleCounter;
 
-        if (sequencer.playing) {
-            if (context.futureTransport >= (context.sliceTime * 2)) {
+        if (context.playing) {
+            if (context.futureTransport >= context.leadTime) {
                 ++context.presentTransport;
             }
             ++context.futureTransport;
@@ -154,26 +139,33 @@ void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
 
 void AudioSystem::setTrigs()
 {
-    auto& sequencer = context.sharedDataWrapper->getFrontBuffer().sequencer;
-
-    int step = sequencer.getStep(context.transport);
-
-    if (
-        sequencer.playing
-        && context.transport % sequencer.samplesPerStep == 0
-        && sequencer.row[step].on
-    ) {
+    // check if presentTransport is in eventMap
+    if (context.eventMap.find(context.presentTransport) != context.eventMap.end()) {
+        std::cout << "set trigs" << std::endl;
         context.trig = true;
-        // printMap(sequencer.row[step].intData);
-        context.intData = sequencer.row[step].intData;
-        // std::cout << "set trigs:" << std::endl;
-        // printMap(context.intData);
+        context.intData = context.eventMap[context.presentTransport];
+        context.intData["note"] = 60;
+        context.eventMap.erase(context.presentTransport);
     }
+
+    // auto& sequencer = context.sharedDataWrapper->getFrontBuffer().sequencer;
+
+    // int step = sequencer.getStep(context.transport);
+
+    // if (
+    //     sequencer.playing
+    //     && context.transport % sequencer.samplesPerStep == 0
+    //     && sequencer.row[step].on
+    // ) {
+    //     context.trig = true;
+    //     context.intData = sequencer.row[step].intData;
+    // }
 }
 
 void AudioSystem::unsetTrigs()
 {
     context.trig = false;
+    // context.eventMap.clear();
 }
 
 AudioSystem::~AudioSystem()

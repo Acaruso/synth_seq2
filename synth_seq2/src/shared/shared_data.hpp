@@ -20,6 +20,15 @@ inline void printMap(T t)
     std::cout << std::endl;
 }
 
+template <typename T>
+inline void printKeys(T t)
+{
+    for (auto& elt : t) {
+        std::cout << elt.first << std::endl;
+    }
+    std::cout << std::endl;
+}
+
 struct SharedData
 {
     std::unordered_map<std::string, int> intData;
@@ -48,46 +57,16 @@ public:
     moodycamel::ReaderWriterQueue<Message> toAudioQueue;
     moodycamel::ReaderWriterQueue<Message> toMainQueue;
 
-    std::vector<SharedData> sharedDataVector;
-    std::atomic<std::uint64_t> counter;
+    SharedData sharedData;
 
     SharedDataWrapper()
     {
         toAudioQueue = moodycamel::ReaderWriterQueue<Message>(16);
         toMainQueue = moodycamel::ReaderWriterQueue<Message>(16);
-
-        sharedDataVector.push_back(SharedData());
-        sharedDataVector.push_back(SharedData());
     }
 
-    // front buffer is buffer that is not being written to
-    // safe for audio thread to read from it
-    SharedData& getFrontBuffer()
-    {
-        return sharedDataVector[getFrontIndex()];
-    }
-
-    // back buffer is buffer that is currently being updated by main thread
     SharedData& getBackBuffer()
     {
-        return sharedDataVector[getBackIndex()];
-    }
-
-    void nextState()
-    {
-        int oldBackIndex = getBackIndex();
-        counter++;
-        sharedDataVector[getBackIndex()] = sharedDataVector[oldBackIndex];
-    }
-
-private:
-    int getFrontIndex()
-    {
-        return counter % 2;
-    }
-
-    int getBackIndex()
-    {
-        return (counter + 1) % 2;
+        return sharedData;
     }
 };

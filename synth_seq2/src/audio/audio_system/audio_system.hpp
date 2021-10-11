@@ -22,8 +22,6 @@ public:
     );
 
     void playAudio();
-    void handleMessagesFromMainThread();
-    void sendMessagesToMainThread();
     ~AudioSystem();
 
 private:
@@ -31,7 +29,10 @@ private:
     SampleBuffer sampleBuffer;
     unsigned bufferSizeBytes;
     unsigned bufferSizeFrames;
+    unsigned periodSizeFrames;
 
+    void handleMessagesFromMainThread();
+    void sendMessagesToMainThread();
     void setTrigs();
     void unsetTrigs();
     void fillSampleBuffer(size_t numSamplesToWrite);

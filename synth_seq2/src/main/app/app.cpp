@@ -13,9 +13,7 @@ App::App(
     std::function<void(AppContext& context)> callback
 )
     : setup(setup), callback(callback)
-{
-    context.graphicsWrapper.init();
-}
+{}
 
 void App::run()
 {
@@ -35,6 +33,10 @@ void App::run()
         context.inputSystem.run();
 
         callback(context);
+
+        auto& sequencer = context.sharedDataWrapper.getBackBuffer().sequencer;
+        EventMap eventMap = sequencer.getEventMap();
+        sendMessagesToAudioThread(eventMap);
 
         context.graphicsWrapper.render();
 
@@ -64,12 +66,21 @@ void App::handleMessagesFromAudioThread()
 
     while (context.sharedDataWrapper.toMainQueue.try_dequeue(message)) {
         if (IntMessage* p = std::get_if<IntMessage>(&message)) {
-            std::cout << "main got message" << std::endl;
             if (p->key == "futureTransport") {
-                std::cout << "main futureTransport: " << p->value << std::endl;
-                // sequencer.transport = p->value;
+                sequencer.prevTransport = sequencer.transport;
+                sequencer.transport = p->value;
+                getEventMap = true;
             }
         }
+    }
+}
+
+void App::sendMessagesToAudioThread(EventMap& eventMap)
+{
+    EventMapMessage message(eventMap);
+
+    if (getEventMap) {
+        context.sharedDataWrapper.toAudioQueue.enqueue(message);
     }
 }
 
@@ -77,5 +88,5 @@ void App::nextState()
 {
     context.eltId = 0;
     context.inputSystem.nextState();
-    context.sharedDataWrapper.nextState();
+    getEventMap = false;
 }
