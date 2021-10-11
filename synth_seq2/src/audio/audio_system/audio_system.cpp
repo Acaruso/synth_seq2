@@ -140,7 +140,6 @@ void AudioSystem::setTrigs()
     if (eventMap.find(presentTransport) != eventMap.end()) {
         trig = true;
         synthSettings = eventMap[presentTransport];
-        synthSettings["note"] = 60;
         eventMap.erase(presentTransport);
     }
 }
