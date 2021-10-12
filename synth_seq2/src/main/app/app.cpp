@@ -42,8 +42,7 @@ void App::run()
 
         callback(context);
 
-        EventMap eventMap = sequencer.getEventMap();
-        sendMessagesToAudioThread(eventMap);
+        sendMessagesToAudioThread();
 
         context.graphicsWrapper.render();
 
@@ -80,11 +79,12 @@ void App::handleMessagesFromAudioThread()
     }
 }
 
-void App::sendMessagesToAudioThread(EventMap& eventMap)
+void App::sendMessagesToAudioThread()
 {
-    EventMapMessage message(eventMap);
-
     if (getEventMap) {
+        EventMap eventMap = sequencer.getEventMap();
+        EventMapMessage message(eventMap);
+
         toAudioQueue.enqueue(message);
     }
 }

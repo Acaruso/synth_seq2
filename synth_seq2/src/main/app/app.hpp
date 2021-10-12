@@ -32,6 +32,6 @@ private:
     std::function<void(AppContext& context)> callback;
 
     void handleMessagesFromAudioThread();
-    void sendMessagesToAudioThread(EventMap& eventMap);
+    void sendMessagesToAudioThread();
     void nextState();
 };
