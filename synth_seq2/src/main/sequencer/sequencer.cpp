@@ -78,13 +78,7 @@ void Sequencer::updateTransport(unsigned newTransport)
 {
     prevTransport = transport;
     transport = newTransport;
-}
-
-void Sequencer::update()
-{
-    if (playing) {
-        step = getStep(transport);
-    }
+    step = getStep(transport);
 }
 
 int Sequencer::getStep(int transport)

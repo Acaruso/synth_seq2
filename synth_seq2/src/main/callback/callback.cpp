@@ -28,8 +28,6 @@ void setup(AppContext& context)
 
 void callback(AppContext& context)
 {
-    context.sequencer->update();
-
     {
         EltParams p(context, Coord(100, 100));
         pianoElt(p);

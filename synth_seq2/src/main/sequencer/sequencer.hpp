@@ -45,7 +45,6 @@ public:
     SynthSettings& getSynthSettings();
     void toggleCell(int i);
     void selectCell(int i);
-    void update();
     void updateTransport(unsigned newTransport);
     int getStep(int transport);
     EventMap getEventMap();
