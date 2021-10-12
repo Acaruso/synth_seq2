@@ -19,7 +19,6 @@ void whiteKey(
     AppContext& ctx,
     Rect rect,
     std::function<void()> onClick,
-    SequencerMode mode,
     int note
 );
 
@@ -27,7 +26,6 @@ void blackKey(
     AppContext& ctx,
     Rect rect,
     std::function<void()> onClick,
-    SequencerMode mode,
     int note
 );
 
@@ -64,7 +62,6 @@ void pianoElt(EltParams& params)
                 params.ctx,
                 getBlackKeyRect(coord, i),
                 _onClick,
-                ctx.sequencer->mode,
                 note
             );
         }
@@ -73,11 +70,64 @@ void pianoElt(EltParams& params)
                 params.ctx,
                 getWhiteKeyRect(coord, k++),
                 _onClick,
-                ctx.sequencer->mode,
                 note
             );
         }
     }
+}
+
+void whiteKey(
+    AppContext& ctx,
+    Rect rect,
+    std::function<void()> onClick,
+    int note
+) {
+    EltParams p(ctx);
+    p.rect = rect;
+    p.color = white;
+
+    if (
+        ctx.sequencer->mode == Select
+        && ctx.sequencer->getSelectedCell().on
+        && ctx.sequencer->getSelectedCell().synthSettings["note"] == note
+    ) {
+        p.displayColor = blue;
+    }
+    else {
+        p.displayColor = white;
+    }
+
+    p.onClickColor = blue;
+    p.onClick = onClick;
+    p.onHold = [&]() { p.displayColor = p.onClickColor; };
+    rectButtonElt(p);
+}
+
+void blackKey(
+    AppContext& ctx,
+    Rect rect,
+    std::function<void()> onClick,
+    int note
+) {
+    EltParams p(ctx);
+    p.rect = rect;
+    p.color = black;
+
+    if (
+        ctx.sequencer->mode == Select
+        && ctx.sequencer->getSelectedCell().on
+        && ctx.sequencer->getSelectedCell().synthSettings["note"] == note
+    ) {
+        p.displayColor = blue;
+    }
+    else {
+        p.displayColor = black;
+    }
+
+    p.onClickColor = blue;
+    p.onClick = onClick;
+    p.onHold = [&]() { p.displayColor = p.onClickColor; };
+    rectButtonElt(p);
 }
 
 Rect getWhiteKeyRect(Coord coord, int i)
@@ -116,40 +166,6 @@ Rect getBlackKeyRect(Coord coord, int i)
     }
 
     return newRect;
-}
-
-void whiteKey(
-    AppContext& ctx,
-    Rect rect,
-    std::function<void()> onClick,
-    SequencerMode mode,
-    int note
-) {
-    EltParams p(ctx);
-    p.rect = rect;
-    p.color = white;
-    p.displayColor = white;
-    p.onClickColor = blue;
-    p.onClick = onClick;
-    p.onHold = [&]() { p.displayColor = p.onClickColor; };
-    rectButtonElt(p);
-}
-
-void blackKey(
-    AppContext& ctx,
-    Rect rect,
-    std::function<void()> onClick,
-    SequencerMode mode,
-    int note
-) {
-    EltParams p(ctx);
-    p.rect = rect;
-    p.color = black;
-    p.displayColor = black;
-    p.onClickColor = blue;
-    p.onClick = onClick;
-    p.onHold = [&]() { p.displayColor = p.onClickColor; };
-    rectButtonElt(p);
 }
 
 void background(EltParams& params, Coord coord)
