@@ -92,24 +92,21 @@ EventMap Sequencer::getEventMap()
 {
     EventMap map;
 
-    // nextStep = next step's location in samples
-    unsigned nextStep = 0;
+    unsigned sample = 0;
 
     if (prevTransport == 0) {
-        nextStep = 0;
+        sample = 0;
     }
     else {
-        nextStep = prevTransport + (samplesPerStep - (prevTransport % samplesPerStep));
+        sample = prevTransport + (samplesPerStep - (prevTransport % samplesPerStep));
     }
 
-    while (nextStep < transport) {
-        int step = getStep(nextStep);
+    for (; sample < transport; sample += samplesPerStep) {
+        int step = getStep(sample);
 
         if (row[step].on) {
-            map[nextStep] = row[step].synthSettings;
+            map[sample] = row[step].synthSettings;
         }
-
-        nextStep += samplesPerStep;
     }
 
     return map;
