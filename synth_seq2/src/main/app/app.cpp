@@ -71,8 +71,7 @@ void App::handleMessagesFromAudioThread()
     while (toMainQueue.try_dequeue(message)) {
         if (IntMessage* p = std::get_if<IntMessage>(&message)) {
             if (p->key == "futureTransport") {
-                sequencer.prevTransport = sequencer.transport;
-                sequencer.transport = p->value;
+                sequencer.updateTransport(p->value);
                 getEventMap = true;
             }
         }

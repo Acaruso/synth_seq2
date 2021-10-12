@@ -74,6 +74,12 @@ void Sequencer::selectCell(int i)
     }
 }
 
+void Sequencer::updateTransport(unsigned newTransport)
+{
+    prevTransport = transport;
+    transport = newTransport;
+}
+
 void Sequencer::update()
 {
     if (playing) {
