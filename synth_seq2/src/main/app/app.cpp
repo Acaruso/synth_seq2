@@ -4,7 +4,7 @@
 #include <iostream>
 #include <thread>
 
-#include "src/lib/readerwriterqueue.h"
+#include "lib/readerwriterqueue.h"
 
 #include "src/audio/audio_entrypoint.hpp"
 
@@ -14,14 +14,20 @@ App::App(
 )
     : setup(setup), callback(callback)
 {
-    context.graphicsWrapper.init();
+    toAudioQueue = MessageQueue(16);
+    toMainQueue = MessageQueue(16);
+
+    context.toAudioQueue = &toAudioQueue;
+    context.toMainQueue = &toMainQueue;
+    context.sequencer = &sequencer;
 }
 
 void App::run()
 {
     std::thread audioThread(
         &audioEntrypoint,
-        &(context.sharedDataWrapper)
+        &toAudioQueue,
+        &toMainQueue
     );
 
     setup(context);
@@ -36,6 +42,8 @@ void App::run()
 
         callback(context);
 
+        sendMessagesToAudioThread();
+
         context.graphicsWrapper.render();
 
         nextState();
@@ -48,7 +56,7 @@ void App::run()
 
     std::cout << "main thread: quitting" << std::endl;
 
-    context.sharedDataWrapper.toAudioQueue.enqueue(QuitMessage());
+    toAudioQueue.enqueue(QuitMessage());
 
     audioThread.join();
 
@@ -58,16 +66,25 @@ void App::run()
 
 void App::handleMessagesFromAudioThread()
 {
-    auto& sequencer = context.sharedDataWrapper.getBackBuffer().sequencer;
-
     Message message;
 
-    while (context.sharedDataWrapper.toMainQueue.try_dequeue(message)) {
+    while (toMainQueue.try_dequeue(message)) {
         if (IntMessage* p = std::get_if<IntMessage>(&message)) {
-            if (p->key == "transport") {
-                sequencer.transport = p->value;
+            if (p->key == "futureTransport") {
+                sequencer.updateTransport(p->value);
+                getEventMap = true;
             }
         }
+    }
+}
+
+void App::sendMessagesToAudioThread()
+{
+    if (getEventMap) {
+        EventMap eventMap = sequencer.getEventMap();
+        EventMapMessage message(eventMap);
+
+        toAudioQueue.enqueue(message);
     }
 }
 
@@ -75,5 +92,5 @@ void App::nextState()
 {
     context.eltId = 0;
     context.inputSystem.nextState();
-    context.sharedDataWrapper.nextState();
+    getEventMap = false;
 }

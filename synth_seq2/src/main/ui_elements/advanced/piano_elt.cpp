@@ -19,7 +19,6 @@ void whiteKey(
     AppContext& ctx,
     Rect rect,
     std::function<void()> onClick,
-    SequencerMode mode,
     int note
 );
 
@@ -27,7 +26,6 @@ void blackKey(
     AppContext& ctx,
     Rect rect,
     std::function<void()> onClick,
-    SequencerMode mode,
     int note
 );
 
@@ -37,8 +35,6 @@ void pianoElt(EltParams& params)
 {
     AppContext& ctx = params.ctx;
     Coord coord = params.coord;
-    auto& sharedData = ctx.getSharedData();
-    auto& sequencer = ctx.getSequencer();
 
     background(params, coord);
 
@@ -49,15 +45,19 @@ void pianoElt(EltParams& params)
 
         std::function<void()> _onClick = nullptr;
 
-        if (sequencer.mode == Normal) {
+        if (ctx.sequencer->mode == Normal) {
             _onClick = [&]() {
-                sharedData.intData["note"] = note;
-                ctx.sharedDataWrapper.toAudioQueue.enqueue(NoteMessage(note));
+                // ctx.sequencer->curSynthSettings["note"] = note;
+                // ctx.toAudioQueue->enqueue(NoteMessage(note));
+                ctx.sequencer->curSynthSettings["note"] = note;
+                ctx.toAudioQueue->enqueue(
+                    SynthSettingsMessage(ctx.sequencer->curSynthSettings)
+                );
             };
         }
-        else if (sequencer.mode == Select) {
+        else if (ctx.sequencer->mode == Select) {
             _onClick = [&]() {
-                sequencer.getCurrentCell().intData["note"] = note;
+                ctx.sequencer->getSelectedCell().synthSettings["note"] = note;
             };
         }
 
@@ -66,7 +66,6 @@ void pianoElt(EltParams& params)
                 params.ctx,
                 getBlackKeyRect(coord, i),
                 _onClick,
-                sequencer.mode,
                 note
             );
         }
@@ -75,11 +74,64 @@ void pianoElt(EltParams& params)
                 params.ctx,
                 getWhiteKeyRect(coord, k++),
                 _onClick,
-                sequencer.mode,
                 note
             );
         }
     }
+}
+
+void whiteKey(
+    AppContext& ctx,
+    Rect rect,
+    std::function<void()> onClick,
+    int note
+) {
+    EltParams p(ctx);
+    p.rect = rect;
+    p.color = white;
+
+    if (
+        ctx.sequencer->mode == Select
+        && ctx.sequencer->getSelectedCell().on
+        && ctx.sequencer->getSelectedCell().synthSettings["note"] == note
+    ) {
+        p.displayColor = blue;
+    }
+    else {
+        p.displayColor = white;
+    }
+
+    p.onClickColor = blue;
+    p.onClick = onClick;
+    p.onHold = [&]() { p.displayColor = p.onClickColor; };
+    rectButtonElt(p);
+}
+
+void blackKey(
+    AppContext& ctx,
+    Rect rect,
+    std::function<void()> onClick,
+    int note
+) {
+    EltParams p(ctx);
+    p.rect = rect;
+    p.color = black;
+
+    if (
+        ctx.sequencer->mode == Select
+        && ctx.sequencer->getSelectedCell().on
+        && ctx.sequencer->getSelectedCell().synthSettings["note"] == note
+    ) {
+        p.displayColor = blue;
+    }
+    else {
+        p.displayColor = black;
+    }
+
+    p.onClickColor = blue;
+    p.onClick = onClick;
+    p.onHold = [&]() { p.displayColor = p.onClickColor; };
+    rectButtonElt(p);
 }
 
 Rect getWhiteKeyRect(Coord coord, int i)
@@ -118,40 +170,6 @@ Rect getBlackKeyRect(Coord coord, int i)
     }
 
     return newRect;
-}
-
-void whiteKey(
-    AppContext& ctx,
-    Rect rect,
-    std::function<void()> onClick,
-    SequencerMode mode,
-    int note
-) {
-    EltParams p(ctx);
-    p.rect = rect;
-    p.color = white;
-    p.displayColor = white;
-    p.onClickColor = blue;
-    p.onClick = onClick;
-    p.onHold = [&]() { p.displayColor = p.onClickColor; };
-    rectButtonElt(p);
-}
-
-void blackKey(
-    AppContext& ctx,
-    Rect rect,
-    std::function<void()> onClick,
-    SequencerMode mode,
-    int note
-) {
-    EltParams p(ctx);
-    p.rect = rect;
-    p.color = black;
-    p.displayColor = black;
-    p.onClickColor = blue;
-    p.onClick = onClick;
-    p.onHold = [&]() { p.displayColor = p.onClickColor; };
-    rectButtonElt(p);
 }
 
 void background(EltParams& params, Coord coord)

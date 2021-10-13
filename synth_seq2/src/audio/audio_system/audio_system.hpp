@@ -2,28 +2,25 @@
 
 #include <functional>
 
-#include "src/lib/readerwriterqueue.h"
+#include "lib/readerwriterqueue.h"
 
-#include "src/audio/audio_system/audio_system_context.hpp"
 #include "src/audio/audio_system/sample_buffer.hpp"
 #include "src/audio/wasapi_wrapper/wasapi_wrapper.hpp"
-#include "src/shared/shared_data.hpp"
+#include "src/shared/messages.hpp"
+#include "src/shared/shared.hpp"
 
 class AudioSystem
 {
 public:
-    AudioSystemContext context;
-
-    std::function<double(AudioSystemContext& context)> callback;
+    MessageQueue* toAudioQueue;
+    MessageQueue* toMainQueue;
 
     AudioSystem(
-        std::function<double(AudioSystemContext& context)> callback,
-        SharedDataWrapper* sharedDataWrapper
+        MessageQueue* toAudioQueue,
+        MessageQueue* toMainQueue
     );
 
     void playAudio();
-    void handleMessagesFromMainThread();
-    void sendMessagesToMainThread();
     ~AudioSystem();
 
 private:
@@ -31,7 +28,39 @@ private:
     SampleBuffer sampleBuffer;
     unsigned bufferSizeBytes;
     unsigned bufferSizeFrames;
+    unsigned periodSizeFrames;
 
+    // from context /////////////////////////////
+
+    unsigned long sampleCounter{0};
+    unsigned long transport{0};
+
+    unsigned sliceTime{0};
+    unsigned leadTime{0};
+    unsigned long presentTransport{0};
+    unsigned long futureTransport{0};
+
+    bool playing{false};
+
+    double secondsPerSample{0.0};
+
+    bool trig{false};
+    SynthSettings synthSettings;
+    EventMap eventMap;
+
+    double freq{0.0};
+    bool quit{false};
+
+    double getTime()
+    {
+        return double(sampleCounter) * secondsPerSample;
+    }
+
+    /////////////////////////////////////////////
+
+    double audioCallback();
+    void handleMessagesFromMainThread();
+    void sendMessagesToMainThread();
     void setTrigs();
     void unsetTrigs();
     void fillSampleBuffer(size_t numSamplesToWrite);

@@ -74,27 +74,16 @@ void synthSettingsElt(EltParams& params)
         numCoord,
         "modRelease"
     );
-
-    numCoord.x += numXPadding;
-    _numberElt(
-        context,
-        "freq",
-        numCoord,
-        "freq"
-    );
 }
 
 void _numberElt(AppContext& context, std::string label, Coord coord, std::string key)
 {
-    auto& sequencer = context.getSequencer();
+    auto& synthSettings = context.sequencer->getSynthSettings();
 
-    auto& intData = sequencer.mode == Normal
-        ? context.sharedDataWrapper.getBackBuffer().intData
-        : sequencer.getCurrentCell().intData;
+    int& data = synthSettings[key];
 
-    std::string fontName = "dos";
+    std::string fontName = "inconsolata";
     Font& font = context.graphicsWrapper.getFont(fontName);
-    int data = intData[key];
 
     context.graphicsWrapper.drawText(label, fontName, coord);
 
@@ -124,8 +113,8 @@ void _numberElt(AppContext& context, std::string label, Coord coord, std::string
     };
 
     p.onDrag = [&]() {
-        intData[key] += context.getDragAmount() / 2;
-        intData[key] = clamp(intData[key], p.min, p.max);
+        data += context.getDragAmount() / 2;
+        data = clamp(data, p.min, p.max);
     };
 
     numberElt(p);

@@ -9,7 +9,7 @@ class WasapiWrapper
 public:
     IMMDeviceEnumerator* enumerator;
     IMMDevice* device;
-    IAudioClient* audioClient;
+    IAudioClient3* audioClient;
     IAudioRenderClient* renderClient;
     WAVEFORMATEXTENSIBLE waveFormat;
     HANDLE hEvent;
@@ -18,6 +18,7 @@ public:
     unsigned getBufferSizeFrames();
     unsigned getBufferSizeBytes();
     unsigned getCurrentPadding();
+    unsigned getPeriodSizeFrames();
     void writeBuffer(unsigned long* source, unsigned numFramesToWrite);
     void startPlaying();
     void stopPlaying();

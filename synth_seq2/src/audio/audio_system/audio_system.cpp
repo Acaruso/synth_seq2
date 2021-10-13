@@ -5,26 +5,30 @@
 
 #include "src/audio/audio_util.hpp"
 #include "src/audio/wasapi_wrapper/init.hpp"
-#include "src/shared/messages.hpp"
 
 AudioSystem::AudioSystem(
-    std::function<double(AudioSystemContext& context)> callback,
-    SharedDataWrapper* sharedDataWrapper
+    MessageQueue* toAudioQueue,
+    MessageQueue* toMainQueue
 )
-    : callback(callback)
+    : toAudioQueue(toAudioQueue), toMainQueue(toMainQueue)
 {
-    context.sharedDataWrapper = sharedDataWrapper;
-
     wasapiWrapper = {};
     init(wasapiWrapper);
 
     unsigned long samplesPerSecond = wasapiWrapper.waveFormat.Format.nSamplesPerSec;
-    context.secondsPerSample = 1.0 / (double)samplesPerSecond;
+    secondsPerSample = 1.0 / (double)samplesPerSecond;
 
     bufferSizeBytes = wasapiWrapper.getBufferSizeBytes();
     sampleBuffer = SampleBuffer(bufferSizeBytes);
 
     bufferSizeFrames = wasapiWrapper.getBufferSizeFrames();
+
+    periodSizeFrames = wasapiWrapper.getPeriodSizeFrames();
+
+    sliceTime = periodSizeFrames * 4;
+    leadTime = sliceTime * 2;
+
+    synthSettings = getDefaultSynthSettings();
 }
 
 void AudioSystem::playAudio()
@@ -36,7 +40,7 @@ void AudioSystem::playAudio()
     wasapiWrapper.startPlaying();
 
     // main loop:
-    while (!context.quit) {
+    while (!quit) {
         WaitForSingleObject(wasapiWrapper.hEvent, INFINITE);
 
         handleMessagesFromMainThread();
@@ -65,56 +69,67 @@ void AudioSystem::handleMessagesFromMainThread()
 {
     Message message;
 
-    while (context.sharedDataWrapper->toAudioQueue.try_dequeue(message)) {
+    while (toAudioQueue->try_dequeue(message)) {
         if (std::get_if<QuitMessage>(&message)) {
             std::cout << "audio thread: quitting" << std::endl;
-            context.quit = true;
+            quit = true;
             break;
         }
+        else if (std::get_if<PlayMessage>(&message)) {
+            playing = true;
+        }
+        else if (std::get_if<StopMessage>(&message)) {
+            playing = false;
+        }
         else if (NoteMessage* p = std::get_if<NoteMessage>(&message)) {
-            context.freq = mtof(p->note);
-            context.trig = true;
+            freq = mtof(p->note);
+            trig = true;
+        }
+        else if (SynthSettingsMessage* p = std::get_if<SynthSettingsMessage>(&message)) {
+            synthSettings = p->synthSettings;
+            trig = true;
+        }
+        else if (EventMapMessage* p = std::get_if<EventMapMessage>(&message)) {
+            // merge maps
+            eventMap.insert(p->eventMap.begin(), p->eventMap.end());
         }
     }
 }
 
 void AudioSystem::sendMessagesToMainThread()
 {
-    auto& sequencer = context.sharedDataWrapper->getFrontBuffer().sequencer;
-
-    if (sequencer.playing) {
-        context.sharedDataWrapper->toMainQueue.enqueue(
-            IntMessage("transport", context.transport)
+    if (playing && futureTransport % sliceTime == 0) {
+        toMainQueue->enqueue(
+            IntMessage("futureTransport", futureTransport)
         );
     }
 }
 
 void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
 {
-    auto& sequencer = context.sharedDataWrapper->getFrontBuffer().sequencer;
-
     unsigned numChannels = 2;
 
     for (int i = 0; i < numSamplesToWrite; i += numChannels) {
         setTrigs();
 
-        // std::cout << "fill sample buffer:" << std::endl;
-        // printMap(context.intData);
-
-        double sig = callback(context);
+        double sig = audioCallback();
 
         unsigned samp = scaleSignal(sig);
 
         sampleBuffer.buffer[i] = samp;       // L
         sampleBuffer.buffer[i + 1] = samp;   // R
 
-        ++context.sampleCounter;
+        ++sampleCounter;
 
-        if (sequencer.playing) {
-            ++context.transport;
+        if (playing) {
+            if (futureTransport >= leadTime) {
+                ++presentTransport;
+            }
+            ++futureTransport;
         }
         else {
-            context.transport = 0;
+            futureTransport = 0;
+            presentTransport = 0;
         }
 
         // need to unset trigs each sample
@@ -125,26 +140,17 @@ void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
 
 void AudioSystem::setTrigs()
 {
-    auto& sequencer = context.sharedDataWrapper->getFrontBuffer().sequencer;
-
-    int step = sequencer.getStep(context.transport);
-
-    if (
-        sequencer.playing
-        && context.transport % sequencer.samplesPerStep == 0
-        && sequencer.row[step].on
-    ) {
-        context.trig = true;
-        // printMap(sequencer.row[step].intData);
-        context.intData = sequencer.row[step].intData;
-        // std::cout << "set trigs:" << std::endl;
-        // printMap(context.intData);
+    // check if presentTransport is in eventMap
+    if (eventMap.find(presentTransport) != eventMap.end()) {
+        trig = true;
+        synthSettings = eventMap[presentTransport];
+        eventMap.erase(presentTransport);
     }
 }
 
 void AudioSystem::unsetTrigs()
 {
-    context.trig = false;
+    trig = false;
 }
 
 AudioSystem::~AudioSystem()

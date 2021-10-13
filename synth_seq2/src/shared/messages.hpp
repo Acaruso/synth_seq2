@@ -3,7 +3,16 @@
 #include <string>
 #include <variant>
 
+#include "lib/readerwriterqueue.h"
+
+#include "src/main/sequencer/sequencer.hpp"
+#include "src/shared/shared.hpp"
+
 struct QuitMessage {};
+
+struct PlayMessage {};
+
+struct StopMessage {};
 
 struct NoteMessage
 {
@@ -42,11 +51,29 @@ struct StringMessage
     StringMessage(std::string key, std::string value) : key(key), value(value) {}
 };
 
+struct EventMapMessage
+{
+    EventMap eventMap;
+    EventMapMessage(EventMap eventMap) : eventMap(eventMap) {}
+};
+
+struct SynthSettingsMessage
+{
+    SynthSettings synthSettings;
+    SynthSettingsMessage(SynthSettings synthSettings) : synthSettings(synthSettings) {}
+};
+
 using Message = std::variant<
     QuitMessage,
+    PlayMessage,
+    StopMessage,
     NoteMessage,
     IntMessage,
     BoolMessage,
     DoubleMessage,
-    StringMessage
+    StringMessage,
+    EventMapMessage,
+    SynthSettingsMessage
 >;
+
+using MessageQueue = moodycamel::ReaderWriterQueue<Message>;

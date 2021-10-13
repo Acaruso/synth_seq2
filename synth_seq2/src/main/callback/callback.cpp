@@ -14,9 +14,17 @@ void setup(AppContext& context)
     try {
         context.graphicsWrapper.loadFont(
             "dos",
-            "src/fonts/Perfect-DOS-VGA-437.ttf",
+            "fonts/Perfect-DOS-VGA-437.ttf",
             16,
             9,
+            20
+        );
+
+        context.graphicsWrapper.loadFont(
+            "inconsolata",
+            "fonts/Inconsolata-Regular.ttf",
+            16,
+            8,
             20
         );
     }
@@ -28,10 +36,6 @@ void setup(AppContext& context)
 
 void callback(AppContext& context)
 {
-    auto& sequencer = context.sharedDataWrapper.getBackBuffer().sequencer;
-
-    sequencer.update();
-
     {
         EltParams p(context, Coord(100, 100));
         pianoElt(p);
@@ -54,16 +58,21 @@ void callback(AppContext& context)
         textElt(textParams);
 
         EltParams p(context);
-        // auto& sequencer = context.sharedDataWrapper.getBackBuffer().sequencer;
-        // bool& playing = sequencer.playing;
         p.rect = Rect(coord.x, coord.y + 20, 50, 50);
         p.color = white;
-        p.displayColor = sequencer.playing ? blue : white;
+        p.displayColor = context.sequencer->playing ? blue : white;
         p.onClickColor = blue;
 
         p.onClick = [&]() {
-            sequencer.playing = !sequencer.playing;
-            sequencer.transport = 0;
+            context.sequencer->playing = !context.sequencer->playing;
+            context.sequencer->transport = 0;
+
+            if (context.sequencer->playing) {
+                context.toAudioQueue->enqueue(PlayMessage());
+            }
+            else {
+                context.toAudioQueue->enqueue(StopMessage());
+            }
         };
 
         p.onHold = [&]() { p.displayColor = p.onClickColor; };

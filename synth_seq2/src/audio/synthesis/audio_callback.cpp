@@ -1,4 +1,4 @@
-#include "audio_callback.hpp"
+#include "src/audio/audio_system/audio_system.hpp"
 
 #include <iostream>
 
@@ -10,36 +10,23 @@
 PolyFmSin polyFmSin(8);
 Smooth smooth(32);
 
-// void printMap(AudioSystemContext& context)
-// {
-//     for (auto& elt : context.intData) {
-//         std::cout << elt.first << " " << elt.second << std::endl;
-//     }
-//     std::cout << std::endl;
-// }
-
-double audioCallback(AudioSystemContext& context)
+double AudioSystem::audioCallback()
 {
-    // auto& intData = context.sharedDataWrapper->getFrontBuffer().intData;
-    auto& intData = context.intData;
+    double t = getTime();
+    double volume = ((double)synthSettings["volume"]) / 100.0;
 
-    double t = context.getTime();
-    double volume = ((double)intData["volume"]) / 100.0;
+    if (trig) {
+        double freq = mtof(synthSettings["note"]);
 
-    if (context.trig) {
-        // double freq = context.freq;
-        // printMap(context.intData);
-        double freq = mtof(intData["note"]);
-
-        double modAmount = ((double)intData["modAmount"]) / 100.0;
+        double modAmount = ((double)synthSettings["modAmount"]) / 100.0;
 
         polyFmSin.trigger(
-            (double)intData["attack"] * 2,
-            (double)intData["hold"] * 20,
-            (double)intData["release"] * 20,
-            (double)intData["modAttack"] * 2,
-            (double)intData["modHold"] * 20,
-            (double)intData["modRelease"] * 20,
+            (double)synthSettings["attack"] * 2,
+            (double)synthSettings["hold"] * 20,
+            (double)synthSettings["release"] * 20,
+            (double)synthSettings["modAttack"] * 2,
+            (double)synthSettings["modHold"] * 20,
+            (double)synthSettings["modRelease"] * 20,
             modAmount,
             freq
         );

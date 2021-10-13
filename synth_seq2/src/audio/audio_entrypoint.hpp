@@ -1,5 +1,8 @@
 #pragma once
 
-#include "src/shared/shared_data.hpp"
+#include "src/shared/messages.hpp"
 
-int audioEntrypoint(SharedDataWrapper* sharedDataWrapper);
+int audioEntrypoint(
+    MessageQueue* toAudioQueue,
+    MessageQueue* toMainQueue
+);

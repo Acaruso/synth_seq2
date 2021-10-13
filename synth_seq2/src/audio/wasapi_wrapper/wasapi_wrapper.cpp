@@ -72,6 +72,24 @@ unsigned WasapiWrapper::getCurrentPadding()
     return numPaddingFrames;
 }
 
+unsigned WasapiWrapper::getPeriodSizeFrames()
+{
+    WAVEFORMATEX waveformat = {};
+    WAVEFORMATEX* pWaveFormat = &waveformat;
+    unsigned currentPeriodInFrames = 0;
+
+    HRESULT hr = audioClient->GetCurrentSharedModeEnginePeriod(
+        &pWaveFormat,
+        &currentPeriodInFrames
+    );
+
+    if (FAILED(hr)) {
+        throw std::runtime_error("ERROR " + toHex(hr) + ": getPeriodSizeFrames");
+    }
+
+    return currentPeriodInFrames;
+}
+
 void WasapiWrapper::startPlaying()
 {
     HRESULT hr = this->audioClient->Start();
