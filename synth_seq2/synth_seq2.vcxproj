@@ -45,6 +45,7 @@
     <ClCompile Include="src/main/ui_elements/advanced/rect_button_elt.cpp" />
     <ClCompile Include="src/main/ui_elements/advanced/sequencer_elt.cpp" />
     <ClCompile Include="src/main/ui_elements/advanced/synth_settings_elt.cpp" />
+    <ClCompile Include="src/main/ui_elements/advanced/transport_elt.cpp" />
     <ClCompile Include="src/main/ui_elements/decorators/base_decorator.cpp" />
     <ClCompile Include="src/main/ui_elements/decorators/clickable.cpp" />
     <ClCompile Include="src/main/ui_elements/decorators/decorator_utils.cpp" />
@@ -72,6 +73,7 @@
     <ClInclude Include="src/main/ui_elements/advanced/rect_button_elt.hpp" />
     <ClInclude Include="src/main/ui_elements/advanced/sequencer_elt.hpp" />
     <ClInclude Include="src/main/ui_elements/advanced/synth_settings_elt.hpp" />
+    <ClInclude Include="src/main/ui_elements/advanced/transport_elt.hpp" />
     <ClInclude Include="src/main/ui_elements/advanced/text_elt.hpp" />
     <ClInclude Include="src/main/ui_elements/basic/rect_outline_elt.hpp" />
     <ClInclude Include="src/main/ui_elements/decorators/base_decorator.hpp" />
