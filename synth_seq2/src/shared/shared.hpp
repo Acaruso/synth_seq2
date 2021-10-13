@@ -10,12 +10,12 @@ inline SynthSettings getDefaultSynthSettings()
 
     synthSettings["volume"] = 100;
     synthSettings["modAmount"] = 0;
-    synthSettings["attack"] = 0;
-    synthSettings["hold"] = 80;
-    synthSettings["release"] = 100;
-    synthSettings["modAttack"] = 0;
-    synthSettings["modHold"] = 80;
-    synthSettings["modRelease"] = 100;
+    synthSettings["attack"] = 2;
+    synthSettings["hold"] = 20;
+    synthSettings["release"] = 10;
+    synthSettings["modAttack"] = 2;
+    synthSettings["modHold"] = 20;
+    synthSettings["modRelease"] = 10;
     synthSettings["note"] = 60;
 
     return synthSettings;

@@ -74,14 +74,6 @@ void synthSettingsElt(EltParams& params)
         numCoord,
         "modRelease"
     );
-
-    numCoord.x += numXPadding;
-    _numberElt(
-        context,
-        "freq",
-        numCoord,
-        "freq"
-    );
 }
 
 void _numberElt(AppContext& context, std::string label, Coord coord, std::string key)
