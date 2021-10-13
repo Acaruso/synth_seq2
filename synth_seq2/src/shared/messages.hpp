@@ -57,6 +57,12 @@ struct EventMapMessage
     EventMapMessage(EventMap eventMap) : eventMap(eventMap) {}
 };
 
+struct SynthSettingsMessage
+{
+    SynthSettings synthSettings;
+    SynthSettingsMessage(SynthSettings synthSettings) : synthSettings(synthSettings) {}
+};
+
 using Message = std::variant<
     QuitMessage,
     PlayMessage,
@@ -66,7 +72,8 @@ using Message = std::variant<
     BoolMessage,
     DoubleMessage,
     StringMessage,
-    EventMapMessage
+    EventMapMessage,
+    SynthSettingsMessage
 >;
 
 using MessageQueue = moodycamel::ReaderWriterQueue<Message>;

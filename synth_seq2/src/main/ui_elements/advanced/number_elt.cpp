@@ -7,40 +7,77 @@
 #include "src/main/ui_elements/decorators/base_decorator.hpp"
 #include "src/main/ui_elements/decorators/decorator_utils.hpp"
 
-void numberEltInner(EltParams& params)
+Rect getInnerRect(EltParams& params)
 {
     std::string fontName = params.fontName;
     std::string displayText = params.getDisplayText();
-
     Coord innerCoord;
     innerCoord.x = params.coord.x + 1;
     innerCoord.y = params.coord.y + 1;
-
     Font& font = params.ctx.graphicsWrapper.getFont(fontName);
-
     int maxNumDigits = (int)std::to_string(params.max).size();
 
-    Rect rect{
-        innerCoord.x,
-        innerCoord.y,
-        -1,
-        maxNumDigits * font.width + 1,
-        font.height - 1,
-        red
-    };
+    if (fontName == "inconsolata") {
+        return Rect{
+            innerCoord.x,
+            innerCoord.y,
+            -1,
+            maxNumDigits * font.width + 4,
+            font.height + 1,
+            red
+        };
+    }
+    else if (fontName == "dos") {
+        return Rect{
+            innerCoord.x,
+            innerCoord.y,
+            -1,
+            maxNumDigits * font.width + 1,
+            font.height - 1,
+            red
+        };
+    }
+}
 
-    params.ctx.graphicsWrapper.drawRect(rect);
-
+Coord getTextCoord(EltParams& params)
+{
+    std::string fontName = params.fontName;
+    Coord innerCoord;
+    innerCoord.x = params.coord.x + 1;
+    innerCoord.y = params.coord.y + 1;
     Coord textCoord = innerCoord;
-    textCoord.x += 1;
+
+    if (fontName == "inconsolata") {
+        textCoord.x += 2;
+    }
+    else if (fontName == "dos") {
+        textCoord.x += 1;
+    }
+
+    return textCoord;
+}
+
+void numberEltInner(EltParams& params)
+{
+    std::string fontName = params.fontName;
+    Font& font = params.ctx.graphicsWrapper.getFont(params.fontName);
+
+    std::string displayText = params.getDisplayText();
+
+    Rect innerRect = getInnerRect(params);
+
+    params.ctx.graphicsWrapper.drawRect(innerRect);
+
+    Coord textCoord = getTextCoord(params);
+
     params.ctx.graphicsWrapper.drawText(displayText, fontName, textCoord);
 
     Rect outerRect{
         params.coord.x,
         params.coord.y,
         -2,
-        rect.w + 2,
-        rect.h + 2,
+        innerRect.w + 2,
+        innerRect.h + 2,
         black
     };
 

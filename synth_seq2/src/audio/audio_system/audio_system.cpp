@@ -85,6 +85,10 @@ void AudioSystem::handleMessagesFromMainThread()
             freq = mtof(p->note);
             trig = true;
         }
+        else if (SynthSettingsMessage* p = std::get_if<SynthSettingsMessage>(&message)) {
+            synthSettings = p->synthSettings;
+            trig = true;
+        }
         else if (EventMapMessage* p = std::get_if<EventMapMessage>(&message)) {
             // merge maps
             eventMap.insert(p->eventMap.begin(), p->eventMap.end());

@@ -19,6 +19,14 @@ void setup(AppContext& context)
             9,
             20
         );
+
+        context.graphicsWrapper.loadFont(
+            "inconsolata",
+            "fonts/Inconsolata-Regular.ttf",
+            16,
+            8,
+            20
+        );
     }
     catch(std::exception& ex) {
         std::cout << ex.what() << std::endl;

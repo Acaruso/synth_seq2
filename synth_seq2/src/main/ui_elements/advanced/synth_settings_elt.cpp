@@ -82,7 +82,7 @@ void _numberElt(AppContext& context, std::string label, Coord coord, std::string
 
     int& data = synthSettings[key];
 
-    std::string fontName = "dos";
+    std::string fontName = "inconsolata";
     Font& font = context.graphicsWrapper.getFont(fontName);
 
     context.graphicsWrapper.drawText(label, fontName, coord);
