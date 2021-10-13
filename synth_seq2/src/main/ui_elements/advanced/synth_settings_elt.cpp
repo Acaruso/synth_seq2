@@ -1,6 +1,7 @@
 #include "synth_settings_elt.hpp"
 
 #include "src/main/ui_elements/advanced/number_with_label_elt.hpp"
+#include "src/main/util.hpp"
 
 void _numberElt(AppContext& context, std::string label, Coord coord, std::string key);
 
@@ -87,6 +88,23 @@ void _numberElt(AppContext& context, std::string label, Coord coord, std::string
     EltParams p(context);
     p.label = label;
     p.coord = coord;
-    p.key = key;
+
+    auto& synthSettings = context.sequencer->getSynthSettings();
+    int& data = synthSettings[key];
+
+    p.min = 0;
+    p.max = 100;
+
+    int maxNumDigits = (int)std::to_string(p.max).size();
+
+    p.getDisplayText = [&]() {
+        return pad(maxNumDigits, std::to_string(data));
+    };
+
+    p.onDrag = [&]() {
+        data += context.getDragAmount() / 2;
+        data = clamp(data, p.min, p.max);
+    };
+
     numberWithLabelElt(p);
 }

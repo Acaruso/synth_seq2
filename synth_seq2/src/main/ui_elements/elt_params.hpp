@@ -20,7 +20,6 @@ struct EltParams
     int min{0};
     int max{100};
     std::string label;
-    std::string key;
     std::string fontName{"inconsolata"};
 
     std::function<void()> onClick{nullptr};
