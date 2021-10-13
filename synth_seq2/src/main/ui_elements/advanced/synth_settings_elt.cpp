@@ -1,8 +1,6 @@
 #include "synth_settings_elt.hpp"
 
-#include "src/main/ui_elements/advanced/number_elt.hpp"
-#include "src/main/ui_elements/basic/rect_outline_elt.hpp"
-#include "src/main/util.hpp"
+#include "src/main/ui_elements/advanced/number_with_label_elt.hpp"
 
 void _numberElt(AppContext& context, std::string label, Coord coord, std::string key);
 
@@ -86,55 +84,9 @@ void synthSettingsElt(EltParams& params)
 
 void _numberElt(AppContext& context, std::string label, Coord coord, std::string key)
 {
-    auto& synthSettings = context.sequencer->getSynthSettings();
-
-    int& data = synthSettings[key];
-
-    std::string fontName = "inconsolata";
-    Font& font = context.graphicsWrapper.getFont(fontName);
-
-    context.graphicsWrapper.drawText(label, fontName, coord);
-
     EltParams p(context);
-
-    p.coord = Coord{
-        coord.x + 100,
-        coord.y
-    };
-
-    p.min = 0;
-    p.max = 100;
-
-    int maxNumDigits = (int)std::to_string(p.max).size();
-
-    p.fontName = fontName;
-
-    p.rect = Rect{
-        p.coord.x,
-        p.coord.y,
-        maxNumDigits * font.width,
-        font.height
-    },
-
-    p.getDisplayText = [&]() {
-        return pad(maxNumDigits, std::to_string(data));
-    };
-
-    p.onDrag = [&]() {
-        data += context.getDragAmount() / 2;
-        data = clamp(data, p.min, p.max);
-    };
-
-    numberElt(p);
-
-    Rect outerRect{
-        coord.x - 2,
-        coord.y,
-        102,
-        18
-    };
-
-    EltParams p2(context);
-    p2.rect = outerRect;
-    rectOutlineElt(p2);
+    p.label = label;
+    p.coord = coord;
+    p.key = key;
+    numberWithLabelElt(p);
 }
