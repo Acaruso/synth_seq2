@@ -22,10 +22,25 @@ void sequencerElt(EltParams& params)
 {
     Coord coord = params.coord;
 
+    Rect bgRect{
+        coord.x,
+        coord.y,
+        -3,
+        ((cellWidth + padding) * (int)params.ctx.sequencer->row.size()) + padding,
+        cellHeight + clockCellHeight + (padding * 3),
+        green
+    };
+
+    params.ctx.graphicsWrapper.drawRect(bgRect);
+
+    Coord newCoord = coord;
+    newCoord.x = coord.x + padding;
+    newCoord.y = coord.y + padding;
+
     for (int i = 0; i < params.ctx.sequencer->row.size(); i++) {
         Cell& cell = params.ctx.sequencer->row[i];
-        _clock(params.ctx, coord, i);
-        _cell(params.ctx, cell, coord, i);
+        _clock(params.ctx, newCoord, i);
+        _cell(params.ctx, cell, newCoord, i);
     }
 }
 
@@ -122,6 +137,15 @@ void _drawSelectedRect(AppContext& ctx, Rect rect)
         white
     );
 
-    ctx.graphicsWrapper.drawRect(whiteRect);
+    Rect greenRect(
+        rect.x - 1,
+        rect.y - 1,
+        -1,
+        rect.w + 2,
+        rect.h + 2,
+        green
+    );
+
+    ctx.graphicsWrapper.drawRect(greenRect);
     ctx.graphicsWrapper.drawRect(selectedRect);
 }
