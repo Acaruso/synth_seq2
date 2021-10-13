@@ -71,6 +71,11 @@ void GraphicsWrapper::drawText(std::string text, std::string fontName, Coord coo
     drawSystem.push(DrawTextCommand(text, this->fonts[fontName], coord));
 }
 
+void GraphicsWrapper::drawLine(Coord begin, Coord end)
+{
+    drawSystem.push(DrawLineCommand(begin, end));
+}
+
 void GraphicsWrapper::loadImage(std::string name, std::string path)
 {
     SDL_Surface* buffer = IMG_Load(path.c_str());

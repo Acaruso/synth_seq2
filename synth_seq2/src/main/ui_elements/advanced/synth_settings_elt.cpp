@@ -1,6 +1,7 @@
 #include "synth_settings_elt.hpp"
 
 #include "src/main/ui_elements/advanced/number_elt.hpp"
+#include "src/main/ui_elements/basic/rect_outline_elt.hpp"
 #include "src/main/util.hpp"
 
 void _numberElt(AppContext& context, std::string label, Coord coord, std::string key);
@@ -92,12 +93,10 @@ void _numberElt(AppContext& context, std::string label, Coord coord, std::string
     std::string fontName = "inconsolata";
     Font& font = context.graphicsWrapper.getFont(fontName);
 
-    // draw label ////////////////////
     context.graphicsWrapper.drawText(label, fontName, coord);
 
     EltParams p(context);
 
-    // coord for rect ///////////////
     p.coord = Coord{
         coord.x + 100,
         coord.y
@@ -127,4 +126,15 @@ void _numberElt(AppContext& context, std::string label, Coord coord, std::string
     };
 
     numberElt(p);
+
+    Rect outerRect{
+        coord.x - 2,
+        coord.y,
+        102,
+        18
+    };
+
+    EltParams p2(context);
+    p2.rect = outerRect;
+    rectOutlineElt(p2);
 }
