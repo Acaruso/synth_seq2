@@ -12,6 +12,7 @@
 #include "src/main/input_system/input_system.hpp"
 #include "src/main/sequencer/sequencer.hpp"
 #include "src/main/ui_elements/new/base_elt.hpp"
+#include "src/main/ui_elements/new/rect_button_oop_elt.hpp"
 #include "src/main/ui_elements/new/text_oop_elt.hpp"
 #include "src/main/util.hpp"
 #include "src/shared/messages.hpp"
@@ -22,12 +23,14 @@ public:
     TransportOopElt() {}
 
     TransportOopElt(
+        Coord coord,
         GraphicsWrapper* graphicsWrapper,
         InputSystem* inputSystem,
         Sequencer* sequencer,
         MessageQueue* toAudioQueue
     )
-        : graphicsWrapper(graphicsWrapper)
+        : coord(coord)
+        , graphicsWrapper(graphicsWrapper)
         , inputSystem(inputSystem)
         , sequencer(sequencer)
         , toAudioQueue(toAudioQueue)
@@ -49,47 +52,53 @@ public:
         color = white;
         onClickColor = blue;
 
-        children.push_back(new TextOopElt(graphicsWrapper, "play"));
-    }
+        children.push_back(new TextOopElt(coord, graphicsWrapper, "play"));
 
-    void run(Coord coord) override
-    {
-        // text ///////////////////////
-        // std::string label = "play";
-
-        // graphicsWrapper->drawText(
-        //     label,
-        //     "inconsolata",
-        //     coord
-        // );
-
-        // rect button ////////////////
         Rect rect(coord.x, coord.y + 20, 50, 50);
 
-        handleUserInput(rect);
+        children.push_back(
+            new RectButtonOopElt(
+                coord,
+                graphicsWrapper,
+                inputSystem,
+                sequencer,
+                rect,
+                onClick,
+                onHold
+            )
+        );
+    }
 
-        Rect innerRect{
-            rect.x + 2,
-            rect.y + 2,
-            rect.z + 1,
-            rect.w - 4,
-            rect.h - 4
-        };
+    void run() override
+    {
+        // // rect button ////////////////
+        // Rect rect(coord.x, coord.y + 20, 50, 50);
 
-        rect.color = black;
-        graphicsWrapper->drawRect(rect);
+        // handleUserInput(rect);
 
-        displayColor = sequencer->playing ? blue : white;
+        // Rect innerRect{
+        //     rect.x + 2,
+        //     rect.y + 2,
+        //     rect.z + 1,
+        //     rect.w - 4,
+        //     rect.h - 4
+        // };
 
-        innerRect.color = displayColor;
-        graphicsWrapper->drawRect(innerRect);
+        // rect.color = black;
+        // graphicsWrapper->drawRect(rect);
+
+        // displayColor = sequencer->playing ? blue : white;
+
+        // innerRect.color = displayColor;
+        // graphicsWrapper->drawRect(innerRect);
 
         for (auto& child : children) {
-            child->run(coord);
+            child->run();
         }
     }
 
 private:
+    Coord coord;
     GraphicsWrapper* graphicsWrapper;
     InputSystem* inputSystem;
     Sequencer* sequencer;

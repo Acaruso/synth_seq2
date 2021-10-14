@@ -6,5 +6,5 @@
 class BaseElt
 {
 public:
-    virtual void run(Coord coord) = 0;
+    virtual void run() = 0;
 };

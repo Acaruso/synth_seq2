@@ -22,6 +22,7 @@ App::App(
     context.sequencer = &sequencer;
 
     transportOopElt = new TransportOopElt(
+        Coord(1200, 500),
         &context.graphicsWrapper,
         &context.inputSystem,
         &sequencer,
@@ -47,7 +48,7 @@ void App::run()
         context.graphicsWrapper.clearWindow();
         context.inputSystem.run();
 
-        transportOopElt->run(Coord(1200, 500));
+        transportOopElt->run();
 
         callback(context);
 

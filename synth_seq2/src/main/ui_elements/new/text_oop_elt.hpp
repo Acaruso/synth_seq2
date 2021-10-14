@@ -11,14 +11,16 @@ public:
     TextOopElt() {}
 
     TextOopElt(
+        Coord coord,
         GraphicsWrapper* graphicsWrapper,
         std::string label
     )
-        : graphicsWrapper(graphicsWrapper)
+        : coord(coord)
+        , graphicsWrapper(graphicsWrapper)
         , label(label)
     {}
 
-    void run(Coord coord) override
+    void run() override
     {
         graphicsWrapper->drawText(
             label,
@@ -28,6 +30,7 @@ public:
     }
 
 private:
+    Coord coord;
     GraphicsWrapper* graphicsWrapper;
     std::string label;
 };
