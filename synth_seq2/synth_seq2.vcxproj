@@ -73,8 +73,8 @@
     <ClInclude Include="src/main/ui_elements/advanced/rect_button_elt.hpp" />
     <ClInclude Include="src/main/ui_elements/advanced/sequencer_elt.hpp" />
     <ClInclude Include="src/main/ui_elements/advanced/synth_settings_elt.hpp" />
-    <ClInclude Include="src/main/ui_elements/advanced/transport_elt.hpp" />
     <ClInclude Include="src/main/ui_elements/advanced/text_elt.hpp" />
+    <ClInclude Include="src/main/ui_elements/advanced/transport_elt.hpp" />
     <ClInclude Include="src/main/ui_elements/basic/rect_outline_elt.hpp" />
     <ClInclude Include="src/main/ui_elements/decorators/base_decorator.hpp" />
     <ClInclude Include="src/main/ui_elements/decorators/clickable.hpp" />
@@ -82,6 +82,7 @@
     <ClInclude Include="src/main/ui_elements/decorators/draggable.hpp" />
     <ClInclude Include="src/main/ui_elements/decorators/holdable.hpp" />
     <ClInclude Include="src/main/ui_elements/elt_params.hpp" />
+    <ClInclude Include="src/main/ui_elements/new/transport_oop_elt.hpp" />
     <ClInclude Include="src/main/ui_elements/ui_elements_shared.hpp" />
     <ClInclude Include="src/main/util.hpp" />
   </ItemGroup>
