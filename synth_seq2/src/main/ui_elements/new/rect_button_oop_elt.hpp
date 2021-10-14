@@ -13,6 +13,12 @@
 class RectButtonOopElt : public BaseElt
 {
 public:
+    std::function<void()> onClick;
+    std::function<void()> onHold;
+    Color color{white};
+    Color displayColor{white};
+    Color onClickColor{blue};
+
     RectButtonOopElt() {}
 
     RectButtonOopElt(
@@ -20,8 +26,8 @@ public:
         GraphicsWrapper* graphicsWrapper,
         InputSystem* inputSystem,
         Rect rect,
-        std::function<void()> onClick,
-        std::function<void()> onHold
+        std::function<void()> onClick = nullptr,
+        std::function<void()> onHold = nullptr
     )
         : coord(coord)
         , graphicsWrapper(graphicsWrapper)
@@ -46,8 +52,6 @@ public:
         rect.color = black;
         graphicsWrapper->drawRect(rect);
 
-        displayColor = toggled ? blue : white;
-
         innerRect.color = displayColor;
         graphicsWrapper->drawRect(innerRect);
     }
@@ -58,14 +62,6 @@ private:
     GraphicsWrapper* graphicsWrapper;
     InputSystem* inputSystem;
     Rect rect;
-
-    std::function<void()> onClick;
-    std::function<void()> onHold;
-
-    Color color;
-    Color displayColor;
-    Color onClickColor;
-    bool toggled{false};
 
     void handleUserInput()
     {
@@ -79,9 +75,8 @@ private:
             && !prevUiState.click
         );
 
-        if (isClicked) {
+        if (isClicked && onClick) {
             onClick();
-            toggled = !toggled;
         }
 
         // on hold ////////////////////
@@ -92,7 +87,7 @@ private:
 
         bool isHeld = (isInside && uiState.click);
 
-        if (isHeld) {
+        if (isHeld && onHold) {
             onHold();
         }
     }

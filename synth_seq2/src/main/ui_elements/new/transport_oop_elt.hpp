@@ -23,21 +23,32 @@ public:
     TransportOopElt() {}
 
     TransportOopElt(
-        Coord coord,
-        GraphicsWrapper* graphicsWrapper,
-        InputSystem* inputSystem,
-        Sequencer* sequencer,
-        MessageQueue* toAudioQueue
+        Coord coord_,
+        GraphicsWrapper* graphicsWrapper_,
+        InputSystem* inputSystem_,
+        Sequencer* sequencer_,
+        MessageQueue* toAudioQueue_
     )
-        : coord(coord)
-        , graphicsWrapper(graphicsWrapper)
-        , inputSystem(inputSystem)
-        , sequencer(sequencer)
-        , toAudioQueue(toAudioQueue)
+        : coord(coord_)
+        , graphicsWrapper(graphicsWrapper_)
+        , inputSystem(inputSystem_)
+        , sequencer(sequencer_)
+        , toAudioQueue(toAudioQueue_)
     {
-        auto onClick = [=]() {
+        auto rectButton = new RectButtonOopElt(
+            coord,
+            graphicsWrapper,
+            inputSystem,
+            Rect(coord.x, coord.y + 20, 50, 50)
+        );
+
+        rectButton->onClick = [=]() {
             sequencer->playing = !sequencer->playing;
             sequencer->transport = 0;
+
+            rectButton->displayColor = sequencer->playing
+                ? rectButton->onClickColor
+                : rectButton->color;
 
             if (sequencer->playing) {
                 toAudioQueue->enqueue(PlayMessage());
@@ -47,31 +58,13 @@ public:
             }
         };
 
-        // TODO: figure out onHold
-        auto onHold = [&]() { displayColor = onClickColor; };
-
-        color = white;
-        onClickColor = blue;
-
+        children.push_back(rectButton);
         children.push_back(new TextOopElt(coord, graphicsWrapper, "play"));
-
-        Rect rect(coord.x, coord.y + 20, 50, 50);
-
-        children.push_back(
-            new RectButtonOopElt(
-                coord,
-                graphicsWrapper,
-                inputSystem,
-                rect,
-                onClick,
-                onHold
-            )
-        );
     }
 
     void run() override
     {
-        for (auto& child : children) {
+        for (const auto& child : children) {
             child->run();
         }
     }
