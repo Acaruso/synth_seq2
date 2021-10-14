@@ -27,8 +27,7 @@ public:
         , sequencer(sequencer)
         , toAudioQueue(toAudioQueue)
     {
-        onClick = [&]() {
-            std::cout << "clicked" << std::endl;
+        onClick = [=]() {
             sequencer->playing = !sequencer->playing;
             sequencer->transport = 0;
 

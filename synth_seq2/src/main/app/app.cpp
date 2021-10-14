@@ -21,6 +21,8 @@ App::App(
     context.toMainQueue = &toMainQueue;
     context.sequencer = &sequencer;
 
+    std::cout << "sequencer playing: " << sequencer.playing << std::endl;
+
     transportOopElt = TransportOopElt(
         &context.graphicsWrapper,
         &context.inputSystem,
