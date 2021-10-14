@@ -24,6 +24,7 @@ public:
     void drawRect(Rect rect);
     void drawImage(std::string name, Coord coord);
     void drawText(std::string text, std::string fontName, Coord coord);
+    void drawLine(Coord begin, Coord end);
 
     void loadImage(std::string name, std::string path);
 

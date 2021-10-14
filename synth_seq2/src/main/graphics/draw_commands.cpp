@@ -46,7 +46,7 @@ int DrawImageCommand::getZAxis()
 
 DrawTextCommand::DrawTextCommand(std::string text, Font font, Coord coord)
     : text(text), font(font), coord(coord)
-{};
+{}
 
 void DrawTextCommand::draw(SDL_Renderer* renderer)
 {
@@ -56,4 +56,18 @@ void DrawTextCommand::draw(SDL_Renderer* renderer)
 int DrawTextCommand::getZAxis()
 {
     return this->coord.z;
+}
+
+DrawLineCommand::DrawLineCommand(Coord start, Coord end)
+    : start(start), end(end)
+{}
+
+void DrawLineCommand::draw(SDL_Renderer* renderer)
+{
+    SDL_RenderDrawLine(renderer, start.x, start.y, end.x, end.y);
+}
+
+int DrawLineCommand::getZAxis()
+{
+    return this->start.z;
 }

@@ -1,6 +1,6 @@
 #include "synth_settings_elt.hpp"
 
-#include "src/main/ui_elements/advanced/number_elt.hpp"
+#include "src/main/ui_elements/advanced/number_with_label_elt.hpp"
 #include "src/main/util.hpp"
 
 void _numberElt(AppContext& context, std::string label, Coord coord, std::string key);
@@ -8,10 +8,13 @@ void _numberElt(AppContext& context, std::string label, Coord coord, std::string
 void synthSettingsElt(EltParams& params)
 {
     AppContext& context = params.ctx;
+    Font& font = context.graphicsWrapper.getFont(params.fontName);
     Coord numCoord = params.coord;
 
-    int numXPadding = 150;
+    int numXPadding = 200;
+    int numYPadding = 6;
 
+    // col 1
     _numberElt(
         context,
         "volume",
@@ -19,7 +22,7 @@ void synthSettingsElt(EltParams& params)
         "volume"
     );
 
-    numCoord.x += numXPadding;
+    numCoord.y += font.lineHeight + numYPadding;
     _numberElt(
         context,
         "mod amount",
@@ -27,7 +30,9 @@ void synthSettingsElt(EltParams& params)
         "modAmount"
     );
 
+    // col 2
     numCoord.x += numXPadding;
+    numCoord.y = params.coord.y;
     _numberElt(
         context,
         "attack",
@@ -35,7 +40,7 @@ void synthSettingsElt(EltParams& params)
         "attack"
     );
 
-    numCoord.x += numXPadding;
+    numCoord.y += font.lineHeight + numYPadding;
     _numberElt(
         context,
         "hold",
@@ -43,7 +48,7 @@ void synthSettingsElt(EltParams& params)
         "hold"
     );
 
-    numCoord.x += numXPadding;
+    numCoord.y += font.lineHeight + numYPadding;
     _numberElt(
         context,
         "release",
@@ -51,7 +56,9 @@ void synthSettingsElt(EltParams& params)
         "release"
     );
 
-    numCoord = Coord{100 + numXPadding * 2, 400};
+    // col3
+    numCoord.x += numXPadding;
+    numCoord.y = params.coord.y;
     _numberElt(
         context,
         "mod attack",
@@ -59,7 +66,7 @@ void synthSettingsElt(EltParams& params)
         "modAttack"
     );
 
-    numCoord.x += numXPadding;
+    numCoord.y += font.lineHeight + numYPadding;
     _numberElt(
         context,
         "mod hold",
@@ -67,7 +74,7 @@ void synthSettingsElt(EltParams& params)
         "modHold"
     );
 
-    numCoord.x += numXPadding;
+    numCoord.y += font.lineHeight + numYPadding;
     _numberElt(
         context,
         "mod release",
@@ -78,35 +85,17 @@ void synthSettingsElt(EltParams& params)
 
 void _numberElt(AppContext& context, std::string label, Coord coord, std::string key)
 {
-    auto& synthSettings = context.sequencer->getSynthSettings();
-
-    int& data = synthSettings[key];
-
-    std::string fontName = "inconsolata";
-    Font& font = context.graphicsWrapper.getFont(fontName);
-
-    context.graphicsWrapper.drawText(label, fontName, coord);
-
     EltParams p(context);
+    p.label = label;
+    p.coord = coord;
 
-    p.coord = Coord{
-        coord.x,
-        coord.y + font.lineHeight
-    };
+    auto& synthSettings = context.sequencer->getSynthSettings();
+    int& data = synthSettings[key];
 
     p.min = 0;
     p.max = 100;
 
     int maxNumDigits = (int)std::to_string(p.max).size();
-
-    p.fontName = fontName;
-
-    p.rect = Rect{
-        p.coord.x,
-        p.coord.y,
-        maxNumDigits * font.width,
-        font.height
-    },
 
     p.getDisplayText = [&]() {
         return pad(maxNumDigits, std::to_string(data));
@@ -117,5 +106,5 @@ void _numberElt(AppContext& context, std::string label, Coord coord, std::string
         data = clamp(data, p.min, p.max);
     };
 
-    numberElt(p);
+    numberWithLabelElt(p);
 }
