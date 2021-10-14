@@ -19,8 +19,6 @@ public:
         Coord coord,
         GraphicsWrapper* graphicsWrapper,
         InputSystem* inputSystem,
-        // TODO: remove sequencer
-        Sequencer* sequencer,
         Rect rect,
         std::function<void()> onClick,
         std::function<void()> onHold
@@ -28,7 +26,6 @@ public:
         : coord(coord)
         , graphicsWrapper(graphicsWrapper)
         , inputSystem(inputSystem)
-        , sequencer(sequencer)
         , rect(rect)
         , onClick(onClick)
         , onHold(onHold)
@@ -49,8 +46,7 @@ public:
         rect.color = black;
         graphicsWrapper->drawRect(rect);
 
-        // displayColor = sequencer->playing ? blue : white;
-        displayColor = white;
+        displayColor = toggled ? blue : white;
 
         innerRect.color = displayColor;
         graphicsWrapper->drawRect(innerRect);
@@ -61,7 +57,6 @@ private:
 
     GraphicsWrapper* graphicsWrapper;
     InputSystem* inputSystem;
-    Sequencer* sequencer;
     Rect rect;
 
     std::function<void()> onClick;
@@ -70,6 +65,7 @@ private:
     Color color;
     Color displayColor;
     Color onClickColor;
+    bool toggled{false};
 
     void handleUserInput()
     {
@@ -85,6 +81,7 @@ private:
 
         if (isClicked) {
             onClick();
+            toggled = !toggled;
         }
 
         // on hold ////////////////////
@@ -99,5 +96,4 @@ private:
             onHold();
         }
     }
-
 };
