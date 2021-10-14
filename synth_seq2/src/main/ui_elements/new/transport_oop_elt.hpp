@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <iostream>
 #include <string>
 
 #include "src/main/graphics/color.hpp"
@@ -13,11 +14,13 @@
 class TransportOopElt
 {
 public:
+    TransportOopElt() {}
+
     TransportOopElt(
-        GraphicsWrapper& graphicsWrapper,
-        InputSystem& inputSystem,
-        Sequencer& sequencer,
-        MessageQueue& toAudioQueue
+        GraphicsWrapper* graphicsWrapper,
+        InputSystem* inputSystem,
+        Sequencer* sequencer,
+        MessageQueue* toAudioQueue
     )
         : graphicsWrapper(graphicsWrapper)
         , inputSystem(inputSystem)
@@ -25,21 +28,22 @@ public:
         , toAudioQueue(toAudioQueue)
     {
         onClick = [&]() {
-            sequencer.playing = sequencer.playing;
-            sequencer.transport = 0;
+            std::cout << "clicked" << std::endl;
+            sequencer->playing = !sequencer->playing;
+            sequencer->transport = 0;
 
-            if (sequencer.playing) {
-                toAudioQueue.enqueue(PlayMessage());
+            if (sequencer->playing) {
+                toAudioQueue->enqueue(PlayMessage());
             }
             else {
-                toAudioQueue.enqueue(StopMessage());
+                toAudioQueue->enqueue(StopMessage());
             }
         };
 
         onHold = [&]() { displayColor = onClickColor; };
 
         color = white;
-        displayColor = sequencer.playing ? blue : white;
+        displayColor = sequencer->playing ? blue : white;
         onClickColor = blue;
     }
 
@@ -48,7 +52,7 @@ public:
         // text ///////////////////////
         std::string label = "play";
 
-        graphicsWrapper.drawText(
+        graphicsWrapper->drawText(
             label,
             "inconsolata",
             coord
@@ -56,6 +60,8 @@ public:
 
         // rect button ////////////////
         Rect rect(coord.x, coord.y + 20, 50, 50);
+
+        handleUserInput(rect);
 
         Rect innerRect{
             rect.x + 2,
@@ -66,17 +72,17 @@ public:
         };
 
         rect.color = black;
-        graphicsWrapper.drawRect(rect);
+        graphicsWrapper->drawRect(rect);
 
         innerRect.color = displayColor;
-        graphicsWrapper.drawRect(innerRect);
+        graphicsWrapper->drawRect(innerRect);
     }
 
 private:
-    GraphicsWrapper& graphicsWrapper;
-    InputSystem& inputSystem;
-    Sequencer& sequencer;
-    MessageQueue& toAudioQueue;
+    GraphicsWrapper* graphicsWrapper;
+    InputSystem* inputSystem;
+    Sequencer* sequencer;
+    MessageQueue* toAudioQueue;
     std::function<void()> onClick;
     std::function<void()> onHold;
     Color color;
@@ -85,8 +91,8 @@ private:
 
     void handleUserInput(Rect rect)
     {
-        UiState& uiState = inputSystem.uiState;
-        UiState& prevUiState = inputSystem.prevUiState;
+        UiState& uiState = inputSystem->uiState;
+        UiState& prevUiState = inputSystem->prevUiState;
 
         // on click ///////////////////
         bool isClicked = (

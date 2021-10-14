@@ -20,6 +20,13 @@ App::App(
     context.toAudioQueue = &toAudioQueue;
     context.toMainQueue = &toMainQueue;
     context.sequencer = &sequencer;
+
+    transportOopElt = TransportOopElt(
+        &context.graphicsWrapper,
+        &context.inputSystem,
+        &sequencer,
+        &toAudioQueue
+    );
 }
 
 void App::run()
@@ -41,6 +48,7 @@ void App::run()
         context.inputSystem.run();
 
         callback(context);
+        transportOopElt.draw(Coord(1200, 500));
 
         sendMessagesToAudioThread();
 
