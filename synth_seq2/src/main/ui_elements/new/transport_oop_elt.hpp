@@ -3,6 +3,7 @@
 #include <functional>
 #include <iostream>
 #include <string>
+#include <vector>
 
 #include "src/main/graphics/color.hpp"
 #include "src/main/graphics/coord.hpp"
@@ -11,6 +12,7 @@
 #include "src/main/input_system/input_system.hpp"
 #include "src/main/sequencer/sequencer.hpp"
 #include "src/main/ui_elements/new/base_elt.hpp"
+#include "src/main/ui_elements/new/text_oop_elt.hpp"
 #include "src/main/util.hpp"
 #include "src/shared/messages.hpp"
 
@@ -46,18 +48,20 @@ public:
 
         color = white;
         onClickColor = blue;
+
+        children.push_back(new TextOopElt(graphicsWrapper, "play"));
     }
 
-    void run(Coord coord)
+    void run(Coord coord) override
     {
         // text ///////////////////////
-        std::string label = "play";
+        // std::string label = "play";
 
-        graphicsWrapper->drawText(
-            label,
-            "inconsolata",
-            coord
-        );
+        // graphicsWrapper->drawText(
+        //     label,
+        //     "inconsolata",
+        //     coord
+        // );
 
         // rect button ////////////////
         Rect rect(coord.x, coord.y + 20, 50, 50);
@@ -79,6 +83,10 @@ public:
 
         innerRect.color = displayColor;
         graphicsWrapper->drawRect(innerRect);
+
+        for (auto& child : children) {
+            child->run(coord);
+        }
     }
 
 private:
@@ -91,6 +99,7 @@ private:
     Color color;
     Color displayColor;
     Color onClickColor;
+    std::vector<BaseElt*> children;
 
     void handleUserInput(Rect rect)
     {
