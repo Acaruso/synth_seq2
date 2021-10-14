@@ -7,9 +7,10 @@
 
 #include "app_context.hpp"
 #include "src/main/sequencer/sequencer.hpp"
+#include "src/main/ui_elements/new/base_elt.hpp"
+#include "src/main/ui_elements/new/transport_oop_elt.hpp"
 #include "src/shared/messages.hpp"
 #include "src/shared/shared.hpp"
-#include "src/main/ui_elements/new/transport_oop_elt.hpp"
 
 class App
 {
@@ -18,7 +19,7 @@ public:
     MessageQueue toAudioQueue;
     MessageQueue toMainQueue;
     Sequencer sequencer;
-    TransportOopElt transportOopElt;
+    BaseElt* transportOopElt;
 
     App(
         std::function<void(AppContext& context)> setup,

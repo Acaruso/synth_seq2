@@ -21,9 +21,7 @@ App::App(
     context.toMainQueue = &toMainQueue;
     context.sequencer = &sequencer;
 
-    std::cout << "sequencer playing: " << sequencer.playing << std::endl;
-
-    transportOopElt = TransportOopElt(
+    transportOopElt = new TransportOopElt(
         &context.graphicsWrapper,
         &context.inputSystem,
         &sequencer,
@@ -49,8 +47,9 @@ void App::run()
         context.graphicsWrapper.clearWindow();
         context.inputSystem.run();
 
+        transportOopElt->run(Coord(1200, 500));
+
         callback(context);
-        transportOopElt.draw(Coord(1200, 500));
 
         sendMessagesToAudioThread();
 

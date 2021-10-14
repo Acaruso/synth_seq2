@@ -5,13 +5,16 @@
 #include <string>
 
 #include "src/main/graphics/color.hpp"
+#include "src/main/graphics/coord.hpp"
 #include "src/main/graphics/graphics_wrapper.hpp"
+#include "src/main/graphics/rect.hpp"
 #include "src/main/input_system/input_system.hpp"
 #include "src/main/sequencer/sequencer.hpp"
+#include "src/main/ui_elements/new/base_elt.hpp"
 #include "src/main/util.hpp"
 #include "src/shared/messages.hpp"
 
-class TransportOopElt
+class TransportOopElt : public BaseElt
 {
 public:
     TransportOopElt() {}
@@ -42,11 +45,10 @@ public:
         onHold = [&]() { displayColor = onClickColor; };
 
         color = white;
-        displayColor = sequencer->playing ? blue : white;
         onClickColor = blue;
     }
 
-    void draw(Coord coord)
+    void run(Coord coord)
     {
         // text ///////////////////////
         std::string label = "play";
@@ -72,6 +74,8 @@ public:
 
         rect.color = black;
         graphicsWrapper->drawRect(rect);
+
+        displayColor = sequencer->playing ? blue : white;
 
         innerRect.color = displayColor;
         graphicsWrapper->drawRect(innerRect);
