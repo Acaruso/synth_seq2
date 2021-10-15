@@ -10,6 +10,8 @@
 PolyFmSin polyFmSin(8);
 Smooth smooth(32);
 
+// todo: be able to trigger more than 1 note simultaniusly
+// ie one note per track
 double AudioSystem::audioCallback()
 {
     double t = getTime();

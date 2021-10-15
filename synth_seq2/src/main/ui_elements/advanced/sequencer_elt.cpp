@@ -44,9 +44,6 @@ void sequencerElt(EltParams& params)
 
     // params.ctx.graphicsWrapper.drawRect(bgRect);
 
-    // todo: more than 1 track
-    // Track& track = sequencer->tracks[0];
-
     for (int row = 0; row < sequencer->tracks.size(); row++) {
         auto& track = sequencer->tracks[row];
         for (int col = 0; col < track.cells.size(); col++) {

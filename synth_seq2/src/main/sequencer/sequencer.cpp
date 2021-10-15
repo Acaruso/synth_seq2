@@ -123,10 +123,13 @@ EventMap Sequencer::getEventMap()
     for (; sample < transport; sample += samplesPerStep) {
         int step = getStep(sample);
 
-        Cell& cell = tracks[0].cells[step];
+        // todo: give events track tags
+        for (auto& track : tracks) {
+            Cell& cell = track.cells[step];
 
-        if (cell.on) {
-            map[sample] = cell.synthSettings;
+            if (cell.on) {
+                map[sample] = cell.synthSettings;
+            }
         }
     }
 
