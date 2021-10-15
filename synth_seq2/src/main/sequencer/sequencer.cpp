@@ -4,25 +4,43 @@
 
 Sequencer::Sequencer()
 {
-    curSynthSettings = getDefaultSynthSettings();
+    // curSynthSettings = getDefaultSynthSettings();
+
+    // int size = 16;
+    // for (int i = 0; i < size; i++) {
+    //     row.push_back(Cell());
+    // }
+
+    int rid = rows.addRow();
+    int tid = tracks.addTrack(rid);
 
     int size = 16;
     for (int i = 0; i < size; i++) {
-        row.push_back(Cell());
+        rows.get(rid).push_back(Cell());
     }
 }
 
 Sequencer::Sequencer(int size)
 {
-    curSynthSettings = getDefaultSynthSettings();
+    // curSynthSettings = getDefaultSynthSettings();
+
+    // for (int i = 0; i < size; i++) {
+    //     row.push_back(Cell());
+    // }
+
+    int rid = rows.addRow();
+    int tid = tracks.addTrack(rid);
 
     for (int i = 0; i < size; i++) {
-        row.push_back(Cell());
+        rows.get(rid).push_back(Cell());
     }
 }
 
 Cell& Sequencer::getCell(int i)
 {
+    // return row[i];
+    int rid = tracks.get(0).rowId;
+    auto row = rows.get(rid);
     return row[i];
 }
 

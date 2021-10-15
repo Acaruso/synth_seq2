@@ -67,6 +67,7 @@
     <ClInclude Include="src/main/graphics/rect.hpp" />
     <ClInclude Include="src/main/input_system/input_system.hpp" />
     <ClInclude Include="src/main/sequencer/sequencer.hpp" />
+    <ClInclude Include="src/main/sequencer/track.hpp" />
     <ClInclude Include="src/main/ui_elements/advanced/number_elt.hpp" />
     <ClInclude Include="src/main/ui_elements/advanced/number_with_label_elt.hpp" />
     <ClInclude Include="src/main/ui_elements/advanced/piano_elt.hpp" />

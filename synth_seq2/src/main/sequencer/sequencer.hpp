@@ -4,6 +4,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "src/main/sequencer/row.hpp"
+#include "src/main/sequencer/track.hpp"
 #include "src/shared/shared.hpp"
 
 enum SequencerMode
@@ -12,30 +14,25 @@ enum SequencerMode
     Select
 };
 
-struct Cell
-{
-    bool on{false};
-    SynthSettings synthSettings;
-
-    Cell()
-    {
-        synthSettings = getDefaultSynthSettings();
-    }
-};
-
 class Sequencer
 {
 public:
-    bool playing{false};
-    int step{0};
+    std::vector<Track> tracks;
     SequencerMode mode{Normal};
-    int selected{0};
-    unsigned long transport{0};
-    unsigned long prevTransport{0};
-    int samplesPerStep{10000};
+
+    // todo change this
     SynthSettings curSynthSettings;
 
-    std::vector<Cell> row;
+    bool playing{false};
+    int step{0};
+
+    // todo change this
+    int selected{0};
+
+    unsigned long transport{0};
+    unsigned long prevTransport{0};
+
+    int samplesPerStep{10000};
 
     Sequencer();
     Sequencer(int size);
