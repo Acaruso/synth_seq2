@@ -135,5 +135,5 @@ EventMap Sequencer::getEventMap()
 
 void Sequencer::addTrack()
 {
-
+    tracks.push_back(Track());
 }

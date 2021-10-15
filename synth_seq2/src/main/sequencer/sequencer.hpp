@@ -4,7 +4,6 @@
 #include <unordered_map>
 #include <vector>
 
-#include "src/main/sequencer/row.hpp"
 #include "src/main/sequencer/track.hpp"
 #include "src/shared/shared.hpp"
 
