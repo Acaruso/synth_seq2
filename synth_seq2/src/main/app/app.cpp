@@ -80,12 +80,11 @@ void App::handleMessagesFromAudioThread()
 
 void App::sendMessagesToAudioThread()
 {
-    // todo: do this
-    // if (getEventMap) {
-    //     EventMap eventMap = sequencer.getEventMap();
-    //     EventMapMessage message(eventMap);
-    //     toAudioQueue.enqueue(message);
-    // }
+    if (getEventMap) {
+        EventMap eventMap = sequencer.getEventMap();
+        EventMapMessage message(eventMap);
+        toAudioQueue.enqueue(message);
+    }
 }
 
 void App::nextState()

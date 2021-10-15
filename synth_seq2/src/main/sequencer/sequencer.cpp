@@ -114,26 +114,28 @@ int Sequencer::getStep(int transport)
     return t;
 }
 
-// EventMap Sequencer::getEventMap()
-// {
-//     EventMap map;
+EventMap Sequencer::getEventMap()
+{
+    EventMap map;
 
-//     unsigned sample = 0;
+    unsigned sample = 0;
 
-//     if (prevTransport == 0) {
-//         sample = 0;
-//     }
-//     else {
-//         sample = prevTransport + (samplesPerStep - (prevTransport % samplesPerStep));
-//     }
+    if (prevTransport == 0) {
+        sample = 0;
+    }
+    else {
+        sample = prevTransport + (samplesPerStep - (prevTransport % samplesPerStep));
+    }
 
-//     for (; sample < transport; sample += samplesPerStep) {
-//         int step = getStep(sample);
+    for (; sample < transport; sample += samplesPerStep) {
+        int step = getStep(sample);
 
-//         if (row[step].on) {
-//             map[sample] = row[step].synthSettings;
-//         }
-//     }
+        Cell& cell = tracks[0].cells[step];
 
-//     return map;
-// }
+        if (cell.on) {
+            map[sample] = cell.synthSettings;
+        }
+    }
+
+    return map;
+}

@@ -51,5 +51,5 @@ public:
     void selectCell(int row, int col);
     void updateTransport(unsigned newTransport);
     int getStep(int transport);
-    // EventMap getEventMap();
+    EventMap getEventMap();
 };
