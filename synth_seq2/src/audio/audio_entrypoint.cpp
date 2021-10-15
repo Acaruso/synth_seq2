@@ -15,8 +15,6 @@ int audioEntrypoint(
 
     try {
         AudioSystem audioSystem(toAudioQueue, toMainQueue);
-
-        // begin main loop
         audioSystem.playAudio();
     }
     catch(std::exception& ex) {

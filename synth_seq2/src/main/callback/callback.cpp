@@ -52,8 +52,8 @@ void callback(AppContext& context)
         sequencerElt(p);
     }
 
-    {
-        EltParams p(context, Coord(1200, 500));
-        transportElt(p);
-    }
+    // {
+    //     EltParams p(context, Coord(1200, 500));
+    //     transportElt(p);
+    // }
 }

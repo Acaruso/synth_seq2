@@ -12,13 +12,19 @@ struct Color
     Color() {}
 
     Color(Uint8 r, Uint8 g, Uint8 b, Uint8 a)
-    {
-        this->r = r;
-        this->g = g;
-        this->b = b;
-        this->a = a;
-    }
+        : r(r), g(g), b(b), a(a)
+    {}
 };
+
+inline bool operator==(const Color& lhs, const Color& rhs)
+{
+    return (
+        lhs.r == rhs.r
+        && lhs.g == rhs.g
+        && lhs.b == rhs.b
+        && lhs.a == rhs.a
+    );
+}
 
 static Color black = Color(0x00, 0x00, 0x00, 0xFF);
 static Color white = Color(0xFF, 0xFF, 0xFF, 0xFF);
