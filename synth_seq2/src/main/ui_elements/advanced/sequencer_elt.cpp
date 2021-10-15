@@ -5,7 +5,7 @@
 
 void _clock(AppContext& ctx, Coord coord, int i);
 Rect _getClockRect(Coord coord, int i);
-void _cell(AppContext& ctx, Cell& cell, Coord coord, int i);
+void _cell(AppContext& ctx, Cell& cell, Coord coord, int row, int col);
 Rect _getCellRect(Coord coord, int i);
 void _drawSelectedRect(AppContext& ctx, Rect rect);
 
@@ -21,31 +21,39 @@ namespace
 void sequencerElt(EltParams& params)
 {
     Sequencer* sequencer = params.ctx.sequencer;
-
-    // todo: more than 1 track
-    Track& track = sequencer->tracks[0];
-
     Coord coord = params.coord;
 
-    Rect bgRect{
-        coord.x,
-        coord.y,
-        -3,
-        ((cellWidth + padding) * (int)track.cells.size()) + padding,
-        cellHeight + clockCellHeight + (padding * 3),
-        green
-    };
-
-    params.ctx.graphicsWrapper.drawRect(bgRect);
-
+    // clock elts ////////////////////////////////////
     Coord newCoord = coord;
     newCoord.x = coord.x + padding;
     newCoord.y = coord.y + padding;
 
-    for (int i = 0; i < track.cells.size(); i++) {
-        Cell& cell = track.cells[i];
+    for (int i = 0; i < sequencer->tracks[0].cells.size(); i++) {
         _clock(params.ctx, newCoord, i);
-        _cell(params.ctx, cell, newCoord, i);
+    }
+
+    // background ////////////////////////////////////
+    // Rect bgRect{
+    //     coord.x,
+    //     coord.y,
+    //     -3,
+    //     ((cellWidth + padding) * (int)track.cells.size()) + padding,
+    //     cellHeight + clockCellHeight + (padding * 3),
+    //     green
+    // };
+
+    // params.ctx.graphicsWrapper.drawRect(bgRect);
+
+    // todo: more than 1 track
+    // Track& track = sequencer->tracks[0];
+
+    for (int row = 0; row < sequencer->tracks.size(); row++) {
+        auto& track = sequencer->tracks[row];
+        for (int col = 0; col < track.cells.size(); col++) {
+            Cell& cell = track.cells[col];
+            _cell(params.ctx, cell, newCoord, row, col);
+        }
+        newCoord.y += cellHeight + padding;
     }
 }
 
@@ -75,23 +83,22 @@ Rect _getClockRect(Coord coord, int i)
     );
 }
 
-void _cell(AppContext& ctx, Cell& cell, Coord coord, int i)
+void _cell(AppContext& ctx, Cell& cell, Coord coord, int row, int col)
 {
     auto& uiState = ctx.getUiState();
 
     EltParams p(ctx);
-    p.rect = _getCellRect(coord, i);
+    p.rect = _getCellRect(coord, col);
     p.color = white;
     p.displayColor = cell.on ? blue : white;
     p.onClickColor = blue;
 
     p.onClick = [&]() {
-        // todo: add row
         if (uiState.lshift) {
-            ctx.sequencer->selectCell(0, i);
+            ctx.sequencer->selectCell(row, col);
         }
         else {
-            ctx.sequencer->toggleCell(0, i);
+            ctx.sequencer->toggleCell(row, col);
         }
     };
 
@@ -101,10 +108,10 @@ void _cell(AppContext& ctx, Cell& cell, Coord coord, int i)
         }
     };
 
-    // todo: add row
     if (
         ctx.sequencer->getMode() == Select
-        && ctx.sequencer->getSelected().col == i
+        && ctx.sequencer->getSelected().row == row
+        && ctx.sequencer->getSelected().col == col
     ) {
         _drawSelectedRect(ctx, p.rect);
     }
