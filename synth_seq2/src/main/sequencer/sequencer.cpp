@@ -49,37 +49,39 @@ Selected Sequencer::getSelected()
     return selected;
 }
 
-// SynthSettings& Sequencer::getSynthSettings()
-// {
-//     if (mode == Normal) {
-//         return curSynthSettings;
-//     }
-//     else {
-//         auto& cell = getSelectedCell();
-//         if (cell.on) {
-//             return cell.synthSettings;
-//         }
-//         else {
-//             return curSynthSettings;
-//         }
-//     }
-// }
+SynthSettings& Sequencer::getSynthSettings()
+{
+    Track& track = getSelectedTrack();
+    Cell& cell = getSelectedCell();
+
+    if (mode == Normal) {
+        return track.getSynthSettings();
+    }
+    else {
+        if (cell.on) {
+            return cell.getSynthSettings();
+        }
+        else {
+            return track.getSynthSettings();
+        }
+    }
+}
 
 void Sequencer::toggleCell(int row, int col)
 {
     mode = Select;
+    selected = { row, col };
 
-    Cell& cell = getCell(row, col);
+    Cell& cell = getSelectedCell();
+    Track& track = getSelectedTrack();
 
     if (!cell.on) {
         cell.on = true;
-        // cell.synthSettings = curSynthSettings;
+        cell.synthSettings = track.getSynthSettings();
     }
     else {
         cell.on = false;
     }
-
-    selected = { row, col };
 }
 
 void Sequencer::selectCell(int row, int col)

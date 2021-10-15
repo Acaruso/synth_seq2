@@ -49,7 +49,7 @@ public:
     Cell& getCell(int row, int col);
     Cell& getSelectedCell();
     Selected getSelected();
-    // SynthSettings& getSynthSettings();
+    SynthSettings& getSynthSettings();
     void toggleCell(int row, int col);
     void selectCell(int row, int col);
     void updateTransport(unsigned newTransport);
