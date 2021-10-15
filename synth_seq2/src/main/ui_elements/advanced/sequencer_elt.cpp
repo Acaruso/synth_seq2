@@ -20,13 +20,18 @@ namespace
 
 void sequencerElt(EltParams& params)
 {
+    Sequencer* sequencer = params.ctx.sequencer;
+
+    // todo: more than 1 track
+    Track& track = sequencer->tracks[0];
+
     Coord coord = params.coord;
 
     Rect bgRect{
         coord.x,
         coord.y,
         -3,
-        ((cellWidth + padding) * (int)params.ctx.sequencer->row.size()) + padding,
+        ((cellWidth + padding) * (int)track.cells.size()) + padding,
         cellHeight + clockCellHeight + (padding * 3),
         green
     };
@@ -37,8 +42,8 @@ void sequencerElt(EltParams& params)
     newCoord.x = coord.x + padding;
     newCoord.y = coord.y + padding;
 
-    for (int i = 0; i < params.ctx.sequencer->row.size(); i++) {
-        Cell& cell = params.ctx.sequencer->row[i];
+    for (int i = 0; i < track.cells.size(); i++) {
+        Cell& cell = track.cells[i];
         _clock(params.ctx, newCoord, i);
         _cell(params.ctx, cell, newCoord, i);
     }
@@ -50,7 +55,7 @@ void _clock(AppContext& ctx, Coord coord, int i)
     p.rect = _getClockRect(coord, i);
     p.color = white;
 
-    if (ctx.sequencer->playing == false) {
+    if (ctx.sequencer->isPlaying() == false) {
         p.displayColor = white;
     }
     else {
@@ -81,11 +86,12 @@ void _cell(AppContext& ctx, Cell& cell, Coord coord, int i)
     p.onClickColor = blue;
 
     p.onClick = [&]() {
+        // todo: add row
         if (uiState.lshift) {
-            ctx.sequencer->selectCell(i);
+            ctx.sequencer->selectCell(0, i);
         }
         else {
-            ctx.sequencer->toggleCell(i);
+            ctx.sequencer->toggleCell(0, i);
         }
     };
 
@@ -95,7 +101,11 @@ void _cell(AppContext& ctx, Cell& cell, Coord coord, int i)
         }
     };
 
-    if (ctx.sequencer->mode == Select && ctx.sequencer->selected == i) {
+    // todo: add row
+    if (
+        ctx.sequencer->getMode() == Select
+        && ctx.sequencer->getSelected().col == i
+    ) {
         _drawSelectedRect(ctx, p.rect);
     }
 

@@ -13,6 +13,11 @@ struct Cell
     {
         synthSettings = getDefaultSynthSettings();
     }
+
+    SynthSettings& getSynthSettings()
+    {
+        return synthSettings;
+    }
 };
 
 struct Track
@@ -23,5 +28,10 @@ struct Track
     Track()
     {
         synthSettings = getDefaultSynthSettings();
+    }
+
+    SynthSettings& getSynthSettings()
+    {
+        return synthSettings;
     }
 };

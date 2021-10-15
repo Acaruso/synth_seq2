@@ -89,7 +89,10 @@ void _numberElt(AppContext& context, std::string label, Coord coord, std::string
     p.label = label;
     p.coord = coord;
 
-    auto& synthSettings = context.sequencer->getSynthSettings();
+    // auto& synthSettings = context.sequencer->getSynthSettings();
+    auto& track = context.sequencer->getSelectedTrack();
+    auto& synthSettings = track.getSynthSettings();
+
     int& data = synthSettings[key];
 
     p.min = 0;

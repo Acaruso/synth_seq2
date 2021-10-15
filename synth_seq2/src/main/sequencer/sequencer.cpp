@@ -10,6 +10,28 @@ Sequencer::Sequencer()
     for (int i = 0; i < numCells; i++) {
         track.cells.push_back(Cell());
     }
+
+    tracks.push_back(track);
+}
+
+bool Sequencer::isPlaying()
+{
+    return playing;
+}
+
+SequencerMode Sequencer::getMode()
+{
+    return mode;
+}
+
+void Sequencer::setMode(SequencerMode mode_)
+{
+    mode = mode_;
+}
+
+Track& Sequencer::getSelectedTrack()
+{
+    return tracks[selected.row];
 }
 
 Cell& Sequencer::getCell(int row, int col)
@@ -17,10 +39,15 @@ Cell& Sequencer::getCell(int row, int col)
     return tracks[row].cells[col];
 }
 
-// Cell& Sequencer::getSelectedCell()
-// {
-//     return row[selected];
-// }
+Cell& Sequencer::getSelectedCell()
+{
+    return tracks[selected.row].cells[selected.col];
+}
+
+Selected Sequencer::getSelected()
+{
+    return selected;
+}
 
 // SynthSettings& Sequencer::getSynthSettings()
 // {
@@ -57,14 +84,18 @@ void Sequencer::toggleCell(int row, int col)
 
 void Sequencer::selectCell(int row, int col)
 {
-    // todo fix this
-    // if (selected == i && mode == Select) {
-    //     mode = Normal;
-    // }
-    // else {
-    //     mode = Select;
-    //     selected = i;
-    // }
+    if (
+        selected.row == row
+        && selected.col == col
+        && mode == Select
+    ) {
+        mode = Normal;
+    }
+    else {
+        mode = Select;
+        selected.row = row;
+        selected.col = col;
+    }
 }
 
 void Sequencer::updateTransport(unsigned newTransport)

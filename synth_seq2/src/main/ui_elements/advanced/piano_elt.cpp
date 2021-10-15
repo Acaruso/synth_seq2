@@ -3,6 +3,7 @@
 #include <functional>
 #include <iostream>
 
+#include "src/main/sequencer/sequencer.hpp"
 #include "src/main/ui_elements/advanced/rect_button_elt.hpp"
 
 namespace
@@ -35,6 +36,7 @@ void pianoElt(EltParams& params)
 {
     AppContext& ctx = params.ctx;
     Coord coord = params.coord;
+    Sequencer* sequencer = ctx.sequencer;
 
     background(params, coord);
 
@@ -43,21 +45,21 @@ void pianoElt(EltParams& params)
     for (int i = 0; i < 12; i++) {
         int note = baseNote + i;
 
-        std::function<void()> _onClick = nullptr;
+        std::function<void()> onClick_ = nullptr;
 
-        if (ctx.sequencer->mode == Normal) {
-            _onClick = [&]() {
-                // ctx.sequencer->curSynthSettings["note"] = note;
-                // ctx.toAudioQueue->enqueue(NoteMessage(note));
-                ctx.sequencer->curSynthSettings["note"] = note;
+        if (sequencer->getMode() == Normal) {
+            onClick_ = [&]() {
+                auto& synthSettings = sequencer->getSelectedTrack().getSynthSettings();
+                synthSettings["note"] = note;
                 ctx.toAudioQueue->enqueue(
-                    SynthSettingsMessage(ctx.sequencer->curSynthSettings)
+                    SynthSettingsMessage(synthSettings)
                 );
             };
         }
-        else if (ctx.sequencer->mode == Select) {
-            _onClick = [&]() {
-                ctx.sequencer->getSelectedCell().synthSettings["note"] = note;
+        else if (sequencer->getMode() == Select) {
+            onClick_ = [&]() {
+                auto& synthSettings = sequencer->getSelectedCell().getSynthSettings();
+                synthSettings["note"] = note;
             };
         }
 
@@ -65,7 +67,7 @@ void pianoElt(EltParams& params)
             blackKey(
                 params.ctx,
                 getBlackKeyRect(coord, i),
-                _onClick,
+                onClick_,
                 note
             );
         }
@@ -73,7 +75,7 @@ void pianoElt(EltParams& params)
             whiteKey(
                 params.ctx,
                 getWhiteKeyRect(coord, k++),
-                _onClick,
+                onClick_,
                 note
             );
         }

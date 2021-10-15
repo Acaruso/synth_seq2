@@ -16,8 +16,8 @@ enum SequencerMode
 
 struct Selected
 {
-    int row;
-    int col;
+    int row{0};
+    int col{0};
 };
 
 class Sequencer
@@ -42,8 +42,13 @@ public:
 
     Sequencer();
 
-    Cell& Sequencer::getCell(int row, int col);
-    // Cell& getSelectedCell();
+    bool isPlaying();
+    SequencerMode getMode();
+    void setMode(SequencerMode);
+    Track& getSelectedTrack();
+    Cell& getCell(int row, int col);
+    Cell& getSelectedCell();
+    Selected getSelected();
     // SynthSettings& getSynthSettings();
     void toggleCell(int row, int col);
     void selectCell(int row, int col);
