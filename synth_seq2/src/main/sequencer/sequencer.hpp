@@ -27,9 +27,6 @@ public:
 
     SequencerMode mode{Normal};
 
-    // todo change this
-    SynthSettings curSynthSettings;
-
     bool playing{false};
     int step{0};
 
