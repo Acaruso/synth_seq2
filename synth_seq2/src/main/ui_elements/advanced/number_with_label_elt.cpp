@@ -12,8 +12,6 @@ void numberWithLabelElt(EltParams& params)
     Coord coord = params.coord;
 
     // label //////////////////////////
-    auto& synthSettings = context.sequencer->getSynthSettings();
-
     std::string fontName = "inconsolata";
     Font& font = context.graphicsWrapper.getFont(fontName);
     Coord labelCoord = coord;

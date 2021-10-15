@@ -14,10 +14,17 @@ enum SequencerMode
     Select
 };
 
+struct Selected
+{
+    int row;
+    int col;
+};
+
 class Sequencer
 {
 public:
     std::vector<Track> tracks;
+
     SequencerMode mode{Normal};
 
     // todo change this
@@ -26,8 +33,7 @@ public:
     bool playing{false};
     int step{0};
 
-    // todo change this
-    int selected{0};
+    Selected selected;
 
     unsigned long transport{0};
     unsigned long prevTransport{0};
@@ -35,14 +41,13 @@ public:
     int samplesPerStep{10000};
 
     Sequencer();
-    Sequencer(int size);
 
-    Cell& getCell(int i);
-    Cell& getSelectedCell();
-    SynthSettings& getSynthSettings();
-    void toggleCell(int i);
-    void selectCell(int i);
+    Cell& Sequencer::getCell(int row, int col);
+    // Cell& getSelectedCell();
+    // SynthSettings& getSynthSettings();
+    void toggleCell(int row, int col);
+    void selectCell(int row, int col);
     void updateTransport(unsigned newTransport);
     int getStep(int transport);
-    EventMap getEventMap();
+    // EventMap getEventMap();
 };

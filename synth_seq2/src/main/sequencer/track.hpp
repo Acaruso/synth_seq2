@@ -4,10 +4,21 @@
 
 #include "src/shared/shared.hpp"
 
+struct Cell
+{
+    bool on{false};
+    SynthSettings synthSettings;
+
+    Cell()
+    {
+        synthSettings = getDefaultSynthSettings();
+    }
+};
+
 struct Track
 {
     SynthSettings synthSettings;
-    std::vector<Row> rows;
+    std::vector<Cell> cells;
 
     Track()
     {

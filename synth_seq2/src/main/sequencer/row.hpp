@@ -5,16 +5,16 @@
 
 #include "src/shared/shared.hpp"
 
-struct Cell
-{
-    bool on{false};
-    SynthSettings synthSettings;
+// struct Cell
+// {
+//     bool on{false};
+//     SynthSettings synthSettings;
 
-    Cell()
-    {
-        synthSettings = getDefaultSynthSettings();
-    }
-};
+//     Cell()
+//     {
+//         synthSettings = getDefaultSynthSettings();
+//     }
+// };
 
 struct Row
 {
