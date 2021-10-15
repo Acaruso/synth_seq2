@@ -56,4 +56,28 @@ void callback(AppContext& context)
         EltParams p(context, Coord(1200, 500));
         transportElt(p);
     }
+
+    {
+        Coord coord(1200, 600);
+
+        EltParams textParams(context, coord);
+        textParams.label = "add track";
+        textElt(textParams);
+
+        EltParams p(context, coord);
+        Sequencer* sequencer = context.sequencer;
+
+        p.rect = Rect(coord.x, coord.y + 20, 50, 50);
+        p.color = white;
+        p.displayColor = white;
+        p.onClickColor = blue;
+
+        p.onClick = [&]() {
+            sequencer->addTrack();
+        };
+
+        p.onHold = [&]() { p.displayColor = p.onClickColor; };
+
+        rectButtonElt(p);
+    }
 }
