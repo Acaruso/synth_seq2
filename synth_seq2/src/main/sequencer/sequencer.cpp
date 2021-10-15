@@ -4,14 +4,7 @@
 
 Sequencer::Sequencer()
 {
-    Track track;
-
-    int numCells = 16;
-    for (int i = 0; i < numCells; i++) {
-        track.cells.push_back(Cell());
-    }
-
-    tracks.push_back(track);
+    tracks.push_back(Track());
 }
 
 bool Sequencer::isPlaying()
@@ -138,4 +131,9 @@ EventMap Sequencer::getEventMap()
     }
 
     return map;
+}
+
+void Sequencer::addTrack()
+{
+
 }

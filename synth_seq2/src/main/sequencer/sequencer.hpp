@@ -52,4 +52,5 @@ public:
     void updateTransport(unsigned newTransport);
     int getStep(int transport);
     EventMap getEventMap();
+    void addTrack();
 };
