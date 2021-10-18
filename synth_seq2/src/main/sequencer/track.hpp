@@ -29,9 +29,7 @@ struct Track
     {
         synthSettings = getDefaultSynthSettings();
         int numCells = 16;
-        for (int i = 0; i < numCells; i++) {
-            cells.push_back(Cell());
-        }
+        cells = std::vector<Cell>(numCells, Cell());
     }
 
     SynthSettings& getSynthSettings()

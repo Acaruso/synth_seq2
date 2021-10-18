@@ -1,5 +1,6 @@
 #include "audio_system.hpp"
 
+#include <cstdio>
 #include <iostream>
 #include <string>
 
@@ -28,7 +29,8 @@ AudioSystem::AudioSystem(
     sliceTime = periodSizeFrames * 4;
     leadTime = sliceTime * 2;
 
-    synthSettings = getDefaultSynthSettings();
+    trigs = std::vector<bool>(numTracks, false);
+    vSynthSettings = std::vector<SynthSettings>(numTracks, getDefaultSynthSettings());
 }
 
 void AudioSystem::playAudio()
@@ -80,10 +82,6 @@ void AudioSystem::handleMessagesFromMainThread()
         }
         else if (std::get_if<StopMessage>(&message)) {
             playing = false;
-        }
-        else if (NoteMessage* p = std::get_if<NoteMessage>(&message)) {
-            freq = mtof(p->note);
-            trig = true;
         }
         else if (SynthSettingsMessage* p = std::get_if<SynthSettingsMessage>(&message)) {
             synthSettings = p->synthSettings;
@@ -140,17 +138,23 @@ void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
 
 void AudioSystem::setTrigs()
 {
-    // check if presentTransport is in eventMap
-    if (eventMap.find(presentTransport) != eventMap.end()) {
-        trig = true;
-        synthSettings = eventMap[presentTransport];
-        eventMap.erase(presentTransport);
+    std::string key;
+
+    for (int trackIdx = 0; trackIdx < numTracks; trackIdx++) {
+        key = getEventKey(presentTransport, trackIdx);
+
+        if (eventMap.find(key) != eventMap.end()) {
+            trigs[trackIdx] = true;
+            vSynthSettings[trackIdx] = eventMap[key].synthSettings;
+            eventMap.erase(key);
+        }
     }
 }
 
 void AudioSystem::unsetTrigs()
 {
     trig = false;
+    trigs.assign(trigs.size(), false);
 }
 
 AudioSystem::~AudioSystem()

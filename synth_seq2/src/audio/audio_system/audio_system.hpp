@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <vector>
 
 #include "lib/readerwriterqueue.h"
 
@@ -46,9 +47,13 @@ private:
 
     bool trig{false};
     SynthSettings synthSettings;
+
     EventMap eventMap;
 
-    double freq{0.0};
+    int numTracks{4};
+    std::vector<bool> trigs;
+    std::vector<SynthSettings> vSynthSettings;
+
     bool quit{false};
 
     double getTime()

@@ -13,13 +13,6 @@ struct PlayMessage {};
 
 struct StopMessage {};
 
-struct NoteMessage
-{
-    int note{0};
-    NoteMessage() {}
-    NoteMessage(int note) : note(note) {}
-};
-
 struct IntMessage
 {
     std::string key;
@@ -66,7 +59,6 @@ using Message = std::variant<
     QuitMessage,
     PlayMessage,
     StopMessage,
-    NoteMessage,
     IntMessage,
     BoolMessage,
     DoubleMessage,

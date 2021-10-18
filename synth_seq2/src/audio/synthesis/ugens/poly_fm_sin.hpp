@@ -6,8 +6,12 @@
 
 struct Operator
 {
-    Sin carrier;
-    Sin modulator;
+    // Sin carrier;
+    // Sin modulator;
+
+    SinWT carrier;
+    SinWT modulator;
+
     double modAmount;
 
     Operator() {}
