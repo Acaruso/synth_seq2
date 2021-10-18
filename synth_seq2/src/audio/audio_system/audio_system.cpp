@@ -31,6 +31,8 @@ AudioSystem::AudioSystem(
 
     trigs = std::vector<bool>(numTracks, false);
     vSynthSettings = std::vector<SynthSettings>(numTracks, getDefaultSynthSettings());
+
+    initUgens();
 }
 
 void AudioSystem::playAudio()

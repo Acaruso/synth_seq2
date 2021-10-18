@@ -19,7 +19,6 @@ struct Sin
     );
 
     double get(double t);
-
     double get(double theta, double t);
 };
 

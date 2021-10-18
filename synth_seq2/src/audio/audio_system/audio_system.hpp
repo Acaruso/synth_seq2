@@ -6,6 +6,7 @@
 #include "lib/readerwriterqueue.h"
 
 #include "src/audio/audio_system/sample_buffer.hpp"
+#include "src/audio/synthesis/ugens/poly_fm_sin.hpp"
 #include "src/audio/wasapi_wrapper/wasapi_wrapper.hpp"
 #include "src/shared/messages.hpp"
 #include "src/shared/shared.hpp"
@@ -43,6 +44,7 @@ private:
 
     bool playing{false};
 
+    // aka Ts
     double secondsPerSample{0.0};
 
     bool trig{false};
@@ -63,7 +65,12 @@ private:
 
     /////////////////////////////////////////////
 
+    PolyFmSin polyFmSin;
+    std::vector<PolyFmSin> sins;
+
+    void initUgens();
     double audioCallback();
+
     void handleMessagesFromMainThread();
     void sendMessagesToMainThread();
     void setTrigs();

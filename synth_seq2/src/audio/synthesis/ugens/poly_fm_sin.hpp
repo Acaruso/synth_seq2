@@ -48,7 +48,9 @@ struct PolyFmSin
 {
     std::vector<Operator> oscs;
 
-    PolyFmSin(int size);
+    PolyFmSin() {}
+
+    PolyFmSin(int size, double secondsPerSample);
 
     void trigger(
         double a,

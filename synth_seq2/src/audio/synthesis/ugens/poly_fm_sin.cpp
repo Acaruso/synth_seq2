@@ -1,6 +1,6 @@
 #include "poly_fm_sin.hpp"
 
-PolyFmSin::PolyFmSin(int size)
+PolyFmSin::PolyFmSin(int size, double secondsPerSample)
 {
     for (int i = 0; i < size; i++) {
         oscs.push_back(Operator());

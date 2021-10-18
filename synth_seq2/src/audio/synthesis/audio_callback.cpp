@@ -8,8 +8,11 @@
 #include "src/audio/synthesis/ugens/poly_sin.hpp"
 #include "src/audio/synthesis/ugens/smooth.hpp"
 
-PolyFmSin polyFmSin(4);
-std::vector<PolyFmSin> sins(8, PolyFmSin(4));
+void AudioSystem::initUgens()
+{
+    polyFmSin = PolyFmSin(4, secondsPerSample);
+    sins = std::vector<PolyFmSin>(8, PolyFmSin(4, secondsPerSample));
+}
 
 double AudioSystem::audioCallback()
 {
