@@ -32,9 +32,7 @@ struct Event
 
 inline std::string getEventKey(unsigned sample, int track)
 {
-    std::stringstream ss;
-    ss << sample << "," << track;
-    return ss.str();
+    return std::to_string(sample) + "," + std::to_string(track);
 }
 
 using EventMap = std::unordered_map<std::string, Event>;

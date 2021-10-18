@@ -74,10 +74,8 @@ double SinWT::get(double theta, double t)
 {
     double envSig = env.get(t);
 
-    // double sinSig = sin(twoPi * freq * t + theta);
-
-    // int i = (int)floor(size * freq * t + theta) % size;
     double d = size * freq * t + theta;
+
     double dSize = (double)size;
 
     // % size
@@ -87,14 +85,9 @@ double SinWT::get(double theta, double t)
 
     int i = (int)floor(d);
 
-    // if (env.on) {
-    //     printf("i: %d \n", i);
-    // }
-
     double sinSig = wavetable[i];
 
     double outSig = sinSig * envSig;
 
-    
     return outSig;
 }
