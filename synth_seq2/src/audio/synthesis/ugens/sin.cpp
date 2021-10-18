@@ -17,11 +17,7 @@ void Sin::trigger(
 
 double Sin::get(double t)
 {
-    double envSig = env.get(t);
-
-    double sinSig = sin(twoPi * freq * t);
-    double outSig = sinSig * envSig;
-    return outSig;
+    return get(0, t);
 }
 
 double Sin::get(double theta, double t)
@@ -71,30 +67,20 @@ void SinWT::trigger(
 
 double SinWT::get(double t)
 {
-    double envSig = env.get(t);
-
-    // double sinSig = sin(twoPi * freq * t);
-
-    // instead of scaling by twoPi, scale by size of wavetable
-    int i = (int)floor(size * freq * t) % size;
-    double sinSig = wavetable[i];
-
-    double outSig = sinSig * envSig;
-    return outSig;
+    return get(0, t);
 }
 
 double SinWT::get(double theta, double t)
 {
-    int i = (int)floor(phase);
+    int i = (int)phase;
     double sinSig = wavetable[i];
     double envSig = env.get(t);
     double outSig = sinSig * envSig;
 
     // get next phase
-    double phaseInc = ((double)size * freq * secondsPerSample) + theta;
-    phase += phaseInc;
+    phase += ((double)size * freq * secondsPerSample) + theta;
 
-    // phase = phase mod size
+    // phase = phase % size
     double dSize = (double)size;
     while (phase >= dSize) {
         phase -= dSize;

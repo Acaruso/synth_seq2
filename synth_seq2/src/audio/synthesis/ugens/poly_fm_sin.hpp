@@ -6,14 +6,10 @@
 
 struct Operator
 {
-    // Sin carrier;
-    // Sin modulator;
-
-    double secondsPerSample{0};
-
     SinWT carrier;
     SinWT modulator;
 
+    double secondsPerSample{0};
     double modAmount;
 
     Operator() {}
