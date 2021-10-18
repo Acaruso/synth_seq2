@@ -27,6 +27,7 @@ struct SinWT
     AHREnv env;
     double freq;
     double secondsPerSample;
+    double phase{0};
 
     unsigned size{128};
     std::vector<double> wavetable;

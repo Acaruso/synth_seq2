@@ -1,6 +1,7 @@
 #include "sin.hpp"
 
 #include <cmath>
+#include <cstdio>
 
 #include "src/audio/synthesis/consts.hpp"
 
@@ -84,22 +85,20 @@ double SinWT::get(double t)
 
 double SinWT::get(double theta, double t)
 {
-    double envSig = env.get(t);
-
-    double d = size * freq * t + theta;
-
-    double dSize = (double)size;
-
-    // % size
-    while (d >= dSize) {
-        d -= dSize;
-    }
-
-    int i = (int)floor(d);
-
+    int i = (int)floor(phase);
     double sinSig = wavetable[i];
-
+    double envSig = env.get(t);
     double outSig = sinSig * envSig;
+
+    // get next phase
+    double phaseInc = ((double)size * freq * secondsPerSample) + theta;
+    phase += phaseInc;
+
+    // phase = phase mod size
+    double dSize = (double)size;
+    while (phase >= dSize) {
+        phase -= dSize;
+    }
 
     return outSig;
 }

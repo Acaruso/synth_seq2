@@ -52,7 +52,7 @@ private:
 
     EventMap eventMap;
 
-    int numTracks{1};
+    int numTracks{4};
     std::vector<bool> trigs;
     std::vector<SynthSettings> vSynthSettings;
 
