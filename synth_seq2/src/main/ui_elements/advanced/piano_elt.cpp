@@ -5,12 +5,15 @@
 
 #include "src/main/sequencer/sequencer.hpp"
 #include "src/main/ui_elements/advanced/rect_button_elt.hpp"
+#include "src/main/ui_elements/advanced/text_elt.hpp"
+#include "src/main/util.hpp"
 
 namespace
 {
     int buttonSize = 50;
     int padding = 10;
     int baseNote = 60;
+    int octave = 4;
 }
 
 Rect getWhiteKeyRect(Coord coord, int i);
@@ -32,6 +35,55 @@ void blackKey(
 
 void background(EltParams& params, Coord coord);
 
+void octaveControl(EltParams& params, Coord coord)
+{
+    int yPadding = 25;
+
+    {
+        EltParams textParams(params.ctx);
+        textParams.coord = coord;
+        textParams.label = "current octave: " + std::to_string(octave);
+        textElt(textParams);
+    }
+
+    coord.y += yPadding;
+
+    {
+        EltParams textParams(params.ctx);
+        textParams.coord = coord;
+        textParams.label = "octave down";
+        textElt(textParams);
+
+        EltParams p(params.ctx);
+        p.rect = Rect(coord.x + 100, coord.y, 20, 20);
+        p.displayColor = white;
+        p.onClick = [&]() {
+            octave = clamp(octave - 1, 0, 7);
+        };
+        p.onHold = [&]() { p.displayColor = blue; };
+        rectButtonElt(p);
+    }
+
+    coord.y += yPadding;
+
+    {
+        EltParams textParams(params.ctx);
+        textParams.coord = Coord(coord.x, coord.y);
+        textParams.label = "octave up";
+        textElt(textParams);
+
+        EltParams p(params.ctx);
+        p.rect = Rect(coord.x + 100, coord.y, 20, 20);
+        p.displayColor = white;
+        p.onClick = [&]() {
+            octave = clamp(octave + 1, 0, 7);
+        };
+        p.onHold = [&]() { p.displayColor = blue; };
+        rectButtonElt(p);
+    }
+
+}
+
 void pianoElt(EltParams& params)
 {
     AppContext& ctx = params.ctx;
@@ -40,10 +92,13 @@ void pianoElt(EltParams& params)
 
     background(params, coord);
 
+    octaveControl(params, Coord(coord.x + 450, coord.y));
+
     int k = 0;
 
     for (int i = 0; i < 12; i++) {
-        int note = baseNote + i;
+        // int note = baseNote + i;
+        int note = ((octave + 1) * 12) + i;
 
         std::function<void()> onClick_ = nullptr;
 
