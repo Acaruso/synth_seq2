@@ -41,6 +41,8 @@ SinWT::SinWT()
         wavetable.push_back(sin(phase * twoPi));
         phase += delta;
     }
+
+    wavetable.push_back(0.0);
 }
 
 SinWT::SinWT(double secondsPerSample)
@@ -53,6 +55,8 @@ SinWT::SinWT(double secondsPerSample)
         wavetable.push_back(sin(phase * twoPi));
         phase += delta;
     }
+
+    wavetable.push_back(0.0);
 }
 
 void SinWT::trigger(
@@ -73,14 +77,18 @@ double SinWT::get(double t)
 double SinWT::get(double theta, double t)
 {
     int i = (int)phase;
-    double sinSig = wavetable[i];
+    double frac = phase - i;
+
+    // linear interpolation
+    double sinSig = wavetable[i] + (frac * (wavetable[i + 1] - wavetable[i]));
+
     double envSig = env.get(t);
     double outSig = sinSig * envSig;
 
     // get next phase
     phase += ((double)size * freq * secondsPerSample) + theta;
 
-    // phase = phase % size
+    // phase = phase % wavetable size
     double dSize = (double)size;
     while (phase >= dSize) {
         phase -= dSize;
