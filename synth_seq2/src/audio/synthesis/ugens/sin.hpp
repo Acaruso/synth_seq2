@@ -26,11 +26,14 @@ struct SinWT
 {
     AHREnv env;
     double freq;
+    double secondsPerSample;
 
     unsigned size{128};
     std::vector<double> wavetable;
 
     SinWT();
+
+    SinWT(double secondsPerSample);
 
     void trigger(
         double a,

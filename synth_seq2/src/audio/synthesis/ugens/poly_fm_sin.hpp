@@ -9,12 +9,21 @@ struct Operator
     // Sin carrier;
     // Sin modulator;
 
+    double secondsPerSample{0};
+
     SinWT carrier;
     SinWT modulator;
 
     double modAmount;
 
     Operator() {}
+
+    Operator(double secondsPerSample)
+        : secondsPerSample(secondsPerSample)
+    {
+        carrier = SinWT(secondsPerSample);
+        modulator = SinWT(secondsPerSample);
+    }
 
     bool isOn()
     {
@@ -46,6 +55,7 @@ struct Operator
 
 struct PolyFmSin
 {
+    double secondsPerSample{0};
     std::vector<Operator> oscs;
 
     PolyFmSin() {}

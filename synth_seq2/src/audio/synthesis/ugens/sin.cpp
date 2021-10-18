@@ -46,6 +46,18 @@ SinWT::SinWT()
     }
 }
 
+SinWT::SinWT(double secondsPerSample)
+    : secondsPerSample(secondsPerSample)
+{
+    double phase = 0.0;
+    double delta = 1.0 / (double)size;
+
+    for (unsigned i = 0; i < size; i++) {
+        wavetable.push_back(sin(phase * twoPi));
+        phase += delta;
+    }
+}
+
 void SinWT::trigger(
     double a,
     double h,
