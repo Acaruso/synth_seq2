@@ -90,8 +90,13 @@ double SinWT::get(double theta, double t)
 
     // phase = phase % wavetable size
     double dSize = (double)size;
+
     while (phase >= dSize) {
         phase -= dSize;
+    }
+
+    while (phase < 0) {
+        phase += dSize;
     }
 
     return outSig;

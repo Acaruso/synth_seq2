@@ -19,8 +19,23 @@ double AHREnv::get(double t)
         unsigned holdSamps = mstosamps(h);
         unsigned releaseSamps = mstosamps(r);
 
+        attackSamps = attackSamps == 0 ? 1 : attackSamps;
+        holdSamps = holdSamps == 0 ? 1 : holdSamps;
+        releaseSamps = releaseSamps == 0 ? 1 : releaseSamps;
+
         double attackDelta = 1.0 / (double)attackSamps;
         double releaseDelta = 1.0 / (double)releaseSamps;
+
+        // double attackDelta = 0.0;
+        // double releaseDelta = 0.0;
+
+        // if (attackSamps != 0) {
+        //     attackDelta = 1.0 / (double)attackSamps;
+        // }
+
+        // if (releaseSamps != 0) {
+        //     releaseDelta = 1.0 / (double)releaseSamps;
+        // }
 
         if (timer < attackSamps) {
             sig += attackDelta;
@@ -28,7 +43,7 @@ double AHREnv::get(double t)
         else if (timer < attackSamps + holdSamps) {
             sig = 1.0;
         }
-        else if(timer < attackSamps + holdSamps + releaseSamps) {
+        else if (timer < attackSamps + holdSamps + releaseSamps) {
             sig -= releaseDelta;
         }
         else {
