@@ -37,6 +37,8 @@ void Sequencer::setBpm(int newBpm)
 
     bpm = newBpm;
     samplesPerStep = (((double)sampleRate * 60) / bpm) / 4;
+    double temp = (double)sampleRate / ((double)bpm / (double)60 * (double)PPQN);
+    samplesPerPulse = temp;
 }
 
 SequencerMode Sequencer::getMode()
@@ -125,13 +127,14 @@ void Sequencer::updateTransport(unsigned newTransport)
     prevTransport = transport;
     transport = newTransport;
     // step is just display step
-    step = getStep(prevTransport);
+    // step = getStep(prevTransport);
+    int pulsesPer16thNote = PPQN / 4;
+    step = curPulse / pulsesPer16thNote;
 }
 
 int Sequencer::getStep(int sample)
 {
     // this is the problem
-    // int step = (sample % (samplesPerStep * 16)) / samplesPerStep;
     int step = sample / samplesPerStep;
     step = step % numSteps;
     return step;
@@ -147,26 +150,33 @@ EventMap Sequencer::getEventMap()
         sample = 0;
     }
     else {
-        sample = prevTransport + (samplesPerStep - (prevTransport % samplesPerStep));
+        sample = prevTransport + (samplesPerPulse - (prevTransport % samplesPerPulse));
     }
 
-    for (; sample < transport; sample += samplesPerStep) {
-        int step_ = getStep(sample);
+    for (; sample < transport; sample += samplesPerPulse) {
+        // int step_ = getStep(sample);
 
-        for (int i = 0; i < tracks.size(); i++) {
-            Track& track = tracks[i];
-            Cell& cell = track.cells[step_];
+        int pulsesPer16thNote = PPQN / 4;
 
-            if (cell.on) {
-                Event event;
-                event.sample = sample;
-                event.track = i;
-                event.synthSettings = cell.synthSettings;
-                std::string key = makeEventKey(event.sample, event.track);
+        if (curPulse % pulsesPer16thNote == 0) {
+            for (int i = 0; i < tracks.size(); i++) {
+                Track& track = tracks[i];
+                // Cell& cell = track.cells[step_];
+                Cell& cell = track.cells[curPulse / pulsesPer16thNote];
 
-                map[key] = event;
+                if (cell.on) {
+                    Event event;
+                    event.sample = sample;
+                    event.track = i;
+                    event.synthSettings = cell.synthSettings;
+                    std::string key = makeEventKey(event.sample, event.track);
+
+                    map[key] = event;
+                }
             }
         }
+
+        curPulse = (curPulse + 1) % (PPQN * 4);
     }
 
     return map;

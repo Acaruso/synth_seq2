@@ -29,6 +29,11 @@ public:
     int step{0};
     int numSteps{16};
     int samplesPerStep{10000};
+
+    int curPulse{0};
+    int PPQN{24};
+    int samplesPerPulse{0};
+
     unsigned long prevTransport{0};
     unsigned long transport{0};
     int octave{4};
