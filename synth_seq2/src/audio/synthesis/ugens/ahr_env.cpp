@@ -26,17 +26,6 @@ double AHREnv::get(double t)
         double attackDelta = 1.0 / (double)attackSamps;
         double releaseDelta = 1.0 / (double)releaseSamps;
 
-        // double attackDelta = 0.0;
-        // double releaseDelta = 0.0;
-
-        // if (attackSamps != 0) {
-        //     attackDelta = 1.0 / (double)attackSamps;
-        // }
-
-        // if (releaseSamps != 0) {
-        //     releaseDelta = 1.0 / (double)releaseSamps;
-        // }
-
         if (timer < attackSamps) {
             sig += attackDelta;
         }

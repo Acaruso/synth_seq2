@@ -10,21 +10,14 @@ struct Operator
     SinWT modulator;
 
     double secondsPerSample{0};
-    double modAmount;
+    double modAmount{0};
+    double modScale{16};
 
     Operator() {}
 
-    Operator(double secondsPerSample)
-        : secondsPerSample(secondsPerSample)
-    {
-        carrier = SinWT(secondsPerSample);
-        modulator = SinWT(secondsPerSample);
-    }
+    Operator(double secondsPerSample);
 
-    bool isOn()
-    {
-        return carrier.env.on;
-    }
+    bool isOn();
 
     void trigger(
         double a,
@@ -35,18 +28,9 @@ struct Operator
         double mr,
         double modAmount,
         double freq
-    ) {
-        this->modAmount = modAmount;
-        carrier.trigger(a, h, r, freq);
-        modulator.trigger(ma, mh, mr, freq);
-    }
+    );
 
-    double get(double t)
-    {
-        double modSig = modulator.get(t) * modAmount * 8;
-        double carSig = carrier.get(modSig, t);
-        return carSig;
-    }
+    double get(double t);
 };
 
 struct PolyFmSin
