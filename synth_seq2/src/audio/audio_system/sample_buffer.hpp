@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cstring>
+
 class SampleBuffer
 {
 public:
@@ -15,9 +17,7 @@ public:
 
     void zero()
     {
-        for (unsigned i = 0; i < this->numSamples; i++) {
-            this->buffer[i] = 0;
-        }
+        memset(buffer, 0, numSamples * sizeof(unsigned long));
     }
 
     void cleanUp()
