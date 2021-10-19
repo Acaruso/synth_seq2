@@ -33,7 +33,6 @@ private:
     unsigned periodSizeFrames;
 
     unsigned long sampleCounter{0};
-    unsigned long transport{0};
 
     unsigned sliceTime{0};
     unsigned leadTime{0};

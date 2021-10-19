@@ -82,7 +82,6 @@ void App::sendMessagesToAudioThread()
 {
     if (getEventMap) {
         EventMap eventMap = sequencer.getEventMap();
-        printEventMap(eventMap);
         EventMapMessage message(eventMap);
         toAudioQueue.enqueue(message);
     }

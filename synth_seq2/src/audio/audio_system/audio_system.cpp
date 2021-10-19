@@ -140,15 +140,17 @@ void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
 
 void AudioSystem::setTrigs()
 {
-    std::string key;
+    if (futureTransport >= leadTime) {
+        std::string key;
 
-    for (int trackIdx = 0; trackIdx < numTracks; trackIdx++) {
-        key = getEventKey(presentTransport, trackIdx);
+        for (int trackIdx = 0; trackIdx < numTracks; trackIdx++) {
+            key = getEventKey(presentTransport, trackIdx);
 
-        if (eventMap.find(key) != eventMap.end()) {
-            trigs[trackIdx] = true;
-            vSynthSettings[trackIdx] = eventMap[key].synthSettings;
-            eventMap.erase(key);
+            if (eventMap.find(key) != eventMap.end()) {
+                trigs[trackIdx] = true;
+                vSynthSettings[trackIdx] = eventMap[key].synthSettings;
+                eventMap.erase(key);
+            }
         }
     }
 }
