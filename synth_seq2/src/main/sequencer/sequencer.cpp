@@ -113,38 +113,22 @@ int Sequencer::getBpm()
     return bpm;
 }
 
-// when we set a new BPM, calculate a new value for samplesPerPulse
 void Sequencer::setBpm(int newBpm)
 {
     bpm = newBpm;
-    samplesPerStep = (((double)sampleRate * 60) / bpm) / 4;
     double temp = (double)sampleRate / ((double)bpm / (double)60 * (double)pulsesPerQuarterNote);
     samplesPerPulse = temp;
 }
 
-// this gets called when receiving new transport from audio thread
 void Sequencer::updateTransport(unsigned newTransport)
 {
     prevTransport = transport;
     transport = newTransport;
-    // step is just display step
-    // step = getStep(prevTransport);
-
-    // why update this here??
-    // int pulsesPer16thNote = PPQN / 4;
-    step = curPulse / pulsesPer16thNote;
-}
-
-int Sequencer::getStep(int sample)
-{
-    int step = sample / samplesPerStep;
-    step = step % numSteps;
-    return step;
 }
 
 EventMap Sequencer::getEventMap()
 {
-    EventMap map;
+    EventMap eventMap;
 
     unsigned sample = 0;
 
@@ -156,32 +140,25 @@ EventMap Sequencer::getEventMap()
     }
 
     for (; sample < transport; sample += samplesPerPulse) {
-        // int step_ = getStep(sample);
-
-        // int pulsesPer16thNote = PPQN / 4;
+        step = curPulse / pulsesPer16thNote;
 
         if (curPulse % pulsesPer16thNote == 0) {
             for (int i = 0; i < tracks.size(); i++) {
                 Track& track = tracks[i];
-                // Cell& cell = track.cells[step_];
-                Cell& cell = track.cells[curPulse / pulsesPer16thNote];
+                Cell& cell = track.cells[step];
 
                 if (cell.on) {
-                    Event event;
-                    event.sample = sample;
-                    event.track = i;
-                    event.synthSettings = cell.synthSettings;
+                    Event event(sample, i, cell.synthSettings);
                     std::string key = makeEventKey(event.sample, event.track);
-
-                    map[key] = event;
+                    eventMap[key] = event;
                 }
             }
         }
 
-        curPulse = (curPulse + 1) % (pulsesPerQuarterNote * 4);
+        curPulse = (curPulse + 1) % (pulsesPer16thNote * numSteps);
     }
 
-    return map;
+    return eventMap;
 }
 
 void Sequencer::addTrack()
@@ -191,5 +168,4 @@ void Sequencer::addTrack()
 
 void Sequencer::nextState()
 {
-    // samplesPerStep = (((double)sampleRate * 60) / bpm) / 4;
 }

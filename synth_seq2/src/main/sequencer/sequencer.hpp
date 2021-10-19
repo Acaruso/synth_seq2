@@ -28,7 +28,6 @@ public:
     bool playing{false};
     int step{0};
     int numSteps{16};
-    int samplesPerStep{10000};
 
     int curPulse{0};
     int pulsesPerQuarterNote{24};
@@ -57,7 +56,6 @@ public:
     int getBpm();
     void setBpm(int newBpm);
     void updateTransport(unsigned newTransport);
-    int getStep(int transport);
     EventMap getEventMap();
     void addTrack();
     void nextState();

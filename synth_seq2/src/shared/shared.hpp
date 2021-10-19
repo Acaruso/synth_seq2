@@ -28,6 +28,10 @@ struct Event
     unsigned sample;
     int track;
     SynthSettings synthSettings;
+    Event() {}
+    Event(unsigned sample, int track, SynthSettings synthSettings)
+        : sample(sample), track(track), synthSettings(synthSettings)
+    {}
 };
 
 inline std::string makeEventKey(unsigned sample, int track)
