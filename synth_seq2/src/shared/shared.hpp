@@ -1,6 +1,6 @@
 #pragma once
 
-#include <sstream>
+#include <iostream>
 #include <string>
 #include <unordered_map>
 
@@ -36,3 +36,13 @@ inline std::string getEventKey(unsigned sample, int track)
 }
 
 using EventMap = std::unordered_map<std::string, Event>;
+
+inline void printEventMap(EventMap map)
+{
+    for (auto& elt : map) {
+        auto& s = elt.second.synthSettings;
+        std::cout << "key: " << elt.first << std::endl;
+        std::cout << "note: " << s["note"] << std::endl;
+        std::cout << std::endl;
+    }
+}
