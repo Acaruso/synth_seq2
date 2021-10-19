@@ -12,7 +12,7 @@ struct Cell
 
     Cell()
     {
-        synthSettings = getDefaultSynthSettings();
+        synthSettings = makeSynthSettings();
     }
 
     SynthSettings& getSynthSettings()
@@ -28,7 +28,7 @@ struct Track
 
     Track()
     {
-        synthSettings = getDefaultSynthSettings();
+        synthSettings = makeSynthSettings();
         int numCells = 16;
         cells = std::vector<Cell>(numCells, Cell());
     }

@@ -27,6 +27,7 @@ public:
     Selected selected;
     bool playing{false};
     int step{0};
+    int numSteps{16};
     int samplesPerStep{10000};
     unsigned long transport{0};
     unsigned long prevTransport{0};

@@ -30,7 +30,7 @@ AudioSystem::AudioSystem(
     leadTime = sliceTime * 2;
 
     trigs = std::vector<bool>(numTracks, false);
-    vSynthSettings = std::vector<SynthSettings>(numTracks, getDefaultSynthSettings());
+    vSynthSettings = std::vector<SynthSettings>(numTracks, makeSynthSettings());
 
     initUgens();
 }
@@ -144,7 +144,7 @@ void AudioSystem::setTrigs()
         std::string key;
 
         for (int trackIdx = 0; trackIdx < numTracks; trackIdx++) {
-            key = getEventKey(presentTransport, trackIdx);
+            key = makeEventKey(presentTransport, trackIdx);
 
             if (eventMap.find(key) != eventMap.end()) {
                 trigs[trackIdx] = true;

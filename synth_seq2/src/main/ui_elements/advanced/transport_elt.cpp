@@ -53,7 +53,7 @@ void bpmElt(EltParams& params)
     auto& sequencer = context.sequencer;
     EltParams p(context);
     p.coord = params.coord;
-    p.coord.x += 60;
+    p.coord.x += 80;
     p.coord.y += 20;
     p.label = "bpm";
 

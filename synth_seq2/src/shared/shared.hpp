@@ -6,7 +6,7 @@
 
 using SynthSettings = std::unordered_map<std::string, int>;
 
-inline SynthSettings getDefaultSynthSettings()
+inline SynthSettings makeSynthSettings()
 {
     SynthSettings synthSettings;
 
@@ -30,7 +30,7 @@ struct Event
     SynthSettings synthSettings;
 };
 
-inline std::string getEventKey(unsigned sample, int track)
+inline std::string makeEventKey(unsigned sample, int track)
 {
     return std::to_string(sample) + "," + std::to_string(track);
 }

@@ -115,9 +115,9 @@ void Sequencer::updateTransport(unsigned newTransport)
 
 int Sequencer::getStep(int transport)
 {
-    int t = transport / samplesPerStep;
-    t = t % 16;
-    return t;
+    int step = transport / samplesPerStep;
+    step = step % numSteps;
+    return step;
 }
 
 EventMap Sequencer::getEventMap()
@@ -142,11 +142,11 @@ EventMap Sequencer::getEventMap()
 
             if (cell.on) {
                 Event event;
-                event.synthSettings = cell.synthSettings;
                 event.sample = sample;
                 event.track = i;
+                event.synthSettings = cell.synthSettings;
+                std::string key = makeEventKey(event.sample, event.track);
 
-                std::string key = getEventKey(event.sample, event.track);
                 map[key] = event;
             }
         }
