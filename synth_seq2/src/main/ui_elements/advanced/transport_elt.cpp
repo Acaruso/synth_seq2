@@ -21,13 +21,12 @@ void transportElt(EltParams& params)
     p.onClickColor = blue;
 
     p.onClick = [&]() {
-        sequencer->playing = !context.sequencer->playing;
-        sequencer->transport = 0;
-
-        if (context.sequencer->playing) {
+        if (!context.sequencer->playing) {
+            sequencer->play();
             context.toAudioQueue->enqueue(PlayMessage());
         }
         else {
+            sequencer->stop();
             context.toAudioQueue->enqueue(StopMessage());
         }
     };

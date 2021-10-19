@@ -12,6 +12,19 @@ bool Sequencer::isPlaying()
     return playing;
 }
 
+void Sequencer::play()
+{
+    playing = true;
+}
+
+void Sequencer::stop()
+{
+    playing = false;
+    step = 0;
+    transport = 0;
+    prevTransport = 0;
+}
+
 SequencerMode Sequencer::getMode()
 {
     return mode;
@@ -132,9 +145,9 @@ EventMap Sequencer::getEventMap()
                 event.synthSettings = cell.synthSettings;
                 event.sample = sample;
                 event.track = i;
-                
-                map[getEventKey(event.sample, event.track)] = event;
-                // map[sample] = event;
+
+                std::string key = getEventKey(event.sample, event.track);
+                map[key] = event;
             }
         }
     }

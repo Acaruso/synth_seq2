@@ -23,22 +23,18 @@ class Sequencer
 {
 public:
     std::vector<Track> tracks;
-
     SequencerMode mode{Normal};
-
+    Selected selected;
     bool playing{false};
     int step{0};
-
-    Selected selected;
-
+    int samplesPerStep{10000};
     unsigned long transport{0};
     unsigned long prevTransport{0};
 
-    int samplesPerStep{10000};
-
     Sequencer();
-
     bool isPlaying();
+    void play();
+    void stop();
     SequencerMode getMode();
     void setMode(SequencerMode);
     Track& getSelectedTrack();
