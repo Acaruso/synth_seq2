@@ -32,8 +32,6 @@ private:
     unsigned bufferSizeFrames;
     unsigned periodSizeFrames;
 
-    // from context /////////////////////////////
-
     unsigned long sampleCounter{0};
     unsigned long transport{0};
 
@@ -44,7 +42,6 @@ private:
 
     bool playing{false};
 
-    // aka Ts
     double secondsPerSample{0.0};
 
     bool trig{false};
@@ -52,18 +49,11 @@ private:
 
     EventMap eventMap;
 
-    int numTracks{4};
+    int numTracks{6};
     std::vector<bool> trigs;
     std::vector<SynthSettings> vSynthSettings;
 
     bool quit{false};
-
-    double getTime()
-    {
-        return double(sampleCounter) * secondsPerSample;
-    }
-
-    /////////////////////////////////////////////
 
     PolyFmSin polyFmSin;
     std::vector<PolyFmSin> sins;
@@ -75,5 +65,6 @@ private:
     void sendMessagesToMainThread();
     void setTrigs();
     void unsetTrigs();
+    double getTime();
     void fillSampleBuffer(size_t numSamplesToWrite);
 };

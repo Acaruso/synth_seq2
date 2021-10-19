@@ -159,6 +159,11 @@ void AudioSystem::unsetTrigs()
     trigs.assign(trigs.size(), false);
 }
 
+double AudioSystem::getTime()
+{
+    return double(sampleCounter) * secondsPerSample;
+}
+
 AudioSystem::~AudioSystem()
 {
     cleanUp(wasapiWrapper);
