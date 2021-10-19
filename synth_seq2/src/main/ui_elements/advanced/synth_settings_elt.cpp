@@ -103,7 +103,8 @@ void _numberElt(AppContext& context, std::string label, Coord coord, std::string
     };
 
     p.onDrag = [&]() {
-        data += context.getDragAmount() / 2;
+        int drag = context.getDragAmount();
+        data = (drag == 1 || drag == -1) ? data + drag : data + (drag / 2);
         data = clamp(data, p.min, p.max);
     };
 

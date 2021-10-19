@@ -53,12 +53,12 @@ void callback(AppContext& context)
     }
 
     {
-        EltParams p(context, Coord(1200, 500));
+        EltParams p(context, Coord(1100, 500));
         transportElt(p);
     }
 
     {
-        Coord coord(1200, 600);
+        Coord coord(1100, 600);
 
         EltParams textParams(context, coord);
         textParams.label = "add track";

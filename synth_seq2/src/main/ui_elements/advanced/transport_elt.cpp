@@ -4,7 +4,15 @@
 #include "src/main/ui_elements/advanced/rect_button_elt.hpp"
 #include "src/main/ui_elements/advanced/text_elt.hpp"
 
+void playButtonElt(EltParams& params);
+void bpmElt(EltParams& params);
+
 void transportElt(EltParams& params)
+{
+    playButtonElt(params);
+}
+
+void playButtonElt(EltParams& params)
 {
     auto& context = params.ctx;
     Coord coord = params.coord;
@@ -34,4 +42,9 @@ void transportElt(EltParams& params)
     p.onHold = [&]() { p.displayColor = p.onClickColor; };
 
     rectButtonElt(p);
+}
+
+void bpmElt(EltParams& params)
+{
+
 }

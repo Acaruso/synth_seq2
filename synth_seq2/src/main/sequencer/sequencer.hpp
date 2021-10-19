@@ -31,6 +31,7 @@ public:
     unsigned long transport{0};
     unsigned long prevTransport{0};
     int octave{4};
+    int bpm{120};
 
     Sequencer();
     bool isPlaying();
