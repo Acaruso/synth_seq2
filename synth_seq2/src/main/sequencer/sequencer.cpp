@@ -33,6 +33,8 @@ int Sequencer::getBpm()
 
 void Sequencer::setBpm(int newBpm)
 {
+    // nextBpm = newBpm;
+
     bpm = newBpm;
     samplesPerStep = (((double)sampleRate * 60) / bpm) / 4;
 }
@@ -171,4 +173,10 @@ EventMap Sequencer::getEventMap()
 void Sequencer::addTrack()
 {
     tracks.push_back(Track());
+}
+
+void Sequencer::nextState()
+{
+    // bpm = nextBpm;
+    // samplesPerStep = (((double)sampleRate * 60) / bpm) / 4;
 }

@@ -33,6 +33,7 @@ public:
     unsigned long transport{0};
     int octave{4};
     int bpm{120};
+    int nextBpm{120};
     int sampleRate{44100};
 
     Sequencer();
@@ -54,4 +55,5 @@ public:
     int getStep(int transport);
     EventMap getEventMap();
     void addTrack();
+    void nextState();
 };
