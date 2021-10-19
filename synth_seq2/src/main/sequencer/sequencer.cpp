@@ -128,9 +128,11 @@ void Sequencer::updateTransport(unsigned newTransport)
     step = getStep(prevTransport);
 }
 
-int Sequencer::getStep(int transport)
+int Sequencer::getStep(int sample)
 {
-    int step = transport / samplesPerStep;
+    // this is the problem
+    // int step = (sample % (samplesPerStep * 16)) / samplesPerStep;
+    int step = sample / samplesPerStep;
     step = step % numSteps;
     return step;
 }
@@ -149,11 +151,11 @@ EventMap Sequencer::getEventMap()
     }
 
     for (; sample < transport; sample += samplesPerStep) {
-        int step = getStep(sample);
+        int step_ = getStep(sample);
 
         for (int i = 0; i < tracks.size(); i++) {
             Track& track = tracks[i];
-            Cell& cell = track.cells[step];
+            Cell& cell = track.cells[step_];
 
             if (cell.on) {
                 Event event;
@@ -169,6 +171,48 @@ EventMap Sequencer::getEventMap()
 
     return map;
 }
+
+// int Sequencer::getStep(int transport)
+// {
+//     int step = transport / samplesPerStep;
+//     step = step % numSteps;
+//     return step;
+// }
+
+// EventMap Sequencer::getEventMap()
+// {
+//     EventMap map;
+
+//     unsigned sample = 0;
+
+//     if (prevTransport == 0) {
+//         sample = 0;
+//     }
+//     else {
+//         sample = prevTransport + (samplesPerStep - (prevTransport % samplesPerStep));
+//     }
+
+//     for (; sample < transport; sample += samplesPerStep) {
+//         int step = getStep(sample);
+
+//         for (int i = 0; i < tracks.size(); i++) {
+//             Track& track = tracks[i];
+//             Cell& cell = track.cells[step];
+
+//             if (cell.on) {
+//                 Event event;
+//                 event.sample = sample;
+//                 event.track = i;
+//                 event.synthSettings = cell.synthSettings;
+//                 std::string key = makeEventKey(event.sample, event.track);
+
+//                 map[key] = event;
+//             }
+//         }
+//     }
+
+//     return map;
+// }
 
 void Sequencer::addTrack()
 {
