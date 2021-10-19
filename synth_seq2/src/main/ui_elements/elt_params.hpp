@@ -20,13 +20,12 @@ struct EltParams
     int min{0};
     int max{100};
     std::string label;
+    std::string displayText;
     std::string fontName{"inconsolata"};
 
     std::function<void()> onClick{nullptr};
     std::function<void()> onDrag{nullptr};
     std::function<void()> onHold{nullptr};
-
-    std::function<std::string()> getDisplayText{nullptr};
 
     EltParams(AppContext& ctx) : ctx(ctx) {}
     EltParams(AppContext& ctx, Coord coord) : ctx(ctx), coord(coord) {}

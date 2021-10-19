@@ -98,9 +98,7 @@ void _numberElt(AppContext& context, std::string label, Coord coord, std::string
 
     int maxNumDigits = (int)std::to_string(p.max).size();
 
-    p.getDisplayText = [&]() {
-        return pad(maxNumDigits, std::to_string(data));
-    };
+    p.displayText = pad(maxNumDigits, std::to_string(data));
 
     p.onDrag = [&]() {
         int drag = context.getDragAmount();

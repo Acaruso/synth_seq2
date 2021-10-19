@@ -46,5 +46,8 @@ void playButtonElt(EltParams& params)
 
 void bpmElt(EltParams& params)
 {
-
+    auto& context = params.ctx;
+    EltParams p(context);
+    p.coord = params.coord;
+    p.coord.x += 50;
 }
