@@ -24,6 +24,7 @@ void Sequencer::stop()
     step = 0;
     transport = 0;
     prevTransport = 0;
+    curPulse = 0;
 }
 
 SequencerMode Sequencer::getMode()
@@ -117,7 +118,7 @@ void Sequencer::setBpm(int newBpm)
 {
     bpm = newBpm;
     samplesPerStep = (((double)sampleRate * 60) / bpm) / 4;
-    double temp = (double)sampleRate / ((double)bpm / (double)60 * (double)PPQN);
+    double temp = (double)sampleRate / ((double)bpm / (double)60 * (double)pulsesPerQuarterNote);
     samplesPerPulse = temp;
 }
 
@@ -130,7 +131,7 @@ void Sequencer::updateTransport(unsigned newTransport)
     // step = getStep(prevTransport);
 
     // why update this here??
-    int pulsesPer16thNote = PPQN / 4;
+    // int pulsesPer16thNote = PPQN / 4;
     step = curPulse / pulsesPer16thNote;
 }
 
@@ -157,7 +158,7 @@ EventMap Sequencer::getEventMap()
     for (; sample < transport; sample += samplesPerPulse) {
         // int step_ = getStep(sample);
 
-        int pulsesPer16thNote = PPQN / 4;
+        // int pulsesPer16thNote = PPQN / 4;
 
         if (curPulse % pulsesPer16thNote == 0) {
             for (int i = 0; i < tracks.size(); i++) {
@@ -177,7 +178,7 @@ EventMap Sequencer::getEventMap()
             }
         }
 
-        curPulse = (curPulse + 1) % (PPQN * 4);
+        curPulse = (curPulse + 1) % (pulsesPerQuarterNote * 4);
     }
 
     return map;

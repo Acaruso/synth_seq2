@@ -31,7 +31,8 @@ public:
     int samplesPerStep{10000};
 
     int curPulse{0};
-    int PPQN{24};
+    int pulsesPerQuarterNote{24};
+    int pulsesPer16thNote{pulsesPerQuarterNote / 4};
     int samplesPerPulse{0};
 
     unsigned long prevTransport{0};
