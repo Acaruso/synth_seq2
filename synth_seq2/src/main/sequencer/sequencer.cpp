@@ -21,7 +21,7 @@ void Sequencer::play()
 void Sequencer::stop()
 {
     playing = false;
-    step = 0;
+    curStep = 0;
     transport = 0;
     prevTransport = 0;
     curPulse = 0;
@@ -108,6 +108,11 @@ void Sequencer::selectCell(int row, int col)
     }
 }
 
+void Sequencer::addTrack()
+{
+    tracks.push_back(Track());
+}
+
 int Sequencer::getBpm()
 {
     return bpm;
@@ -129,26 +134,25 @@ void Sequencer::updateTransport(unsigned newTransport)
 EventMap Sequencer::getEventMap()
 {
     EventMap eventMap;
-
-    unsigned sample = 0;
+    unsigned curSample = 0;
 
     if (prevTransport == 0) {
-        sample = 0;
+        curSample = 0;
     }
     else {
-        sample = prevTransport + (samplesPerPulse - (prevTransport % samplesPerPulse));
+        curSample = prevTransport + (samplesPerPulse - (prevTransport % samplesPerPulse));
     }
 
-    for (; sample < transport; sample += samplesPerPulse) {
-        step = curPulse / pulsesPer16thNote;
+    for (; curSample < transport; curSample += samplesPerPulse) {
+        curStep = curPulse / pulsesPer16thNote;
 
         if (curPulse % pulsesPer16thNote == 0) {
             for (int i = 0; i < tracks.size(); i++) {
                 Track& track = tracks[i];
-                Cell& cell = track.cells[step];
+                Cell& cell = track.cells[curStep];
 
                 if (cell.on) {
-                    Event event(sample, i, cell.synthSettings);
+                    Event event(curSample, i, cell.synthSettings);
                     std::string key = makeEventKey(event.sample, event.track);
                     eventMap[key] = event;
                 }
@@ -159,13 +163,4 @@ EventMap Sequencer::getEventMap()
     }
 
     return eventMap;
-}
-
-void Sequencer::addTrack()
-{
-    tracks.push_back(Track());
-}
-
-void Sequencer::nextState()
-{
 }

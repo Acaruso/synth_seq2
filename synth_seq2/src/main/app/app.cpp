@@ -91,6 +91,5 @@ void App::nextState()
 {
     context.eltId = 0;
     context.inputSystem.nextState();
-    context.sequencer->nextState();
     getEventMap = false;
 }

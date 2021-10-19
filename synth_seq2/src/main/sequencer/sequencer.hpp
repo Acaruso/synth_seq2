@@ -26,18 +26,16 @@ public:
     SequencerMode mode{Normal};
     Selected selected;
     bool playing{false};
-    int step{0};
+    int bpm{120};
+    int octave{4};
     int numSteps{16};
-
+    int curStep{0};
     int curPulse{0};
     int pulsesPerQuarterNote{24};
     int pulsesPer16thNote{pulsesPerQuarterNote / 4};
     int samplesPerPulse{0};
-
     unsigned long prevTransport{0};
     unsigned long transport{0};
-    int octave{4};
-    int bpm{120};
     int sampleRate{44100};
 
     Sequencer();
@@ -53,10 +51,9 @@ public:
     SynthSettings& getSynthSettings();
     void toggleCell(int row, int col);
     void selectCell(int row, int col);
+    void addTrack();
     int getBpm();
     void setBpm(int newBpm);
     void updateTransport(unsigned newTransport);
     EventMap getEventMap();
-    void addTrack();
-    void nextState();
 };

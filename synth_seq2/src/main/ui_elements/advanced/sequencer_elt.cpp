@@ -64,7 +64,7 @@ void _clock(AppContext& ctx, Coord coord, int i)
         p.displayColor = white;
     }
     else {
-        p.displayColor = ctx.sequencer->step == i ? blue : white;
+        p.displayColor = ctx.sequencer->curStep == i ? blue : white;
     }
 
     rectButtonElt(p);
