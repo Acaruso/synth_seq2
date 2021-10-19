@@ -29,15 +29,18 @@ public:
     int step{0};
     int numSteps{16};
     int samplesPerStep{10000};
-    unsigned long transport{0};
     unsigned long prevTransport{0};
+    unsigned long transport{0};
     int octave{4};
     int bpm{120};
+    int sampleRate{44100};
 
     Sequencer();
     bool isPlaying();
     void play();
     void stop();
+    int getBpm();
+    void setBpm(int newBpm);
     SequencerMode getMode();
     void setMode(SequencerMode);
     Track& getSelectedTrack();

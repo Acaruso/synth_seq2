@@ -5,6 +5,7 @@
 Sequencer::Sequencer()
 {
     tracks.push_back(Track());
+    setBpm(120);
 }
 
 bool Sequencer::isPlaying()
@@ -23,6 +24,17 @@ void Sequencer::stop()
     step = 0;
     transport = 0;
     prevTransport = 0;
+}
+
+int Sequencer::getBpm()
+{
+    return bpm;
+}
+
+void Sequencer::setBpm(int newBpm)
+{
+    bpm = newBpm;
+    samplesPerStep = (((double)sampleRate * 60) / bpm) / 4;
 }
 
 SequencerMode Sequencer::getMode()
@@ -110,7 +122,8 @@ void Sequencer::updateTransport(unsigned newTransport)
 {
     prevTransport = transport;
     transport = newTransport;
-    step = getStep(transport);
+    // step is just display step
+    step = getStep(prevTransport);
 }
 
 int Sequencer::getStep(int transport)

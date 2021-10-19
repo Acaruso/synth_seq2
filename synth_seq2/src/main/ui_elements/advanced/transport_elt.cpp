@@ -62,14 +62,15 @@ void bpmElt(EltParams& params)
 
     int maxNumDigits = (int)std::to_string(p.max).size();
 
-    int& data = sequencer->bpm;
+    int bpm = sequencer->getBpm();
 
-    p.displayText = pad(maxNumDigits, std::to_string(data));
+    p.displayText = pad(maxNumDigits, std::to_string(bpm));
 
     p.onDrag = [&]() {
         int drag = context.getDragAmount();
-        data = (drag == 1 || drag == -1) ? data + drag : data + (drag / 2);
-        data = clamp(data, p.min, p.max);
+        int newBpm = (drag == 1 || drag == -1) ? bpm + drag : bpm + (drag / 2);
+        newBpm = clamp(newBpm, p.min, p.max);
+        sequencer->setBpm(newBpm);
     };
 
     numberWithLabelElt(p);
