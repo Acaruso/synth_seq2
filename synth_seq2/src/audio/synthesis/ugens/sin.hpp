@@ -29,7 +29,7 @@ struct SinWT
     double secondsPerSample;
     double phase{0};
 
-    unsigned size{128};
+    unsigned size{1024};
     std::vector<double> wavetable;
 
     SinWT();

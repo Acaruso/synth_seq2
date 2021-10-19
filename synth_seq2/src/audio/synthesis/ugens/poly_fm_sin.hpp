@@ -43,7 +43,7 @@ struct Operator
 
     double get(double t)
     {
-        double modSig = modulator.get(t) * modAmount * 4;
+        double modSig = modulator.get(t) * modAmount * 8;
         double carSig = carrier.get(modSig, t);
         return carSig;
     }
