@@ -30,6 +30,7 @@ public:
     int samplesPerStep{10000};
     unsigned long transport{0};
     unsigned long prevTransport{0};
+    int octave{4};
 
     Sequencer();
     bool isPlaying();

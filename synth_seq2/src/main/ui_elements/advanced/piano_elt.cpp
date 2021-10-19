@@ -12,8 +12,6 @@ namespace
 {
     int buttonSize = 50;
     int padding = 10;
-    int baseNote = 60;
-    int octave = 4;
 }
 
 Rect getWhiteKeyRect(Coord coord, int i);
@@ -35,54 +33,7 @@ void blackKey(
 
 void background(EltParams& params, Coord coord);
 
-void octaveControl(EltParams& params, Coord coord)
-{
-    int yPadding = 25;
-
-    {
-        EltParams textParams(params.ctx);
-        textParams.coord = coord;
-        textParams.label = "current octave: " + std::to_string(octave);
-        textElt(textParams);
-    }
-
-    coord.y += yPadding;
-
-    {
-        EltParams textParams(params.ctx);
-        textParams.coord = coord;
-        textParams.label = "octave down";
-        textElt(textParams);
-
-        EltParams p(params.ctx);
-        p.rect = Rect(coord.x + 100, coord.y, 20, 20);
-        p.displayColor = white;
-        p.onClick = [&]() {
-            octave = clamp(octave - 1, 0, 7);
-        };
-        p.onHold = [&]() { p.displayColor = blue; };
-        rectButtonElt(p);
-    }
-
-    coord.y += yPadding;
-
-    {
-        EltParams textParams(params.ctx);
-        textParams.coord = Coord(coord.x, coord.y);
-        textParams.label = "octave up";
-        textElt(textParams);
-
-        EltParams p(params.ctx);
-        p.rect = Rect(coord.x + 100, coord.y, 20, 20);
-        p.displayColor = white;
-        p.onClick = [&]() {
-            octave = clamp(octave + 1, 0, 7);
-        };
-        p.onHold = [&]() { p.displayColor = blue; };
-        rectButtonElt(p);
-    }
-
-}
+void octaveControl(EltParams& params, Coord coord);
 
 void pianoElt(EltParams& params)
 {
@@ -97,8 +48,7 @@ void pianoElt(EltParams& params)
     int k = 0;
 
     for (int i = 0; i < 12; i++) {
-        // int note = baseNote + i;
-        int note = ((octave + 1) * 12) + i;
+        int note = ((sequencer->octave + 1) * 12) + i;
 
         std::function<void()> onClick_ = nullptr;
 
@@ -241,4 +191,49 @@ void background(EltParams& params, Coord coord)
     };
 
     params.ctx.graphicsWrapper.drawRect(rect);
+}
+
+void octaveControl(EltParams& params, Coord coord)
+{
+    auto& sequencer = params.ctx.sequencer;
+
+    int yPadding = 25;
+    {
+        EltParams textParams(params.ctx);
+        textParams.coord = coord;
+        textParams.label = "current octave: " + std::to_string(sequencer->octave);
+        textElt(textParams);
+    }
+    coord.y += yPadding;
+    {
+        EltParams textParams(params.ctx);
+        textParams.coord = coord;
+        textParams.label = "octave up";
+        textElt(textParams);
+
+        EltParams p(params.ctx);
+        p.rect = Rect(coord.x + 100, coord.y, 20, 20);
+        p.displayColor = white;
+        p.onClick = [&]() {
+            sequencer->octave = clamp(sequencer->octave + 1, 0, 7);
+        };
+        p.onHold = [&]() { p.displayColor = blue; };
+        rectButtonElt(p);
+    }
+    coord.y += yPadding;
+    {
+        EltParams textParams(params.ctx);
+        textParams.coord = Coord(coord.x, coord.y);
+        textParams.label = "octave down";
+        textElt(textParams);
+
+        EltParams p(params.ctx);
+        p.rect = Rect(coord.x + 100, coord.y, 20, 20);
+        p.displayColor = white;
+        p.onClick = [&]() {
+            sequencer->octave = clamp(sequencer->octave - 1, 0, 7);
+        };
+        p.onHold = [&]() { p.displayColor = blue; };
+        rectButtonElt(p);
+    }
 }
