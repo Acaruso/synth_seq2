@@ -26,21 +26,6 @@ void Sequencer::stop()
     prevTransport = 0;
 }
 
-int Sequencer::getBpm()
-{
-    return bpm;
-}
-
-void Sequencer::setBpm(int newBpm)
-{
-    // nextBpm = newBpm;
-
-    bpm = newBpm;
-    samplesPerStep = (((double)sampleRate * 60) / bpm) / 4;
-    double temp = (double)sampleRate / ((double)bpm / (double)60 * (double)PPQN);
-    samplesPerPulse = temp;
-}
-
 SequencerMode Sequencer::getMode()
 {
     return mode;
@@ -122,19 +107,35 @@ void Sequencer::selectCell(int row, int col)
     }
 }
 
+int Sequencer::getBpm()
+{
+    return bpm;
+}
+
+// when we set a new BPM, calculate a new value for samplesPerPulse
+void Sequencer::setBpm(int newBpm)
+{
+    bpm = newBpm;
+    samplesPerStep = (((double)sampleRate * 60) / bpm) / 4;
+    double temp = (double)sampleRate / ((double)bpm / (double)60 * (double)PPQN);
+    samplesPerPulse = temp;
+}
+
+// this gets called when receiving new transport from audio thread
 void Sequencer::updateTransport(unsigned newTransport)
 {
     prevTransport = transport;
     transport = newTransport;
     // step is just display step
     // step = getStep(prevTransport);
+
+    // why update this here??
     int pulsesPer16thNote = PPQN / 4;
     step = curPulse / pulsesPer16thNote;
 }
 
 int Sequencer::getStep(int sample)
 {
-    // this is the problem
     int step = sample / samplesPerStep;
     step = step % numSteps;
     return step;
@@ -182,48 +183,6 @@ EventMap Sequencer::getEventMap()
     return map;
 }
 
-// int Sequencer::getStep(int transport)
-// {
-//     int step = transport / samplesPerStep;
-//     step = step % numSteps;
-//     return step;
-// }
-
-// EventMap Sequencer::getEventMap()
-// {
-//     EventMap map;
-
-//     unsigned sample = 0;
-
-//     if (prevTransport == 0) {
-//         sample = 0;
-//     }
-//     else {
-//         sample = prevTransport + (samplesPerStep - (prevTransport % samplesPerStep));
-//     }
-
-//     for (; sample < transport; sample += samplesPerStep) {
-//         int step = getStep(sample);
-
-//         for (int i = 0; i < tracks.size(); i++) {
-//             Track& track = tracks[i];
-//             Cell& cell = track.cells[step];
-
-//             if (cell.on) {
-//                 Event event;
-//                 event.sample = sample;
-//                 event.track = i;
-//                 event.synthSettings = cell.synthSettings;
-//                 std::string key = makeEventKey(event.sample, event.track);
-
-//                 map[key] = event;
-//             }
-//         }
-//     }
-
-//     return map;
-// }
-
 void Sequencer::addTrack()
 {
     tracks.push_back(Track());
@@ -231,6 +190,5 @@ void Sequencer::addTrack()
 
 void Sequencer::nextState()
 {
-    // bpm = nextBpm;
     // samplesPerStep = (((double)sampleRate * 60) / bpm) / 4;
 }

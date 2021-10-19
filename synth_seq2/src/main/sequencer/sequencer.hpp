@@ -38,15 +38,12 @@ public:
     unsigned long transport{0};
     int octave{4};
     int bpm{120};
-    int nextBpm{120};
     int sampleRate{44100};
 
     Sequencer();
     bool isPlaying();
     void play();
     void stop();
-    int getBpm();
-    void setBpm(int newBpm);
     SequencerMode getMode();
     void setMode(SequencerMode);
     Track& getSelectedTrack();
@@ -56,6 +53,8 @@ public:
     SynthSettings& getSynthSettings();
     void toggleCell(int row, int col);
     void selectCell(int row, int col);
+    int getBpm();
+    void setBpm(int newBpm);
     void updateTransport(unsigned newTransport);
     int getStep(int transport);
     EventMap getEventMap();
