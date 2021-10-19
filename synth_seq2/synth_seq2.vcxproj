@@ -7,7 +7,6 @@
     <ClCompile Include="src/audio/audio_util.cpp" />
     <ClCompile Include="src/audio/synthesis/audio_callback.cpp" />
     <ClCompile Include="src/audio/synthesis/ugens/ahr_env.cpp" />
-    <ClCompile Include="src/audio/synthesis/ugens/poly_sin.cpp" />
     <ClCompile Include="src/audio/synthesis/ugens/poly_fm_sin.cpp" />
     <ClCompile Include="src/audio/synthesis/ugens/sin.cpp" />
     <ClCompile Include="src/audio/synthesis/ugens/smooth.cpp" />
@@ -21,7 +20,6 @@
     <ClInclude Include="src/audio/audio_util.hpp" />
     <ClInclude Include="src/audio/synthesis/consts.hpp" />
     <ClInclude Include="src/audio/synthesis/ugens/ahr_env.hpp" />
-    <ClInclude Include="src/audio/synthesis/ugens/poly_sin.hpp" />
     <ClInclude Include="src/audio/synthesis/ugens/poly_fm_sin.hpp" />
     <ClInclude Include="src/audio/synthesis/ugens/sin.hpp" />
     <ClInclude Include="src/audio/synthesis/ugens/smooth.hpp" />

@@ -5,7 +5,6 @@
 
 #include "src/audio/audio_util.hpp"
 #include "src/audio/synthesis/ugens/poly_fm_sin.hpp"
-#include "src/audio/synthesis/ugens/poly_sin.hpp"
 #include "src/audio/synthesis/ugens/smooth.hpp"
 
 void AudioSystem::initUgens()
