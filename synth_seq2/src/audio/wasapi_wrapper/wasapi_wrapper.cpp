@@ -47,11 +47,8 @@ void WasapiWrapper::writeBuffer(unsigned long* source, unsigned numFramesToWrite
         throw std::runtime_error("ERROR " + std::to_string(hr) + ": GetBuffer");
     }
 
-    memcpy(
-        dest,
-        source,
-        sizeof(unsigned long) * 2 * numFramesToWrite
-    );
+    size_t size = sizeof(unsigned long) * 2 * numFramesToWrite;
+    memcpy(dest, source, size);
 
     hr = this->renderClient->ReleaseBuffer(numFramesToWrite, 0);
 
