@@ -28,21 +28,36 @@ void sequencerElt(EltParams& params)
     newCoord.x = coord.x + padding;
     newCoord.y = coord.y + padding;
 
-    for (int i = 0; i < sequencer->tracks[0].cells.size(); i++) {
+    for (int i = 0; i < sequencer->numSteps; i++) {
         _clock(params.ctx, newCoord, i);
     }
 
     // background ////////////////////////////////////
-    // Rect bgRect{
-    //     coord.x,
-    //     coord.y,
-    //     -3,
-    //     ((cellWidth + padding) * (int)track.cells.size()) + padding,
-    //     cellHeight + clockCellHeight + (padding * 3),
-    //     green
-    // };
+    Coord bgCoord = coord;
+    Rect bgRect{
+        bgCoord.x,
+        bgCoord.y,
+        -3,
+        ((cellWidth + padding) * (int)sequencer->numSteps) + padding,
+        clockCellHeight + (padding * 2),
+        green
+    };
+    params.ctx.graphicsWrapper.drawRect(bgRect);
 
-    // params.ctx.graphicsWrapper.drawRect(bgRect);
+    bgCoord.y += clockCellHeight + (padding * 2);
+
+    for (int i = 0; i < sequencer->tracks.size(); i++) {
+        Rect bgRect2{
+            bgCoord.x,
+            bgCoord.y,
+            -3,
+            ((cellWidth + padding) * (int)sequencer->numSteps) + padding,
+            cellHeight + (padding),
+            green
+        };
+        params.ctx.graphicsWrapper.drawRect(bgRect2);
+        bgCoord.y += cellHeight + padding;
+    }
 
     for (int row = 0; row < sequencer->tracks.size(); row++) {
         auto& track = sequencer->tracks[row];
