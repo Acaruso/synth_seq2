@@ -8,7 +8,6 @@ void _clock(AppContext& ctx, Coord coord, int i);
 Rect _getClockRect(Coord coord, int i);
 void _cell(AppContext& ctx, Cell& cell, Coord coord, int row, int col);
 Rect _getCellRect(Coord coord, int i);
-void _drawSelectedRect(AppContext& ctx, Rect rect);
 
 namespace
 {
@@ -137,8 +136,9 @@ void _cell(AppContext& ctx, Cell& cell, Coord coord, int row, int col)
             black
         );
 
+        p2.lineWidth = 2;
+
         rectOutlineElt(p2);
-        // _drawSelectedRect(ctx, p.rect);
     }
 
     rectButtonElt(p);
@@ -155,39 +155,4 @@ Rect _getCellRect(Coord coord, int i)
         cellWidth,
         cellHeight
     );
-}
-
-void _drawSelectedRect(AppContext& ctx, Rect rect)
-{
-    int borderWidth = 4;
-
-    Rect selectedRect(
-        rect.x - borderWidth,
-        rect.y - borderWidth,
-        -2,
-        rect.w + (2 * borderWidth),
-        rect.h + (2 * borderWidth),
-        black
-    );
-
-    Rect whiteRect(
-        rect.x - 1,
-        rect.y - 1,
-        -1,
-        rect.w + 2,
-        rect.h + 2,
-        white
-    );
-
-    Rect greenRect(
-        rect.x - 1,
-        rect.y - 1,
-        -1,
-        rect.w + 2,
-        rect.h + 2,
-        green
-    );
-
-    ctx.graphicsWrapper.drawRect(greenRect);
-    ctx.graphicsWrapper.drawRect(selectedRect);
 }
