@@ -51,11 +51,12 @@ void App::run()
 
     while (!context.inputSystem.uiState.quit) {
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
+        context.inputSystem.run();
+        uiSystem.handleUiEvents();
 
         handleMessagesFromAudioThread();
 
         context.graphicsWrapper.clearWindow();
-        context.inputSystem.run();
 
         uiSystem.draw();
 

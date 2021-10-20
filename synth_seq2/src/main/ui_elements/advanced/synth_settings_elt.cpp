@@ -94,7 +94,7 @@ void _numberElt(AppContext& context, std::string label, Coord coord, std::string
     int& data = synthSettings[key];
 
     p.min = 0;
-    p.max = 100;
+    p.max = 101;
 
     int maxNumDigits = (int)std::to_string(p.max).size();
 

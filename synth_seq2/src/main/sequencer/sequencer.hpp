@@ -13,6 +13,14 @@ enum SequencerMode
     Select
 };
 
+enum Direction
+{
+    Up,
+    Down,
+    Left,
+    Right
+};
+
 struct Selected
 {
     int row{0};
@@ -28,6 +36,7 @@ public:
     bool playing{false};
     int bpm{120};
     int octave{4};
+    int numOctaves{8};
     int numSteps{16};
     int curStep{0};
     int curPulse{0};
@@ -46,8 +55,11 @@ public:
     void setMode(SequencerMode);
     Track& getSelectedTrack();
     Cell& getCell(int row, int col);
+    void setCell(int row, int col, Cell cell);
     Cell& getSelectedCell();
+    Cell getSelectedCellCopy();
     Selected getSelected();
+    void moveSelected(Direction direction);
     SynthSettings& getSynthSettings();
     void toggleCell(int row, int col);
     void selectCell(int row, int col);

@@ -69,7 +69,7 @@ void bpmElt(EltParams& params)
     p.onDrag = [&]() {
         int drag = context.getDragAmount();
         int newBpm = (drag == 1 || drag == -1) ? bpm + drag : bpm + (drag / 2);
-        newBpm = clamp(newBpm, p.min, p.max);
+        newBpm = clamp(newBpm, p.min, p.max + 1);
         sequencer->setBpm(newBpm);
     };
 

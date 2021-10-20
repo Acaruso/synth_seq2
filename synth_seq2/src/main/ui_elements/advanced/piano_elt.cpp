@@ -215,7 +215,7 @@ void octaveControl(EltParams& params, Coord coord)
         p.rect = Rect(coord.x + 100, coord.y, 20, 20);
         p.displayColor = inactiveColor;
         p.onClick = [&]() {
-            sequencer->octave = clamp(sequencer->octave + 1, 0, 7);
+            sequencer->octave = clamp(sequencer->octave + 1, 0, sequencer->numOctaves);
         };
         p.onHold = [&]() { p.displayColor = activeColor; };
         rectButtonElt(p);
@@ -231,7 +231,7 @@ void octaveControl(EltParams& params, Coord coord)
         p.rect = Rect(coord.x + 100, coord.y, 20, 20);
         p.displayColor = inactiveColor;
         p.onClick = [&]() {
-            sequencer->octave = clamp(sequencer->octave - 1, 0, 7);
+            sequencer->octave = clamp(sequencer->octave - 1, 0, sequencer->numOctaves);
         };
         p.onHold = [&]() { p.displayColor = activeColor; };
         rectButtonElt(p);

@@ -1,5 +1,7 @@
 #include "ui_system.hpp"
 
+#include <iostream>
+
 #include "src/main/ui_elements/advanced/piano_elt.hpp"
 #include "src/main/ui_elements/advanced/rect_button_elt.hpp"
 #include "src/main/ui_elements/advanced/sequencer_elt.hpp"
@@ -61,5 +63,37 @@ void UiSystem::draw()
 
 void UiSystem::handleUiEvents()
 {
+    auto& sequencer = context.sequencer;
+    auto& state = context.inputSystem.uiState;
+    auto& prevState = context.inputSystem.prevUiState;
 
+    if (
+        state.lctrl
+        && state.c && !prevState.c
+        && sequencer->getMode() == Select
+    ) {
+        copiedCell = sequencer->getSelectedCellCopy();
+    }
+
+    if (
+        state.lctrl
+        && state.v && !prevState.v
+        && sequencer->getMode() == Select
+    ) {
+        auto selected = sequencer->getSelected();
+        sequencer->setCell(selected.row, selected.col, copiedCell);
+    }
+
+    if (state.up && !prevState.up) {
+        sequencer->moveSelected(Up);
+    }
+    if (state.down && !prevState.down) {
+        sequencer->moveSelected(Down);
+    }
+    if (state.right && !prevState.right) {
+        sequencer->moveSelected(Right);
+    }
+    if (state.left && !prevState.left) {
+        sequencer->moveSelected(Left);
+    }
 }

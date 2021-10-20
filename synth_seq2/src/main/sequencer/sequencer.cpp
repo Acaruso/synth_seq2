@@ -2,6 +2,8 @@
 
 #include <iostream>
 
+#include "src/main/util.hpp"
+
 Sequencer::Sequencer()
 {
     tracks.push_back(Track());
@@ -47,7 +49,17 @@ Cell& Sequencer::getCell(int row, int col)
     return tracks[row].cells[col];
 }
 
+void Sequencer::setCell(int row, int col, Cell cell)
+{
+    tracks[row].cells[col] = cell;
+}
+
 Cell& Sequencer::getSelectedCell()
+{
+    return tracks[selected.row].cells[selected.col];
+}
+
+Cell Sequencer::getSelectedCellCopy()
 {
     return tracks[selected.row].cells[selected.col];
 }
@@ -55,6 +67,22 @@ Cell& Sequencer::getSelectedCell()
 Selected Sequencer::getSelected()
 {
     return selected;
+}
+
+void Sequencer::moveSelected(Direction direction)
+{
+    if (direction == Up) {
+        selected.row = clamp(selected.row - 1, 0, tracks.size());
+    }
+    else if (direction == Down) {
+        selected.row = clamp(selected.row + 1, 0, tracks.size());
+    }
+    else if (direction == Left) {
+        selected.col = clamp(selected.col - 1, 0, numSteps);
+    }
+    else if (direction == Right) {
+        selected.col = clamp(selected.col + 1, 0, numSteps);
+    }
 }
 
 SynthSettings& Sequencer::getSynthSettings()
