@@ -95,20 +95,20 @@ void whiteKey(
 ) {
     EltParams p(ctx);
     p.rect = rect;
-    p.color = white;
+    p.color = inactiveColor;
 
     if (
         ctx.sequencer->mode == Select
         && ctx.sequencer->getSelectedCell().on
         && ctx.sequencer->getSelectedCell().synthSettings["note"] == note
     ) {
-        p.displayColor = blue;
+        p.displayColor = activeColor;
     }
     else {
-        p.displayColor = white;
+        p.displayColor = inactiveColor;
     }
 
-    p.onClickColor = blue;
+    p.onClickColor = activeColor;
     p.onClick = onClick;
     p.onHold = [&]() { p.displayColor = p.onClickColor; };
     rectButtonElt(p);
@@ -129,13 +129,13 @@ void blackKey(
         && ctx.sequencer->getSelectedCell().on
         && ctx.sequencer->getSelectedCell().synthSettings["note"] == note
     ) {
-        p.displayColor = blue;
+        p.displayColor = activeColor;
     }
     else {
         p.displayColor = black;
     }
 
-    p.onClickColor = blue;
+    p.onClickColor = activeColor;
     p.onClick = onClick;
     p.onHold = [&]() { p.displayColor = p.onClickColor; };
     rectButtonElt(p);
@@ -213,11 +213,11 @@ void octaveControl(EltParams& params, Coord coord)
 
         EltParams p(params.ctx);
         p.rect = Rect(coord.x + 100, coord.y, 20, 20);
-        p.displayColor = white;
+        p.displayColor = inactiveColor;
         p.onClick = [&]() {
             sequencer->octave = clamp(sequencer->octave + 1, 0, 7);
         };
-        p.onHold = [&]() { p.displayColor = blue; };
+        p.onHold = [&]() { p.displayColor = activeColor; };
         rectButtonElt(p);
     }
     coord.y += yPadding;
@@ -229,11 +229,11 @@ void octaveControl(EltParams& params, Coord coord)
 
         EltParams p(params.ctx);
         p.rect = Rect(coord.x + 100, coord.y, 20, 20);
-        p.displayColor = white;
+        p.displayColor = inactiveColor;
         p.onClick = [&]() {
             sequencer->octave = clamp(sequencer->octave - 1, 0, 7);
         };
-        p.onHold = [&]() { p.displayColor = blue; };
+        p.onHold = [&]() { p.displayColor = activeColor; };
         rectButtonElt(p);
     }
 }

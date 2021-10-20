@@ -27,9 +27,9 @@ void playButtonElt(EltParams& params)
 
     EltParams p(context);
     p.rect = Rect(coord.x, coord.y + 20, 50, 50);
-    p.color = white;
-    p.displayColor = sequencer->isPlaying() ? blue : white;
-    p.onClickColor = blue;
+    p.color = inactiveColor;
+    p.displayColor = sequencer->isPlaying() ? activeColor : inactiveColor;
+    p.onClickColor = activeColor;
 
     p.onClick = [&]() {
         if (!context.sequencer->playing) {
