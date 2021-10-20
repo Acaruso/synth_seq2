@@ -5,13 +5,10 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 
+#include "src/main/graphics/color.hpp"
+
 GraphicsWrapper::GraphicsWrapper()
 {
-    this->windowTitle = "a cool title";
-
-    this->screenWidth = 1400;
-    this->screenHeight = 900;
-
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
         printf("SDL_Error: %s\n", SDL_GetError());
     }
@@ -52,7 +49,7 @@ GraphicsWrapper::GraphicsWrapper()
 
 void GraphicsWrapper::clearWindow()
 {
-    SDL_SetRenderDrawColor(this->windowRenderer, 255, 255, 255, 255);
+    SDL_SetRenderDrawColor(this->windowRenderer, bgColor.r, bgColor.g, bgColor.b, bgColor.a);
     SDL_RenderClear(this->windowRenderer);
 }
 
@@ -118,7 +115,7 @@ void GraphicsWrapper::loadFont(
         this->windowRenderer,
         path.c_str(),
         height,
-        FC_MakeColor(0, 0, 0, 255),
+        FC_MakeColor(textColor.r, textColor.g, textColor.b, 255),
         TTF_STYLE_NORMAL
     );
 

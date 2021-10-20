@@ -50,4 +50,9 @@ void numberWithLabelElt(EltParams& params)
     EltParams p2(context);
     p2.rect = outerRect;
     rectOutlineElt(p2);
+
+    Rect outerBgRect = outerRect;
+    outerBgRect.color = white;
+    outerBgRect.z = -2;
+    params.ctx.graphicsWrapper.drawRect(outerBgRect);
 }

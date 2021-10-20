@@ -154,7 +154,7 @@ void _drawSelectedRect(AppContext& ctx, Rect rect)
         -2,
         rect.w + (2 * borderWidth),
         rect.h + (2 * borderWidth),
-        red
+        darkGreen
     );
 
     Rect whiteRect(
