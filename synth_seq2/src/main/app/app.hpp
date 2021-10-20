@@ -19,7 +19,6 @@ public:
     Sequencer sequencer;
 
     App(
-        std::function<void(AppContext& context)> setup,
         std::function<void(AppContext& context)> callback
     );
 
@@ -28,7 +27,6 @@ public:
 private:
     unsigned frameTimeMs{10};
     bool getEventMap{false};
-    std::function<void(AppContext& context)> setup;
     std::function<void(AppContext& context)> callback;
 
     void handleMessagesFromAudioThread();

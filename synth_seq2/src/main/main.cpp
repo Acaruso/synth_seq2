@@ -3,7 +3,7 @@
 
 int main(int argc, char* args[])
 {
-    App app(setup, callback);
+    App app(callback);
     app.run();
     return 0;
 }
