@@ -44,9 +44,9 @@ public:
     void quit();
 
 private:
-    std::string windowTitle{"a cool title"};
-    int screenWidth{1400};
-    int screenHeight{900};
+    std::string windowTitle{"Seq"};
+    int screenWidth{1250};
+    int screenHeight{890};
     Color bgColor{offWhite};
     Color textColor{black};
     SDL_Window* window;

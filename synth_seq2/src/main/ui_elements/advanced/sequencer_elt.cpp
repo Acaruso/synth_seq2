@@ -2,6 +2,7 @@
 
 #include "src/main/sequencer/sequencer.hpp"
 #include "src/main/ui_elements/advanced/rect_button_elt.hpp"
+#include "src/main/ui_elements/basic/rect_outline_elt.hpp"
 
 void _clock(AppContext& ctx, Coord coord, int i);
 Rect _getClockRect(Coord coord, int i);
@@ -125,7 +126,19 @@ void _cell(AppContext& ctx, Cell& cell, Coord coord, int row, int col)
         && ctx.sequencer->getSelected().row == row
         && ctx.sequencer->getSelected().col == col
     ) {
-        _drawSelectedRect(ctx, p.rect);
+        EltParams p2(ctx);
+        int borderWidth = 4;
+        p2.rect = Rect(
+            p.rect.x - borderWidth,
+            p.rect.y - borderWidth,
+            2,
+            p.rect.w + (2 * borderWidth) - 1,
+            p.rect.h + (2 * borderWidth) - 1,
+            black
+        );
+
+        rectOutlineElt(p2);
+        // _drawSelectedRect(ctx, p.rect);
     }
 
     rectButtonElt(p);
@@ -154,7 +167,7 @@ void _drawSelectedRect(AppContext& ctx, Rect rect)
         -2,
         rect.w + (2 * borderWidth),
         rect.h + (2 * borderWidth),
-        darkGreen
+        black
     );
 
     Rect whiteRect(
