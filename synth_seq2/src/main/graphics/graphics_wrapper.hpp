@@ -45,8 +45,8 @@ public:
 
 private:
     std::string windowTitle{"Seq"};
-    int screenWidth{1250};
-    int screenHeight{890};
+    int screenWidth{1300};
+    int screenHeight{900};
     Color bgColor{offWhite};
     Color textColor{black};
     SDL_Window* window;

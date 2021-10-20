@@ -19,6 +19,7 @@ struct EltParams
     Color displayColor;
     int min{0};
     int max{100};
+    int lineWidth{1};
     std::string label;
     std::string displayText;
     std::string fontName{"inconsolata"};

@@ -45,6 +45,8 @@ GraphicsWrapper::GraphicsWrapper()
     if (this->windowRenderer == NULL) {
         printf("SDL_Error: %s\n", SDL_GetError());
     }
+
+    drawSystem = DrawSystem(windowRenderer);
 }
 
 void GraphicsWrapper::clearWindow()
@@ -133,8 +135,8 @@ Font& GraphicsWrapper::getFont(std::string name)
 
 void GraphicsWrapper::render()
 {
-    this->drawSystem.draw(this->windowRenderer);
-    SDL_RenderPresent(this->windowRenderer);
+    drawSystem.draw();
+    SDL_RenderPresent(windowRenderer);
 }
 
 void GraphicsWrapper::destroyWindow()
