@@ -5,8 +5,9 @@
 class UiSystem
 {
 public:
-    // UiSystem();
     UiSystem(AppContext& context);
+    void draw();
+    void handleUiEvents();
 
 private:
     AppContext& context;

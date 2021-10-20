@@ -8,10 +8,8 @@
 
 #include "src/audio/audio_entrypoint.hpp"
 
-App::App(
-    std::function<void(AppContext& context)> callback
-)
-    : callback(callback)
+App::App()
+    : uiSystem(context)
 {
     toAudioQueue = MessageQueue(16);
     toMainQueue = MessageQueue(16);
@@ -59,7 +57,7 @@ void App::run()
         context.graphicsWrapper.clearWindow();
         context.inputSystem.run();
 
-        callback(context);
+        uiSystem.draw();
 
         sendMessagesToAudioThread();
 

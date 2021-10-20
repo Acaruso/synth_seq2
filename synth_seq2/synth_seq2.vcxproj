@@ -30,7 +30,6 @@
   <ItemGroup>
     <ClCompile Include="C:\cpp-libraries\SDL_FontCache-master\SDL_FontCache.c" />
     <ClCompile Include="src/main/app/app.cpp" />
-    <ClCompile Include="src/main/callback/callback.cpp" />
     <ClCompile Include="src/main/graphics/draw_commands.cpp" />
     <ClCompile Include="src/main/graphics/draw_system.cpp" />
     <ClCompile Include="src/main/graphics/graphics_wrapper.cpp" />
@@ -55,7 +54,6 @@
   <ItemGroup>
     <ClInclude Include="src/main/app/app_context.hpp" />
     <ClInclude Include="src/main/app/app.hpp" />
-    <ClInclude Include="src/main/callback/callback.hpp" />
     <ClInclude Include="src/main/graphics/color.hpp" />
     <ClInclude Include="src/main/graphics/coord.hpp" />
     <ClInclude Include="src/main/graphics/draw_commands.hpp" />
@@ -65,6 +63,7 @@
     <ClInclude Include="src/main/graphics/image.hpp" />
     <ClInclude Include="src/main/graphics/rect.hpp" />
     <ClInclude Include="src/main/input_system/input_system.hpp" />
+    <ClInclude Include="src/main/sequencer/cell.hpp" />
     <ClInclude Include="src/main/sequencer/sequencer.hpp" />
     <ClInclude Include="src/main/sequencer/track.hpp" />
     <ClInclude Include="src/main/ui_elements/advanced/number_elt.hpp" />

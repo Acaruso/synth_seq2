@@ -1,21 +1,15 @@
 #pragma once
 
-#include <algorithm>
-#include <vector>
-
-#include "src/main/sequencer/cell.hpp"
 #include "src/shared/shared.hpp"
 
-struct Track
+struct Cell
 {
+    bool on{false};
     SynthSettings synthSettings;
-    std::vector<Cell> cells;
 
-    Track()
+    Cell()
     {
         synthSettings = makeSynthSettings();
-        int numCells = 16;
-        cells = std::vector<Cell>(numCells, Cell());
     }
 
     SynthSettings& getSynthSettings()
