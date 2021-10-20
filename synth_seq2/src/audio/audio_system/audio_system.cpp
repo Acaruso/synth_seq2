@@ -45,19 +45,12 @@ void AudioSystem::playAudio()
 
     // main loop:
     while (!quit) {
-        WaitForSingleObject(wasapiWrapper.hEvent, INFINITE);
+        wasapiWrapper.waitForSignal();
 
         handleMessagesFromMainThread();
 
-        unsigned numPaddingFrames = wasapiWrapper.getCurrentPadding();
-
-        // recall that each elt of buffer stores 1 sample
-        // frame is 2 samples -> 1 for each channel
-        // so numSamplesToWrite = (2 * numFramesToWrite)
-
-        unsigned numFramesToWrite = bufferSizeFrames - numPaddingFrames;
-
-        unsigned numSamplesToWrite = numFramesToWrite * 2;
+        unsigned numSamplesToWrite = wasapiWrapper.getNumSamplesToWrite();
+        unsigned numFramesToWrite = wasapiWrapper.getNumFramesToWrite();
 
         fillSampleBuffer(numSamplesToWrite);
 

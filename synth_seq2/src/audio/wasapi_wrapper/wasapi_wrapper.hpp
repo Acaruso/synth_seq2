@@ -19,6 +19,9 @@ public:
     unsigned getBufferSizeBytes();
     unsigned getCurrentPadding();
     unsigned getPeriodSizeFrames();
+    void waitForSignal();
+    unsigned getNumFramesToWrite();
+    unsigned getNumSamplesToWrite();
     void writeBuffer(unsigned long* source, unsigned numFramesToWrite);
     void startPlaying();
     void stopPlaying();

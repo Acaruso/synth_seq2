@@ -31,32 +31,6 @@ unsigned WasapiWrapper::getBufferSizeBytes()
     return bufferSizeBytes;
 }
 
-void WasapiWrapper::writeBuffer(unsigned long* source, unsigned numFramesToWrite)
-{
-    HRESULT hr;
-    BYTE *dest = NULL;
-
-    unsigned bufferSizeFrames = this->getBufferSizeFrames();
-
-    unsigned bufferSizeBytes = this->getBufferSizeBytes();
-
-    // after this call, dest will point to location in buffer to write to
-    hr = this->renderClient->GetBuffer(numFramesToWrite, &dest);
-
-    if (FAILED(hr)) {
-        throw std::runtime_error("ERROR " + std::to_string(hr) + ": GetBuffer");
-    }
-
-    size_t size = sizeof(unsigned long) * 2 * numFramesToWrite;
-    memcpy(dest, source, size);
-
-    hr = this->renderClient->ReleaseBuffer(numFramesToWrite, 0);
-
-    if (FAILED(hr)) {
-        throw std::runtime_error("ERROR " + std::to_string(hr) + ": ReleaseBuffer");
-    }
-}
-
 unsigned WasapiWrapper::getCurrentPadding()
 {
     unsigned numPaddingFrames = 0;
@@ -85,6 +59,52 @@ unsigned WasapiWrapper::getPeriodSizeFrames()
     }
 
     return currentPeriodInFrames;
+}
+
+void WasapiWrapper::waitForSignal()
+{
+    WaitForSingleObject(hEvent, INFINITE);
+}
+
+// recall that each elt of buffer stores 1 sample
+// frame is 2 samples -> 1 for each channel
+// so numSamplesToWrite = (2 * numFramesToWrite)
+unsigned WasapiWrapper::getNumFramesToWrite()
+{
+    unsigned bufferSizeFrames = getBufferSizeFrames();
+    unsigned numPaddingFrames = getCurrentPadding();
+    return bufferSizeFrames - numPaddingFrames;
+}
+
+unsigned WasapiWrapper::getNumSamplesToWrite()
+{
+    return getNumFramesToWrite() * 2;
+}
+
+void WasapiWrapper::writeBuffer(unsigned long* source, unsigned numFramesToWrite)
+{
+    HRESULT hr;
+    BYTE *dest = NULL;
+
+    unsigned bufferSizeFrames = this->getBufferSizeFrames();
+
+    unsigned bufferSizeBytes = this->getBufferSizeBytes();
+
+    // after this call, dest will point to location in buffer to write to
+    hr = this->renderClient->GetBuffer(numFramesToWrite, &dest);
+
+    if (FAILED(hr)) {
+        throw std::runtime_error("ERROR " + std::to_string(hr) + ": GetBuffer");
+    }
+
+    size_t size = sizeof(unsigned long) * 2 * numFramesToWrite;
+    memcpy(dest, source, size);
+
+    hr = this->renderClient->ReleaseBuffer(numFramesToWrite, 0);
+
+    if (FAILED(hr)) {
+        throw std::runtime_error("ERROR " + std::to_string(hr) + ": ReleaseBuffer");
+    }
 }
 
 void WasapiWrapper::startPlaying()
