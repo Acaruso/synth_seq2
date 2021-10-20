@@ -2,6 +2,7 @@
 
 #include <cstdio>
 #include <iostream>
+#include <stdint.h>
 #include <string>
 
 #include "src/audio/audio_util.hpp"
@@ -107,7 +108,7 @@ void AudioSystem::fillSampleBuffer(size_t numSamplesToWrite)
 
         double sig = audioCallback();
 
-        unsigned samp = scaleSignal(sig);
+        uint32_t samp = scaleSignal(sig);
 
         sampleBuffer.buffer[i] = samp;       // L
         sampleBuffer.buffer[i + 1] = samp;   // R
