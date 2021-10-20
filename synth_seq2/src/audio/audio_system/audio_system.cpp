@@ -17,7 +17,7 @@ AudioSystem::AudioSystem(
     wasapiWrapper = {};
     init(wasapiWrapper);
 
-    unsigned long samplesPerSecond = wasapiWrapper.waveFormat.Format.nSamplesPerSec;
+    unsigned samplesPerSecond = wasapiWrapper.waveFormat.Format.nSamplesPerSec;
     secondsPerSample = 1.0 / (double)samplesPerSecond;
 
     bufferSizeBytes = wasapiWrapper.getBufferSizeBytes();

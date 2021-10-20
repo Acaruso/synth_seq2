@@ -43,9 +43,9 @@ public:
     int pulsesPerQuarterNote{24};
     int pulsesPer16thNote{pulsesPerQuarterNote / 4};
     int samplesPerPulse{0};
-    unsigned long prevTransport{0};
-    unsigned long transport{0};
-    int sampleRate{44100};
+    unsigned prevTransport{0};
+    unsigned transport{0};
+    unsigned sampleRate{44100};
 
     Sequencer();
     bool isPlaying();

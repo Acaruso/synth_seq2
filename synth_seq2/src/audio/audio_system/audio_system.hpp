@@ -32,12 +32,12 @@ private:
     unsigned bufferSizeFrames;
     unsigned periodSizeFrames;
 
-    unsigned long sampleCounter{0};
+    unsigned sampleCounter{0};
 
     unsigned sliceTime{0};
     unsigned leadTime{0};
-    unsigned long presentTransport{0};
-    unsigned long futureTransport{0};
+    unsigned presentTransport{0};
+    unsigned futureTransport{0};
 
     bool playing{false};
 
