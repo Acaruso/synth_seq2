@@ -8,6 +8,7 @@ void _clock(AppContext& ctx, Coord coord, int i);
 Rect _getClockRect(Coord coord, int i);
 void _cell(AppContext& ctx, Cell& cell, Coord coord, int row, int col);
 Rect _getCellRect(Coord coord, int i);
+void _background(AppContext& ctx, Coord coord);
 
 namespace
 {
@@ -23,42 +24,12 @@ void sequencerElt(EltParams& params)
     Sequencer* sequencer = params.ctx.sequencer;
     Coord coord = params.coord;
 
-    // clock elts ////////////////////////////////////
     Coord newCoord = coord;
     newCoord.x = coord.x + padding;
     newCoord.y = coord.y + padding;
 
     for (int i = 0; i < sequencer->numSteps; i++) {
         _clock(params.ctx, newCoord, i);
-    }
-
-    // background ////////////////////////////////////
-    Coord bgCoord = coord;
-    Color bgColor = grey;
-
-    Rect bgRect{
-        bgCoord.x,
-        bgCoord.y,
-        -3,
-        ((cellWidth + padding) * (int)sequencer->numSteps) + padding,
-        clockCellHeight + (padding * 2),
-        bgColor
-    };
-    params.ctx.graphicsWrapper.drawRect(bgRect);
-
-    bgCoord.y += clockCellHeight + (padding * 2);
-
-    for (int i = 0; i < sequencer->tracks.size(); i++) {
-        Rect bgRect2{
-            bgCoord.x,
-            bgCoord.y,
-            -3,
-            ((cellWidth + padding) * (int)sequencer->numSteps) + padding,
-            cellHeight + (padding),
-            bgColor
-        };
-        params.ctx.graphicsWrapper.drawRect(bgRect2);
-        bgCoord.y += cellHeight + padding;
     }
 
     for (int row = 0; row < sequencer->tracks.size(); row++) {
@@ -69,6 +40,8 @@ void sequencerElt(EltParams& params)
         }
         newCoord.y += cellHeight + padding;
     }
+
+    _background(params.ctx, coord);
 }
 
 void _clock(AppContext& ctx, Coord coord, int i)
@@ -157,4 +130,36 @@ Rect _getCellRect(Coord coord, int i)
         cellWidth,
         cellHeight
     );
+}
+
+void _background(AppContext& ctx, Coord coord)
+{
+    auto& sequencer = ctx.sequencer;
+    Coord bgCoord = coord;
+    Color bgColor = grey;
+
+    Rect bgRect{
+        bgCoord.x,
+        bgCoord.y,
+        -3,
+        ((cellWidth + padding) * (int)sequencer->numSteps) + padding,
+        clockCellHeight + (padding * 2),
+        bgColor
+    };
+    ctx.graphicsWrapper.drawRect(bgRect);
+
+    bgCoord.y += clockCellHeight + (padding * 2);
+
+    for (int i = 0; i < sequencer->tracks.size(); i++) {
+        Rect bgRect2{
+            bgCoord.x,
+            bgCoord.y,
+            -3,
+            ((cellWidth + padding) * (int)sequencer->numSteps) + padding,
+            cellHeight + (padding),
+            bgColor
+        };
+        ctx.graphicsWrapper.drawRect(bgRect2);
+        bgCoord.y += cellHeight + padding;
+    }
 }
