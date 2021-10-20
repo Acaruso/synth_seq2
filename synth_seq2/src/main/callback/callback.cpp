@@ -70,9 +70,9 @@ void callback(AppContext& context)
         Sequencer* sequencer = context.sequencer;
 
         p.rect = Rect(coord.x, coord.y + 20, 50, 50);
-        p.color = white;
-        p.displayColor = white;
-        p.onClickColor = blue;
+        p.color = inactiveColor;
+        p.displayColor = inactiveColor;
+        p.onClickColor = activeColor;
 
         p.onClick = [&]() {
             sequencer->addTrack();

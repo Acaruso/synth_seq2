@@ -34,13 +34,15 @@ void sequencerElt(EltParams& params)
 
     // background ////////////////////////////////////
     Coord bgCoord = coord;
+    Color bgColor = grey;
+
     Rect bgRect{
         bgCoord.x,
         bgCoord.y,
         -3,
         ((cellWidth + padding) * (int)sequencer->numSteps) + padding,
         clockCellHeight + (padding * 2),
-        green
+        bgColor
     };
     params.ctx.graphicsWrapper.drawRect(bgRect);
 
@@ -53,7 +55,7 @@ void sequencerElt(EltParams& params)
             -3,
             ((cellWidth + padding) * (int)sequencer->numSteps) + padding,
             cellHeight + (padding),
-            green
+            bgColor
         };
         params.ctx.graphicsWrapper.drawRect(bgRect2);
         bgCoord.y += cellHeight + padding;
@@ -73,13 +75,13 @@ void _clock(AppContext& ctx, Coord coord, int i)
 {
     EltParams p(ctx);
     p.rect = _getClockRect(coord, i);
-    p.color = white;
+    p.color = inactiveColor;
 
     if (ctx.sequencer->isPlaying() == false) {
-        p.displayColor = white;
+        p.displayColor = inactiveColor;
     }
     else {
-        p.displayColor = ctx.sequencer->curStep == i ? blue : white;
+        p.displayColor = ctx.sequencer->curStep == i ? activeColor : inactiveColor;
     }
 
     rectButtonElt(p);
@@ -102,8 +104,8 @@ void _cell(AppContext& ctx, Cell& cell, Coord coord, int row, int col)
     EltParams p(ctx);
     p.rect = _getCellRect(coord, col);
     p.color = white;
-    p.displayColor = cell.on ? blue : white;
-    p.onClickColor = blue;
+    p.displayColor = cell.on ? activeColor : inactiveColor;
+    p.onClickColor = activeColor;
 
     p.onClick = [&]() {
         if (uiState.lshift) {
