@@ -1,0 +1,3 @@
+issue where overlapping notes seem to have weird envelopes is actually phasing
+
+if you set notes to have different pitches, the issue will disappear
