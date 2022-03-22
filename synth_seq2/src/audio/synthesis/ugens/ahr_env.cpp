@@ -15,13 +15,13 @@ void AHREnv::trigger(double a, double h, double r)
 double AHREnv::get(double t)
 {
     if (on) {
+        a = a == 0 ? 1 : a;
+        h = h == 0 ? 1 : h;
+        r = r == 0 ? 1 : r;
+
         unsigned attackSamps = mstosamps(a);
         unsigned holdSamps = mstosamps(h);
         unsigned releaseSamps = mstosamps(r);
-
-        attackSamps = attackSamps == 0 ? 1 : attackSamps;
-        holdSamps = holdSamps == 0 ? 1 : holdSamps;
-        releaseSamps = releaseSamps == 0 ? 1 : releaseSamps;
 
         double attackDelta = 1.0 / (double)attackSamps;
         double releaseDelta = 1.0 / (double)releaseSamps;
